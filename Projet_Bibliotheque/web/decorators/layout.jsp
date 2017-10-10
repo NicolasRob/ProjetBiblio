@@ -43,14 +43,20 @@
             <li class="nav-item">
               <a class="nav-link" href="go?action=catalogue">Catalogue</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="services.html">Compte</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCompte" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Mon compte
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownCompte">
+                <a class="dropdown-item" href="go?action=afficherReservations">Mes r&eacute;servations</a>
+                <a class="dropdown-item" href="go?action=afficherEmprunts">Mes emprunts</a>
+              </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="contact.html">Contact</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="go?action=afficherLogin">Se Connecter</a>
+              <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
