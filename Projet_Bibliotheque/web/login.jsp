@@ -22,7 +22,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-lg-12">
-              <h2 class="card-title">Connection</h2>
+              <h2 class="card-title"></h2>
               <form class="form-horizontal" action="go">
                   <div class="form-group">
                       <label class="control-label col-sm-2" for="numeroMembre">Num&eacute;ro de membre:</label>

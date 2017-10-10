@@ -52,8 +52,14 @@
                 <a class="dropdown-item" href="go?action=afficherEmprunts">Mes emprunts</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Administration
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownAdmin">
+                <a class="dropdown-item" href="go?action=afficherGestionCatalogue">Gestion du catalogue</a>
+                <a class="dropdown-item" href="go?action=afficherGestionCompte">Gestion des comptes</a>
+              </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
