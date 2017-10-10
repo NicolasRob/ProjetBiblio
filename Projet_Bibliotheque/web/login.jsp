@@ -25,7 +25,7 @@
               <h2 class="card-title">Connection</h2>
               <form class="form-horizontal" action="go">
                   <div class="form-group">
-                      <label class="control-label col-sm-2" for="numeroMembre">Numéro de membre:</label>
+                      <label class="control-label col-sm-2" for="numeroMembre">Num&eacute;ro de membre:</label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control" id="numeroMembre" placeholder="Entrez votre num&eacute;ro de membre" name="numeroMembre">
                       </div>
