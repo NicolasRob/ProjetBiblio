@@ -28,6 +28,18 @@
         <servlet-name>AfficherLogin</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.AfficherLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Connection</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.Connection</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherReservations</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherReservations</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherEmprunts</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherEmprunts</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -47,6 +59,18 @@
     <servlet-mapping>
         <servlet-name>AfficherLogin</servlet-name>
         <url-pattern>/AfficherLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Connection</servlet-name>
+        <url-pattern>/Connection</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherReservations</servlet-name>
+        <url-pattern>/AfficherReservations</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherEmprunts</servlet-name>
+        <url-pattern>/AfficherEmprunts</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
