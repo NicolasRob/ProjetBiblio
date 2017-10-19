@@ -30,7 +30,7 @@ public class AfficherAccueil extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int potato=0;
+        
             RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
             r.forward(request, response);
         }
