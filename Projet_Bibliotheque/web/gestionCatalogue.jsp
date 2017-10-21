@@ -49,7 +49,7 @@
                       </div>
                   </div>
                     <div class="form-group">
-                        <a class='col-sm-2' href='go?action=ajoutOuvrage'>Ajouter un nouvel ouvrage</a>
+                        <a class='col-sm-2' href="go?action=afficherAjoutOuvrage">Ajouter un nouvel ouvrage</a>
                     </div>
               </form>
           </div>
