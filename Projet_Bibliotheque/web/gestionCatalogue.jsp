@@ -53,9 +53,62 @@
                     </div>
               </form>
           </div>
-      </div>
+        </div>
+        </div>
     </div>
-  </div>
+        <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card">
+          <div class="card-header" role="tab" id="headingOne">
+            <h5 class="mb-0">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
+            </h5>
+          </div>
+
+          <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="card-body">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <td colspan="4"><a href="">Ajouter une édition</a></td>
+                    </tr>
+                    <tr>
+                        <td>ISBN</td>
+                        <td>Editeur</td>
+                        <td>Date de Publication</td>
+                        <td>Emplacement</td>
+                    </tr>
+                    <tr>
+                        <td>ISBN</td>
+                        <td>Editeur</td>
+                        <td>Date de Publication</td>
+                        <td>Emplacement</td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+            
+            <div class="card-header" role="tab" id="headingTwo">
+            <h5 class="mb-0">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
+            </h5>
+          </div>
+
+          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="card-body">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <td>ISBN</td>
+                        <td>Editeur</td>
+                        <td>Date de Publication</td>
+                    </tr>
+                    <tr>
+                        <td>ISBN</td>
+                        <td>Editeur</td>
+                        <td>Date de Publication</td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+        </div>
 </div>
 <!-- /.container -->
 
