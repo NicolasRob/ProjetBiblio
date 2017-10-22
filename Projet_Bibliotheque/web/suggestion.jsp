@@ -1,6 +1,5 @@
 <div class="container Site-Content">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Envoyer une suggestion</h1>
 
   <ol class="breadcrumb">
@@ -10,7 +9,6 @@
     <li class="breadcrumb-item active">Suggestion</li>
   </ol>
 
-  <!-- Blog Post -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row">

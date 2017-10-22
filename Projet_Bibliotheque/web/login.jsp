@@ -1,13 +1,5 @@
-<%-- 
-    Document   : login
-    Created on : 5-Oct-2017, 1:37:34 PM
-    Author     : Vengor
---%>
-
-<!-- Page Content -->
 <div class="container Site-Content">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Connection</h1>
 
   <ol class="breadcrumb">
@@ -17,7 +9,6 @@
     <li class="breadcrumb-item active">Connection</li>
   </ol>
 
-  <!-- Blog Post -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row">
@@ -48,5 +39,4 @@
     </div>
   </div>
 </div>
-<!-- /.container -->
 

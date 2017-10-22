@@ -1,11 +1,5 @@
-<%-- 
-    Document   : ajoutOuvrage
-    Created on : 21-Oct-2017, 7:24:09 PM
-    Author     : Vengor
---%>
 <div class="container Site-Content">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Ajouter une Édition</h1>
 
   <ol class="breadcrumb">
@@ -18,7 +12,6 @@
     <li class="breadcrumb-item active">Ajout d'une édition</li>
   </ol>
 
-  <!-- Blog Post -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row">

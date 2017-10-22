@@ -1,6 +1,5 @@
 <div class="container Site-Content">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Emprunts</h1>
 
   <ol class="breadcrumb">
