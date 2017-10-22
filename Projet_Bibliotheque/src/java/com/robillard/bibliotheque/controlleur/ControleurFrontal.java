@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.robillard.bibliotheque.controlleur;
 
 import java.io.IOException;
@@ -12,22 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author moumene
- */
+
 public class ControleurFrontal extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher r = null;
@@ -55,6 +38,42 @@ public class ControleurFrontal extends HttpServlet {
                     break;
                 case "afficherLogin":
                     r = this.getServletContext().getNamedDispatcher("AfficherLogin");
+                    r.forward(request, response);
+                    break;
+                case "afficherReservations":
+                    r = this.getServletContext().getNamedDispatcher("AfficherReservations");
+                    r.forward(request, response);
+                    break;
+                case "afficherEmprunts":
+                    r = this.getServletContext().getNamedDispatcher("AfficherEmprunts");
+                    r.forward(request, response);
+                    break;
+                case "afficherGestionCatalogue":
+                    r = this.getServletContext().getNamedDispatcher("AfficherGestionCatalogue");
+                    r.forward(request, response);
+                    break;
+                case "afficherGestionCompte":
+                    r = this.getServletContext().getNamedDispatcher("AfficherGestionCompte");
+                    r.forward(request, response);
+                    break;
+                case "afficherAjoutOuvrage" :
+                    r = this.getServletContext().getNamedDispatcher("AfficherAjoutOuvrage");
+                    r.forward(request, response);
+                    break;
+                case "afficherAjoutEdition" :
+                    r = this.getServletContext().getNamedDispatcher("AfficherAjoutEdition");
+                    r.forward(request, response);
+                    break;
+                case "afficherSuggestion" :
+                    r = this.getServletContext().getNamedDispatcher("AfficherSuggestion");
+                    r.forward(request, response);
+                    break;
+                case "afficherGestionSuggestion" :
+                    r = this.getServletContext().getNamedDispatcher("AfficherGestionSuggestion");
+                    r.forward(request, response);
+                    break;
+                case "connection":
+                    r = this.getServletContext().getNamedDispatcher("Connection");
                     r.forward(request, response);
                     break;
                 default:

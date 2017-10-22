@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherAccueil extends HttpServlet {
+public class AfficherSuggestion extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
-            r.forward(request, response);
-        }
+        response.setContentType("text/html;charset=UTF-8");
+        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/suggestion.jsp");
+        r.forward(request, response);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

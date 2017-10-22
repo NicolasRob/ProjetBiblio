@@ -1,12 +1,15 @@
 <div class="container Site-Content">
 
-  <h1 class="mt-4 mb-3">Connection</h1>
+  <h1 class="mt-4 mb-3">Ajouter un ouvrage</h1>
 
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="index.html">Accueil</a>
+      <a href="go?action=afficherAccueil">Accueil</a>
     </li>
-    <li class="breadcrumb-item active">Connection</li>
+    <li class="breadcrumb-item">
+        <a href="go?action=afficherGestionCatalogue">Gestion du catalogue</a>
+    </li>
+    <li class="breadcrumb-item active">Ajout d'un ouvrage</li>
   </ol>
 
     <div class="card mb-4">
@@ -16,21 +19,21 @@
               <h2 class="card-title"></h2>
               <form class="form-horizontal" action="go">
                   <div class="form-group">
-                      <label class="control-label col-sm-2" for="numeroMembre">Num&eacute;ro de membre:</label>
+                      <label class="control-label col-sm-2" for="titre">Titre:</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="numeroMembre" placeholder="Entrez votre num&eacute;ro de membre" name="numeroMembre">
+                          <input type="text" class="form-control" id="titre" name="titre">
                       </div>
                   </div>
                   <div class="form-group">
-                      <label class="control-label col-sm-2" for="pwd">Mot de passe:</label>
+                      <label class="control-label col-sm-2" for="auteur">Auteur:</label>
                       <div class="col-sm-10">          
-                          <input type="password" class="form-control" id="pwd" placeholder="Entrez votre mot de passe" name="pwd">
+                          <input type="auteur" class="form-control" id="auteur" name="auteur">
                       </div>
                   </div>
-                  <input type="hidden" name="action" value="connection" />
+                  <input type="hidden" name="action" value="ajouterOuvrage" />
                   <div class="form-group">        
                       <div class="col-sm-offset-2 col-sm-10">
-                          <button type="submit" class="btn btn-default">Connection</button>
+                          <button type="submit" class="btn btn-default">Ajouter</button>
                       </div>
                   </div>
               </form>
@@ -39,4 +42,3 @@
     </div>
   </div>
 </div>
-

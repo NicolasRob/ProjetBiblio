@@ -28,6 +28,42 @@
         <servlet-name>AfficherLogin</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.AfficherLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Connection</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.Connection</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherReservations</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherReservations</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherEmprunts</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherEmprunts</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherGestionCatalogue</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherGestionCatalogue</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherAjoutOuvrage</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherAjoutOuvrage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherAjoutEdition</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherAjoutEdition</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherGestionCompte</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherGestionCompte</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherSuggestion</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherSuggestion</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherGestionSuggestion</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherGestionSuggestion</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -47,6 +83,42 @@
     <servlet-mapping>
         <servlet-name>AfficherLogin</servlet-name>
         <url-pattern>/AfficherLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Connection</servlet-name>
+        <url-pattern>/Connection</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherReservations</servlet-name>
+        <url-pattern>/AfficherReservations</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherEmprunts</servlet-name>
+        <url-pattern>/AfficherEmprunts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherGestionCatalogue</servlet-name>
+        <url-pattern>/AfficherGestionCatalogue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherAjoutOuvrage</servlet-name>
+        <url-pattern>/AfficherAjoutOuvrage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherAjoutEdition</servlet-name>
+        <url-pattern>/AfficherAjoutEdition</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherGestionCompte</servlet-name>
+        <url-pattern>/AfficherGestionCompte</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherSuggestion</servlet-name>
+        <url-pattern>/AfficherSuggestion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherGestionSuggestion</servlet-name>
+        <url-pattern>/AfficherGestionSuggestion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

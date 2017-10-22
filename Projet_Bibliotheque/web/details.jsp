@@ -1,7 +1,5 @@
-<!-- Page Content -->
 <div class="container">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Détails
     <small>Subheading</small>
   </h1>
@@ -14,7 +12,6 @@
     <li class="breadcrumb-item active">Détails</li>
   </ol>
 
-  <!-- Blog Post -->
   <div class="card mb-4">
     <div class="card-header">
       The Empty Thone - Bernard Cornwell
@@ -62,5 +59,4 @@
     </div>
   </div>
 </div>
-<!-- /.container -->
 
