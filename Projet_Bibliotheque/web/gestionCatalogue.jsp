@@ -68,20 +68,25 @@
             <div class="card-body">
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <td colspan="4"><a href="">Ajouter une édition</a></td>
+                        <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une édition</a></td>
+                        <td colspan="2"><a href="2">Modifier l'ouvrage</a></td>
+                        <td colspan="2"><a href="2">Supprimer l'ouvrage</a></td>
                     </tr>
                     <tr>
                         <td>ISBN</td>
                         <td>Editeur</td>
                         <td>Date de Publication</td>
                         <td>Emplacement</td>
+                        <td><a href="">Modifier</a></td>
+                        <td><a href="">Supprimer</a></td>
                     </tr>
                     <tr>
                         <td>ISBN</td>
                         <td>Editeur</td>
                         <td>Date de Publication</td>
                         <td>Emplacement</td>
-                    </tr>
+                        <td><a href="">Modifier</a></td>
+                        <td><a href="">Supprimer</a></td>
                 </table>
             </div>
           </div>
