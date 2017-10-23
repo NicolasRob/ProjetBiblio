@@ -8,6 +8,16 @@
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <context-param>
+        <description>Pilote JDBC</description>
+        <param-name>piloteJDBC</param-name>
+        <param-value>com.mysql.jdbc.Driver</param-value>
+    </context-param>
+    <context-param>
+        <description>URL de la BD</description>
+        <param-name>urlBd</param-name>
+        <param-value>jdbc:mysql://localhost/biblio?user=root&amp;password=root</param-value>
+    </context-param>
     <servlet>
         <servlet-name>ControleurFrontal</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.ControleurFrontal</servlet-class>
@@ -30,7 +40,7 @@
     </servlet>
     <servlet>
         <servlet-name>Connection</servlet-name>
-        <servlet-class>com.robillard.bibliotheque.controlleur.Connection</servlet-class>
+        <servlet-class>com.robillard.bibliotheque.controlleur.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AfficherReservations</servlet-name>
@@ -63,6 +73,10 @@
     <servlet>
         <servlet-name>AfficherGestionSuggestion</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.AfficherGestionSuggestion</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.Login</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
@@ -119,6 +133,10 @@
     <servlet-mapping>
         <servlet-name>AfficherGestionSuggestion</servlet-name>
         <url-pattern>/AfficherGestionSuggestion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -46,6 +46,7 @@
             <li class="nav-item">
               <a class="nav-link" href="go?action=afficherSuggestion">Suggestion</a>
             </li>
+            <% if ((int)session.getAttribute("type") == 2 ) { %>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Administration
@@ -56,6 +57,7 @@
                 <a class="dropdown-item" href="go?action=afficherGestionSuggestion">Consulter les suggestions</a>
               </div>
             </li>
+            <% } %>
             <li class="nav-item">
               <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
             </li>
