@@ -35,6 +35,7 @@
             <li class="nav-item">
               <a class="nav-link" href="go?action=catalogue">Catalogue</a>
             </li>
+            <c:if test="${sessionScope.login != null}">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCompte" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Mon compte
@@ -44,6 +45,7 @@
                 <a class="dropdown-item" href="go?action=afficherEmprunts">Mes emprunts</a>
               </div>
             </li>
+            </c:if>
             <li class="nav-item">
               <a class="nav-link" href="go?action=afficherSuggestion">Suggestion</a>
             </li>

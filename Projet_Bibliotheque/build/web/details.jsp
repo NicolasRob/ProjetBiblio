@@ -1,7 +1,6 @@
-<!-- Page Content -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Détails
     <small>Subheading</small>
   </h1>
@@ -14,7 +13,6 @@
     <li class="breadcrumb-item active">Détails</li>
   </ol>
 
-  <!-- Blog Post -->
   <div class="card mb-4">
     <div class="card-header">
       The Empty Thone - Bernard Cornwell
@@ -56,11 +54,12 @@
                 </tr>
             </tbody>
           </table>
-          <a href="#" class="btn btn-primary">Réserver</a>
+          <c:if test="${sessionScope.login != null}">
+              <a href="#" class="btn btn-primary">Réserver</a>
+          </c:if>
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- /.container -->
 

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
 
   <h1 class="mt-4 mb-3">Détails
@@ -53,7 +54,9 @@
                 </tr>
             </tbody>
           </table>
-          <a href="#" class="btn btn-primary">Réserver</a>
+          <c:if test="${sessionScope.login != null}">
+              <a href="#" class="btn btn-primary">Réserver</a>
+          </c:if>
         </div>
       </div>
     </div>
