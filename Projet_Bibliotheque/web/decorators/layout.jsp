@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +47,7 @@
             <li class="nav-item">
               <a class="nav-link" href="go?action=afficherSuggestion">Suggestion</a>
             </li>
-            <% if ((int)session.getAttribute("type") == 2 ) { %>
+            <c:if test="${sessionScope.type == 2}">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Administration
@@ -57,9 +58,16 @@
                 <a class="dropdown-item" href="go?action=afficherGestionSuggestion">Consulter les suggestions</a>
               </div>
             </li>
-            <% } %>
+            </c:if>
             <li class="nav-item">
-              <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
+                <c:choose>
+                    <c:when test="${sessionScope.login == null}">
+                        <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
+                    </c:when>
+                    <c:when test="${sessionScope.login != null}">
+                        <a class="nav-link" href="go?action=logout">Se d&eacute;connecter</a>
+                    </c:when>
+                </c:choose>
             </li>
           </ul>
         </div>

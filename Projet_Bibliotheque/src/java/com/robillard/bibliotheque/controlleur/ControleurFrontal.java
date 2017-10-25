@@ -76,6 +76,10 @@ public class ControleurFrontal extends HttpServlet {
                     r = this.getServletContext().getNamedDispatcher("Login");
                     r.forward(request, response);
                     break;
+                case "logout":
+                    r = this.getServletContext().getNamedDispatcher("Logout");
+                    r.forward(request, response);
+                    break;
                 default:
                     r = this.getServletContext().getNamedDispatcher("AfficherAccueil");
                     r.forward(request, response);
