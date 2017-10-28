@@ -12,7 +12,7 @@ public class AfficherLogin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/login.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp");
             r.forward(request, response);
     }
 

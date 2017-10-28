@@ -12,7 +12,7 @@ public class AfficherGestionCompte extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/gestionCompte.jsp");
+        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCompte.jsp");
         r.forward(request, response);
     }
 

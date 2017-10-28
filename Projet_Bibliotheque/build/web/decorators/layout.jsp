@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +23,7 @@
     <!-- Menu -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-          <a class="navbar-brand" href="index.html">Biblioth&egrave;que Saint-Baudille</a>
+          <a class="navbar-brand" href="go?action=accueil">Biblioth&egrave;que Saint-Baudille</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -34,6 +35,7 @@
             <li class="nav-item">
               <a class="nav-link" href="go?action=catalogue">Catalogue</a>
             </li>
+            <c:if test="${sessionScope.login != null}">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCompte" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Mon compte
@@ -43,9 +45,11 @@
                 <a class="dropdown-item" href="go?action=afficherEmprunts">Mes emprunts</a>
               </div>
             </li>
+            </c:if>
             <li class="nav-item">
               <a class="nav-link" href="go?action=afficherSuggestion">Suggestion</a>
             </li>
+            <c:if test="${sessionScope.type == 2}">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Administration
@@ -56,8 +60,16 @@
                 <a class="dropdown-item" href="go?action=afficherGestionSuggestion">Consulter les suggestions</a>
               </div>
             </li>
+            </c:if>
             <li class="nav-item">
-              <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
+                <c:choose>
+                    <c:when test="${sessionScope.login == null}">
+                        <a class="nav-link" href="go?action=afficherLogin">Se connecter</a>
+                    </c:when>
+                    <c:when test="${sessionScope.login != null}">
+                        <a class="nav-link" href="go?action=logout">Se d&eacute;connecter</a>
+                    </c:when>
+                </c:choose>
             </li>
           </ul>
         </div>
