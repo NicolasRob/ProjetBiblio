@@ -16,8 +16,7 @@ public class Editeur {
     public Editeur() {
     }
 
-    public Editeur(int id, String nom) {
-        this.id = id;
+    public Editeur(String nom) {
         this.nom = nom;
     }
 
