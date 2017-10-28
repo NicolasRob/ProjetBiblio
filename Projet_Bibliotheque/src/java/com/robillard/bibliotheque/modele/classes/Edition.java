@@ -11,15 +11,24 @@ package com.robillard.bibliotheque.modele.classes;
  */
 public class Edition {
     private int id, ouvrageId,nombrePage,numeroEditeurId,numeorOuvrageId;
-    private String isbn,datePublication;
+    private String isbn,datePublication,image;
 
     public Edition() {
     }
 
-    public Edition(int nombrePage, String isbn, String datePublication) {
+    public Edition(int nombrePage, String isbn, String datePublication, String image) {
         this.nombrePage = nombrePage;
         this.isbn = isbn;
         this.datePublication = datePublication;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getId() {
