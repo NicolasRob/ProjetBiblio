@@ -52,7 +52,7 @@ public class Login extends HttpServlet {
             else
             {
                 request.setAttribute("erreurLogin", "Les informations de connection sont invalides");
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/login.jsp");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp");
                 r.forward(request, response);
             }
         }

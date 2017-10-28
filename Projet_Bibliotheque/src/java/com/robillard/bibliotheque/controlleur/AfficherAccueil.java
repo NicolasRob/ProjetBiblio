@@ -13,7 +13,7 @@ public class AfficherAccueil extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
             r.forward(request, response);
         }
 
