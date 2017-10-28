@@ -5,7 +5,7 @@
  */
 package com.robillard.bibliotheque.modele.dao;
 
-import com.robillard.bibliotheque.modele.classes.Compte;
+import com.robillard.bibliotheque.modele.classes.Auteur;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,29 +20,27 @@ import java.util.logging.Logger;
  *
  * @author Vengor
  */
-public class CompteDAO extends DAO<Compte>{
+public class AuteurDAO extends DAO<Auteur> {
     
     private Logger logger = Logger.getLogger("monLogger");
     
-    public CompteDAO(Connection c)
+    public AuteurDAO(Connection c)
     {
         super(c);
     }
         
     @Override
-    public boolean create(Compte compte) {
+    public boolean create(Auteur auteur) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO compte "
-                + "(NUMERO , PRENOM, NOM, MDP, TYPE) "
-                + "VALUES (?, ?, ?, ?, ?)";
+        String requete = "INSERT INTO auteur"
+                + "(ID , PRENOM, NOM) "
+                + "VALUES (?, ?, ?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, compte.getNumero());
-            stm.setString(2, compte.getPrenom());
-            stm.setString(3, compte.getNom());
-            stm.setString(4, compte.getMdp());
-            stm.setInt(5, compte.getType());
+            stm.setString(1, auteur.getId());
+            stm.setString(2, auteur.getPrenom());
+            stm.setString(3, auteur.getNom());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -70,13 +68,13 @@ public class CompteDAO extends DAO<Compte>{
     }
     
     @Override
-    public boolean delete(Compte compte) {
+    public boolean delete(Auteur auteur) {
         PreparedStatement stm = null;
-        String requete = "DELETE FROM compte WHERE NUMERO = ?";
+        String requete = "DELETE FROM auteur WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, compte.getNumero());
+            stm.setString(1, auteur.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -93,7 +91,7 @@ public class CompteDAO extends DAO<Compte>{
             if (stm!=null)
             try 
             {
-                stm.close();
+                    stm.close();
             } 
             catch (SQLException exp) 
             {
@@ -104,43 +102,42 @@ public class CompteDAO extends DAO<Compte>{
     }
     
     @Override
-    public Compte read(int numero) {
-            return this.read(""+numero);
+    public Auteur read(int id) {
+            return this.read(""+id);
     }
         
     @Override
-    public Compte read(String numero) {
+    public Auteur read(String id) {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM compte WHERE NUMERO = ?";
+        String requete = "SELECT * FROM auteur WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, numero);
+            stm.setString(1, id);
             resultat = stm.executeQuery();
             if (resultat.next())
             {
-                Compte c = new Compte();
-                c.setNumero(resultat.getString("NUMERO"));
-                c.setPrenom(resultat.getString("PRENOM"));
-                c.setNom(resultat.getString("NOM"));
-                c.setMdp(resultat.getString("MDP"));
-                c.setType(resultat.getInt("TYPE"));
+                Auteur a = new Auteur();
+                a.setId(resultat.getString("ID"));
+                a.setPrenom(resultat.getString("PRENOM"));
+                a.setNom(resultat.getString("NOM"));
                 resultat.close();
                 stm.close();
-                return c;
+                return a;
             }
         }
         catch (SQLException exp)
         {
+            logger.log(Level.SEVERE, exp.getMessage());
         }
         finally
         {
             if (stm!=null)
             try 
             {
-                resultat.close();
-                stm.close();
+                    resultat.close();
+                    stm.close();
             } 
             catch (SQLException exp) 
             {
@@ -151,18 +148,15 @@ public class CompteDAO extends DAO<Compte>{
     }
     
     @Override
-    public boolean update(Compte compte) {
+    public boolean update(Auteur auteur) {
         PreparedStatement stm = null;
-        String requete = "UPDATE compte SET PRENOM = ?, NOM = ?, "
-                + "MDP = ?, TYPE = ? WHERE NUMERO = ?";
+        String requete = "UPDATE auteur SET PRENOM = ?, NOM = ? WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, compte.getPrenom());
-            stm.setString(2, compte.getNom());
-            stm.setString(3, compte.getMdp());
-            stm.setInt(4, compte.getType());
-            stm.setString(5, compte.getNumero());
+            stm.setString(1, auteur.getPrenom());
+            stm.setString(2, auteur.getNom());
+            stm.setString(3, auteur.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -190,26 +184,22 @@ public class CompteDAO extends DAO<Compte>{
     }
         
     @Override
-    public List<Compte> findAll() {
+    public List<Auteur> findAll() {
         Statement stm = null;
         ResultSet resultat = null;
-        List<Compte> listeCompte = new LinkedList();
+        List<Auteur> listeAuteur = new LinkedList();
         try 
         {
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery("SELECT * FROM compte");
+            resultat = stm.executeQuery("SELECT * FROM auteur");
             while (resultat.next())
             {
-                    Compte c = new Compte();
-                    c.setNumero(resultat.getString("NUMERO"));
-                    c.setPrenom(resultat.getString("PRENOM"));
-                    c.setNom(resultat.getString("NOM"));
-                    c.setMdp(resultat.getString("MDP"));
-                    c.setType(resultat.getInt("TYPE"));
-                    listeCompte.add(c);
+                    Auteur a = new Auteur();
+                    a.setId(resultat.getString("ID"));
+                    a.setPrenom(resultat.getString("PRENOM"));
+                    a.setNom(resultat.getString("NOM"));
+                    listeAuteur.add(a);
             }
-            resultat.close();
-            stm.close();
         }
         catch (SQLException exp)
         {
@@ -228,6 +218,6 @@ public class CompteDAO extends DAO<Compte>{
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
         }
-        return listeCompte;
+        return listeAuteur;
     }
 }

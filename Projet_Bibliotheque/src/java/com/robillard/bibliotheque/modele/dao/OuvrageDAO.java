@@ -5,7 +5,8 @@
  */
 package com.robillard.bibliotheque.modele.dao;
 
-import com.robillard.bibliotheque.modele.classes.Compte;
+import com.robillard.bibliotheque.modele.classes.Auteur;
+import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,34 +21,32 @@ import java.util.logging.Logger;
  *
  * @author Vengor
  */
-public class CompteDAO extends DAO<Compte>{
+public class OuvrageDAO extends DAO<Ouvrage>{
     
     private Logger logger = Logger.getLogger("monLogger");
-    
-    public CompteDAO(Connection c)
+        
+    public OuvrageDAO(Connection c)
     {
         super(c);
     }
         
     @Override
-    public boolean create(Compte compte) {
+    public boolean create(Ouvrage ouvrage) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO compte "
-                + "(NUMERO , PRENOM, NOM, MDP, TYPE) "
-                + "VALUES (?, ?, ?, ?, ?)";
+        String requete = "INSERT INTO ouvrage "
+                + "(TITRE, TYPE, AUTEUR_ID) "
+                + "VALUES (?, ?, ?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, compte.getNumero());
-            stm.setString(2, compte.getPrenom());
-            stm.setString(3, compte.getNom());
-            stm.setString(4, compte.getMdp());
-            stm.setInt(5, compte.getType());
+            stm.setString(1, ouvrage.getTitre());
+            stm.setString(2, ouvrage.getType());
+            stm.setString(3, ouvrage.getAuteur().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -70,18 +69,18 @@ public class CompteDAO extends DAO<Compte>{
     }
     
     @Override
-    public boolean delete(Compte compte) {
+    public boolean delete(Ouvrage ouvrage) {
         PreparedStatement stm = null;
-        String requete = "DELETE FROM compte WHERE NUMERO = ?";
+        String requete = "DELETE FROM ouvrage WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, compte.getNumero());
+            stm.setInt(1, ouvrage.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -104,35 +103,42 @@ public class CompteDAO extends DAO<Compte>{
     }
     
     @Override
-    public Compte read(int numero) {
-            return this.read(""+numero);
+    public Ouvrage read(int id) {
+            return this.read(""+id);
     }
         
     @Override
-    public Compte read(String numero) {
+    public Ouvrage read(String id) {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM compte WHERE NUMERO = ?";
+        String requete = "SELECT * FROM ouvrage"
+                + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID"
+                + " WHERE ouvrage.ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, numero);
+            stm.setString(1, id);
             resultat = stm.executeQuery();
             if (resultat.next())
             {
-                Compte c = new Compte();
-                c.setNumero(resultat.getString("NUMERO"));
-                c.setPrenom(resultat.getString("PRENOM"));
-                c.setNom(resultat.getString("NOM"));
-                c.setMdp(resultat.getString("MDP"));
-                c.setType(resultat.getInt("TYPE"));
+                Ouvrage o = new Ouvrage();
+                o.setId(resultat.getInt("ouvrage.ID"));
+                o.setTitre(resultat.getString("TITRE"));
+                o.setType(resultat.getString("TYPE"));
+                Auteur a = new Auteur(
+                        resultat.getString("auteur.ID"),
+                        resultat.getString("PRENOM"),
+                        resultat.getString("NOM")
+                );
+                o.setAuteur(a);
                 resultat.close();
                 stm.close();
-                return c;
+                return o;
             }
         }
         catch (SQLException exp)
         {
+            logger.log(Level.SEVERE, exp.getMessage());
         }
         finally
         {
@@ -151,23 +157,21 @@ public class CompteDAO extends DAO<Compte>{
     }
     
     @Override
-    public boolean update(Compte compte) {
+    public boolean update(Ouvrage ouvrage) {
         PreparedStatement stm = null;
-        String requete = "UPDATE compte SET PRENOM = ?, NOM = ?, "
-                + "MDP = ?, TYPE = ? WHERE NUMERO = ?";
+        String requete = "UPDATE ouvrage SET TITRE = ?, TYPE = ?, AUTEUR_ID = ? WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, compte.getPrenom());
-            stm.setString(2, compte.getNom());
-            stm.setString(3, compte.getMdp());
-            stm.setInt(4, compte.getType());
-            stm.setString(5, compte.getNumero());
+            stm.setString(1, ouvrage.getTitre());
+            stm.setString(2, ouvrage.getType());
+            stm.setString(3, ouvrage.getAuteur().getId());
+            stm.setInt(4, ouvrage.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -190,23 +194,28 @@ public class CompteDAO extends DAO<Compte>{
     }
         
     @Override
-    public List<Compte> findAll() {
+    public List<Ouvrage> findAll() {
         Statement stm = null;
         ResultSet resultat = null;
-        List<Compte> listeCompte = new LinkedList();
+        List<Ouvrage> listeOuvrage = new LinkedList();
         try 
         {
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery("SELECT * FROM compte");
+            resultat = stm.executeQuery("SELECT * FROM ouvrage"
+                    + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID");
             while (resultat.next())
             {
-                    Compte c = new Compte();
-                    c.setNumero(resultat.getString("NUMERO"));
-                    c.setPrenom(resultat.getString("PRENOM"));
-                    c.setNom(resultat.getString("NOM"));
-                    c.setMdp(resultat.getString("MDP"));
-                    c.setType(resultat.getInt("TYPE"));
-                    listeCompte.add(c);
+                    Ouvrage o = new Ouvrage();
+                    o.setId(resultat.getInt("ID"));
+                    o.setTitre(resultat.getString("TITRE"));
+                    o.setType(resultat.getString("TYPE"));
+                    Auteur a = new Auteur(
+                        resultat.getString("auteur.ID"),
+                        resultat.getString("PRENOM"),
+                        resultat.getString("NOM")
+                    );
+                    o.setAuteur(a);
+                    listeOuvrage.add(o);
             }
             resultat.close();
             stm.close();
@@ -228,6 +237,6 @@ public class CompteDAO extends DAO<Compte>{
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
         }
-        return listeCompte;
+        return listeOuvrage;
     }
 }
