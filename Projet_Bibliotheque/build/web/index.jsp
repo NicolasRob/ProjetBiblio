@@ -1,14 +1,11 @@
-<!-- Page Content -->
 <div class="container Site-Content">
 
-  <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">Accueil</h1>
 
   <ol class="breadcrumb">
     <li class="breadcrumb-item active">Accueil</li>
   </ol>
 
-  <!-- Intro Content -->
   <div class="row">
     <div class="col-lg-6">
       <img class="img-fluid rounded mb-4" src="./img/biblio.jpg" alt="">
@@ -20,8 +17,6 @@
       <p>Nous avons aussi une section suggestion. Si une oeuvre semble de pas être présente dans le catalogue, n'hésitez pas à faire une suggestion et notre personnel tentera d'acquérir l'ouvrage dans les plus bref délais.</p>
     </div>
   </div>
-  <!-- /.row -->
 
 </div>
-<!-- /.container -->
 

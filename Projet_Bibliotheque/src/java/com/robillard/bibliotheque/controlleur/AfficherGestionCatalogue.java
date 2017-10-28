@@ -12,7 +12,7 @@ public class AfficherGestionCatalogue extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/gestionCatalogue.jsp");
+        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
         r.forward(request, response);
     }
 

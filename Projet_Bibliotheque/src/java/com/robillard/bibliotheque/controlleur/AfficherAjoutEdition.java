@@ -12,7 +12,7 @@ public class AfficherAjoutEdition extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/ajoutEdition.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
             r.forward(request, response);
     }
 

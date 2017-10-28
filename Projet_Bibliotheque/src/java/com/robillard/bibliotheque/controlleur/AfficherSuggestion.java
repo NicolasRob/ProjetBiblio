@@ -13,7 +13,7 @@ public class AfficherSuggestion extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/suggestion.jsp");
+        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/suggestion.jsp");
         r.forward(request, response);
     }
 

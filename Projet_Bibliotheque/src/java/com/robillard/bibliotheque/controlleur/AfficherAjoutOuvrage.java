@@ -12,7 +12,7 @@ public class AfficherAjoutOuvrage extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/ajoutOuvrage.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
             r.forward(request, response);
     }
 

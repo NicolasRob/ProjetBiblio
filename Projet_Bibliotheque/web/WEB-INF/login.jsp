@@ -27,10 +27,12 @@
                           <input type="password" class="form-control" id="pwd" placeholder="Entrez votre mot de passe" name="pwd">
                       </div>
                   </div>
-                  <input type="hidden" name="action" value="connection" />
+                  <input type="hidden" name="action" value="login" />
                   <div class="form-group">        
                       <div class="col-sm-offset-2 col-sm-10">
-                          <button type="submit" class="btn btn-default">Connection</button>
+                            <p class="text-danger"><%= (request.getAttribute("erreurLogin") != null) 
+                                    ? request.getAttribute("erreurLogin") : "" %></p>
+                            <button type="submit" class="btn btn-default">Connection</button>
                       </div>
                   </div>
               </form>

@@ -12,7 +12,7 @@ public class AfficherReservations extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/reservations.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/reservations.jsp");
             r.forward(request, response);
     }
 

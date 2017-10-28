@@ -12,7 +12,7 @@ public class AfficherEmprunts extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/emprunts.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/emprunts.jsp");
             r.forward(request, response);
     }
 
