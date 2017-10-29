@@ -10,8 +10,9 @@ package com.robillard.bibliotheque.modele.classes;
  * @author c.blais
  */
 public class Exemplaire {
-    private int id,numeroEditionId;
+    private int id;
     private String Emplacement;
+    private Edition numeroEditionId;
     
     public int getId() {
         return id;
@@ -19,14 +20,6 @@ public class Exemplaire {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getNumeroEditionId() {
-        return numeroEditionId;
-    }
-
-    public void setNumeroEditionId(int numeroEditionId) {
-        this.numeroEditionId = numeroEditionId;
     }
 
     public String getEmplacement() {
@@ -37,9 +30,17 @@ public class Exemplaire {
         this.Emplacement = Emplacement;
     }
 
-    public Exemplaire(int numeroEditionId, String Emplacement) {
+    public Edition getNumeroEditionId() {
+        return numeroEditionId;
+    }
+
+    public void setNumeroEditionId(Edition numeroEditionId) {
         this.numeroEditionId = numeroEditionId;
+    }
+
+    public Exemplaire(String Emplacement, Edition numeroEditionId) {
         this.Emplacement = Emplacement;
+        this.numeroEditionId = numeroEditionId;
     }
     
 }
