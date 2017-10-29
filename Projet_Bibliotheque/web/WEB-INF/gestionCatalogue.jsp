@@ -53,6 +53,7 @@
     <c:if test="${param.recherche != null}">
         <p class="text-danger">${requestScope.erreurInput}</p>
         <p class="text-danger">${requestScope.erreurException}</p>
+        <p class="text-success">${param.message}</p>
         <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
             <c:forEach var="ouvrage" items="${requestScope.ouvrages}" varStatus="loop">
@@ -70,8 +71,12 @@
                 <table class="table table-striped table-bordered">
                     <tr>
                         <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une édition</a></td>
-                        <td colspan="2"><a href="2">Modifier l'ouvrage</a></td>
-                        <td colspan="2"><a href="2">Supprimer l'ouvrage</a></td>
+                        <td colspan="2"><a href="go?action=supprimerOuvrage&id=${ouvrage.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Supprimer l'ouvrage</a></td>
+                        <td><a href="go?action=afficherModificationOuvrage&id=${ouvrage.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Modifier l'ouvrage</a></td>
+                        <td><a href="go?action=afficherModificationAuteur&id=${ouvrage.getAuteur().getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Modifier l'auteur</a></td>
                     </tr>
                     <tr>
                         <td>ISBN</td>
