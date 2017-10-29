@@ -1,7 +1,15 @@
 package com.robillard.bibliotheque.controlleur;
 
+import com.mysql.jdbc.Connection;
+import com.robillard.bibliotheque.modele.classes.Ouvrage;
+import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
+import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +20,37 @@ public class AfficherGestionCatalogue extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
-        r.forward(request, response);
+        List<Ouvrage> listeOuvrage = new LinkedList();
+        if (request.getParameter("recherche") != null &&
+            request.getParameter("recherche").trim() != "" &&
+            request.getParameter("critere") != null)
+        {
+            try
+            {
+                Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+                Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+                Connection cnx = (Connection) Connexion.getInstance();
+                OuvrageDAO dao = new OuvrageDAO(cnx);
+                listeOuvrage = dao.findAll();
+                request.setAttribute("ouvrages", listeOuvrage);
+            }
+            catch (Exception exp)
+            {
+                Logger logger = Logger.getLogger("monLogger");
+                logger.log(Level.SEVERE, exp.getMessage());
+                String message = "Une erreur inattendue s'est produite lors"
+                        + " de la recherche. Veuillez réessayer plus tard.";
+                request.setAttribute("erreurException", message);
+            }
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+            r.forward(request, response);
+        }
+        else
+        {
+            request.setAttribute("erreurInput", "Les champs ne peuvent être vides");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+            r.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

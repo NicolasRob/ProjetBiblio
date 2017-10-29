@@ -1,3 +1,5 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container Site-Content">
 
   <h1 class="mt-4 mb-3">Gestion du catalogue</h1>
@@ -30,10 +32,11 @@
                             <select class="form-control" id="critere" name="critere">
                                 <option>Titre</option>
                                 <option>Auteur</option>
+                                <option>Catégorie</option>
                             </select>
                         </div>
                   </div>
-                  <input type="hidden" name="action" value="rechercheCatalogue" />
+                  <input type="hidden" name="action" value="afficherGestionCatalogue" />
                   <div class="form-group">        
                       <div class="col-sm-offset-2 col-sm-10">
                           <button type="submit" class="btn btn-default">Rechercher</button>
@@ -47,8 +50,11 @@
         </div>
         </div>
     </div>
+    <c:if test="${param.recherche != null}">
         <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
+            <p class="text-danger">${requestScope.erreurInput}</p>
+            <p class="text-danger">${requestScope.erreurException}</p>
           <div class="card-header" role="tab" id="headingOne">
             <h5 class="mb-0">
               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
@@ -59,7 +65,7 @@
             <div class="card-body">
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une �dition</a></td>
+                        <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une édition</a></td>
                         <td colspan="2"><a href="2">Modifier l'ouvrage</a></td>
                         <td colspan="2"><a href="2">Supprimer l'ouvrage</a></td>
                     </tr>
@@ -105,7 +111,8 @@
             </div>
           </div>
         </div>
-</div>
+        </div>
+        </c:if>
 </div>
 <!-- /.container -->
 
