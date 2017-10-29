@@ -31,7 +31,10 @@ public class AfficherGestionCatalogue extends HttpServlet {
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
                 OuvrageDAO dao = new OuvrageDAO(cnx);
-                listeOuvrage = dao.findAll();
+                System.out.println(request.getParameter("critere"));
+                System.out.println(request.getParameter("recherche"));
+                listeOuvrage = dao.findAll( request.getParameter("critere"), 
+                                            request.getParameter("recherche"));
                 request.setAttribute("ouvrages", listeOuvrage);
             }
             catch (Exception exp)

@@ -27,12 +27,12 @@
                       </div>
                   </div>
                   <div class="form-group">
-                        <label class="control-label col-sm-2" for="pwd">Crit&egrave;re:</label>
+                        <label class="control-label col-sm-2" for="critere">Crit&egrave;re:</label>
                         <div class="col-sm-10">          
                             <select class="form-control" id="critere" name="critere">
-                                <option>Titre</option>
-                                <option>Auteur</option>
-                                <option>Catégorie</option>
+                                <option value="titre">Titre</option>
+                                <option value="auteur">Auteur</option>
+                                <option value="categorie">Catégorie</option>
                             </select>
                         </div>
                   </div>
@@ -51,17 +51,21 @@
         </div>
     </div>
     <c:if test="${param.recherche != null}">
+        <p class="text-danger">${requestScope.erreurInput}</p>
+        <p class="text-danger">${requestScope.erreurException}</p>
         <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
-            <p class="text-danger">${requestScope.erreurInput}</p>
-            <p class="text-danger">${requestScope.erreurException}</p>
-          <div class="card-header" role="tab" id="headingOne">
+            <c:forEach var="ouvrage" items="${requestScope.ouvrages}" varStatus="loop">
+          <div class="card-header" role="tab" id="heading${loop.index}">
             <h5 class="mb-0">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse${loop.index}" 
+                 aria-expanded="true" aria-controls="collapse${loop.index}">
+                  ${ouvrage.getTitre()} - ${ouvrage.getAuteur().getPrenom()} ${ouvrage.getAuteur().getNom()}
+              </a>
             </h5>
           </div>
 
-          <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div id="collapse${loop.index}" class="collapse" role="tabpanel" aria-labelledby="heading${loop.index}">
             <div class="card-body">
                 <table class="table table-striped table-bordered">
                     <tr>
@@ -87,29 +91,7 @@
                 </table>
             </div>
           </div>
-            
-            <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
-            </h5>
-          </div>
-
-          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div class="card-body">
-                <table class="table table-striped table-bordered">
-                    <tr>
-                        <td>ISBN</td>
-                        <td>Editeur</td>
-                        <td>Date de Publication</td>
-                    </tr>
-                    <tr>
-                        <td>ISBN</td>
-                        <td>Editeur</td>
-                        <td>Date de Publication</td>
-                    </tr>
-                </table>
-            </div>
-          </div>
+          </c:forEach>
         </div>
         </div>
         </c:if>
