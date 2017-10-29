@@ -1,45 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.robillard.bibliotheque.modele.classes;
 
-/**
- *
- * @author c.blais
- */
 public class Reservation {
-    private int id,numeroCompteId,numeroExemplaireId;
+    private int id;
     private String dateFin,dateDebut;
+    private Compte compte;
+    private Exemplaire numeroExemplaireId;
 
-    public Reservation(String dateFin, String dateDebut) {
-        this.dateFin = dateFin;
-        this.dateDebut = dateDebut;
+    public Reservation() {
+    }
+    
+    public Compte getcompte() {
+        return compte;
     }
 
+    public void setcompte(Compte compte) {
+        this.compte = compte;
+    }
+
+    public Exemplaire getNumeroExemplaireId() {
+        return numeroExemplaireId;
+    }
+
+    public void setNumeroExemplaireId(Exemplaire numeroExemplaireId) {
+        this.numeroExemplaireId = numeroExemplaireId;
+    }
+
+    public Reservation(String dateFin, String dateDebut, Compte compte, Exemplaire numeroExemplaireId) {
+        this.dateFin = dateFin;
+        this.dateDebut = dateDebut;
+        this.compte = compte;
+        this.numeroExemplaireId = numeroExemplaireId;
+    }
+    
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getNumeroCompteId() {
-        return numeroCompteId;
-    }
-
-    public void setNumeroCompteId(int numeroCompteId) {
-        this.numeroCompteId = numeroCompteId;
-    }
-
-    public int getNumeroExemplaireId() {
-        return numeroExemplaireId;
-    }
-
-    public void setNumeroExemplaireId(int numeroExemplaireId) {
-        this.numeroExemplaireId = numeroExemplaireId;
     }
 
     public String getDateFin() {
