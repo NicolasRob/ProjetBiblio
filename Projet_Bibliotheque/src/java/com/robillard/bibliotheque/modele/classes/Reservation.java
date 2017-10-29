@@ -1,26 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.robillard.bibliotheque.modele.classes;
 
-/**
- *
- * @author c.blais
- */
 public class Reservation {
     private int id;
     private String dateFin,dateDebut;
-    private Compte numeroCompteId;
+    private Compte compte;
     private Exemplaire numeroExemplaireId;
 
-    public Compte getNumeroCompteId() {
-        return numeroCompteId;
+    public Reservation() {
+    }
+    
+    public Compte getcompte() {
+        return compte;
     }
 
-    public void setNumeroCompteId(Compte numeroCompteId) {
-        this.numeroCompteId = numeroCompteId;
+    public void setcompte(Compte compte) {
+        this.compte = compte;
     }
 
     public Exemplaire getNumeroExemplaireId() {
@@ -31,10 +26,10 @@ public class Reservation {
         this.numeroExemplaireId = numeroExemplaireId;
     }
 
-    public Reservation(String dateFin, String dateDebut, Compte numeroCompteId, Exemplaire numeroExemplaireId) {
+    public Reservation(String dateFin, String dateDebut, Compte compte, Exemplaire numeroExemplaireId) {
         this.dateFin = dateFin;
         this.dateDebut = dateDebut;
-        this.numeroCompteId = numeroCompteId;
+        this.compte = compte;
         this.numeroExemplaireId = numeroExemplaireId;
     }
     

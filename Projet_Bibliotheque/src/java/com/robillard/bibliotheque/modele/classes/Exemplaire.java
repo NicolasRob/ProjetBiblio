@@ -1,18 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.robillard.bibliotheque.modele.classes;
 
-/**
- *
- * @author c.blais
- */
 public class Exemplaire {
     private int id;
     private String Emplacement;
-    private Edition numeroEditionId;
+    private Edition edition;
     
     public int getId() {
         return id;
@@ -30,17 +22,20 @@ public class Exemplaire {
         this.Emplacement = Emplacement;
     }
 
-    public Edition getNumeroEditionId() {
-        return numeroEditionId;
+    public Edition getedition() {
+        return edition;
     }
 
-    public void setNumeroEditionId(Edition numeroEditionId) {
-        this.numeroEditionId = numeroEditionId;
+    public void setedition(Edition edition) {
+        this.edition = edition;
     }
 
-    public Exemplaire(String Emplacement, Edition numeroEditionId) {
+    public Exemplaire(String Emplacement, Edition edition) {
         this.Emplacement = Emplacement;
-        this.numeroEditionId = numeroEditionId;
+        this.edition = edition;
+    }
+
+    public Exemplaire() {
     }
     
 }

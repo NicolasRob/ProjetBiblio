@@ -1,32 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.robillard.bibliotheque.modele.classes;
 
-/**
- *
- * @author c.blais
- */
 public class Edition {
     private int id, ouvrageId,nombrePage;
     private String isbn,datePublication,image;
-    private Editeur numeroEditeurId;
-    private Ouvrage numeroOuvrageId;
+    private Editeur editeur;
+    private Ouvrage ouvrage;
 
     public Edition() {
     }
 
 
-    public Edition(int ouvrageId, int nombrePage, String isbn, String datePublication, String image, Editeur numeroEditeurId, Ouvrage numeroOuvrageId) {
+    public Edition(int ouvrageId, int nombrePage, String isbn, String datePublication, String image, Editeur editeur, Ouvrage ouvrage) {
         this.ouvrageId = ouvrageId;
         this.nombrePage = nombrePage;
         this.isbn = isbn;
         this.datePublication = datePublication;
         this.image = image;
-        this.numeroEditeurId = numeroEditeurId;
-        this.numeroOuvrageId = numeroOuvrageId;
+        this.editeur = editeur;
+        this.ouvrage = ouvrage;
     }
 
     public String getImage() {

@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.robillard.bibliotheque.modele.classes;
 
-/**
- *
- * @author c.blais
- */
 public class Emprunt {
     private int id;
-    private Compte numeroCompteId;
-    private Exemplaire numeroExemplaireId;
+    private Compte compte;
+    private Exemplaire Exemplaire;
     private String dateDebut,dateFin;
+
+    public Emprunt() {
+    }
 
     public int getId() {
         return id;
@@ -23,20 +18,20 @@ public class Emprunt {
         this.id = id;
     }
 
-    public Compte getNumeroCompteId() {
-        return numeroCompteId;
+    public Compte getcompte() {
+        return compte;
     }
 
-    public void setNumeroCompteId(Compte numeroCompteId) {
-        this.numeroCompteId = numeroCompteId;
+    public void setcompte(Compte compte) {
+        this.compte = compte;
     }
 
-    public Exemplaire getNumeroExemplaireId() {
-        return numeroExemplaireId;
+    public Exemplaire getExemplaire() {
+        return Exemplaire;
     }
 
-    public void setNumeroExemplaireId(Exemplaire numeroExemplaireId) {
-        this.numeroExemplaireId = numeroExemplaireId;
+    public void setExemplaire(Exemplaire Exemplaire) {
+        this.Exemplaire = Exemplaire;
     }
 
     public String getDateDebut() {
@@ -55,9 +50,9 @@ public class Emprunt {
         this.dateFin = dateFin;
     }
 
-    public Emprunt(Compte numeroCompteId, Exemplaire numeroExemplaireId, String dateDebut, String dateFin) {
-        this.numeroCompteId = numeroCompteId;
-        this.numeroExemplaireId = numeroExemplaireId;
+    public Emprunt(Compte compte, Exemplaire Exemplaire, String dateDebut, String dateFin) {
+        this.compte = compte;
+        this.Exemplaire = Exemplaire;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
