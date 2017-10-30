@@ -132,15 +132,12 @@ public class ReservationDAO extends DAO<Reservation> {
                 r.setId(resultat.getInt("ID"));
                 r.setDateFin(resultat.getString("DATE_FIN"));
                 r.setDateDebut(resultat.getString("NOM"));
-                
                 r.setCompte(new Compte(
                         resultat.getString("NUMERO"),
                         resultat.getString("PRENOM"),
                         resultat.getString("NOM"),
                         resultat.getString("MDP"),
-                        resultat.getInt("TYPE")
-                ));
-                
+                        resultat.getInt("TYPE")));                
                 r.setExemplaire(new Exemplaire(
                         resultat.getInt("ID"),
                         resultat.getString("EMPLACEMENT"),
