@@ -12,7 +12,7 @@
         <a href="go?action=afficherGestionCatalogue">Gestion du catalogue</a>
     </li>
     <li class="breadcrumb-item">Modification d'un auteur</li>
-    <li class="breadcrumb-item active">${requestScope.auteur.getPrenom() + " " + requestScope.auteur.getNom()}</li>
+    <li class="breadcrumb-item active">${requestScope.auteur.getPrenom()} ${requestScope.auteur.getNom()}</li>
   </ol>
 
     <div class="card mb-4">
