@@ -9,6 +9,8 @@ import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.classes.Edition;
 import com.robillard.bibliotheque.modele.classes.Editeur;
+import com.robillard.bibliotheque.modele.classes.Ouvrage;
+import com.robillard.bibliotheque.modele.classes.Auteur;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -115,6 +117,9 @@ public class ReservationDAO extends DAO<Reservation> {
                 +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
                 +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
                 +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
+                +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
                 +"WHERE ID = ?";
         try 
         {
@@ -145,9 +150,17 @@ public class ReservationDAO extends DAO<Reservation> {
                                 resultat.getString("ISBN"),
                                 resultat.getString("DATE_PUBLICATION"),
                                 resultat.getString("IMAGE"),
-                                new Editeur(),
-                                new Ouvrage());
-                ));
+                                new Editeur(
+                                        resultat.getInt("editeur.ID"),
+                                        resultat.getString("editeur.NOM")),
+                                new Ouvrage(
+                                        resultat.getInt("ouvrage.ID"),
+                                        resultat.getString("ouvrage.TITRE"),
+                                        resultat.getString("ouvrage.Type"),
+                                        new Auteur(
+                                                resultat.getString("auteur.ID"),
+                                                resultat.getString("auteur.NOM"),
+                                                resultat.getString("auteur.PRENOM"))))));
                 resultat.close();
                 stm.close();
                 return r;
@@ -215,21 +228,54 @@ public class ReservationDAO extends DAO<Reservation> {
     public List<Reservation> findAll() {
         Statement stm = null;
         ResultSet resultat = null;
-        List<Compte> listeCompte = new LinkedList();
+        List<Reservation> listeReservation = new LinkedList();
         try 
         {
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery("SELECT * FROM compte");
+            resultat = stm.executeQuery("SELECT * FROM reservation" 
+                +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
+                +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
+                +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
+                +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
+                +"WHERE ID = ?");
             while (resultat.next())
             {
-                    //probleme de creation d'objet en chaine, doit consulter nicola
-                    Compte c = new Compte();
-                    c.setNumero(resultat.getString("NUMERO"));
-                    c.setPrenom(resultat.getString("PRENOM"));
-                    c.setNom(resultat.getString("NOM"));
-                    c.setMdp(resultat.getString("MDP"));
-                    c.setType(resultat.getInt("TYPE"));
-                    listeCompte.add(c);
+                    Reservation r = new Reservation();
+                    r.setId(resultat.getInt("ID"));
+                    r.setDateFin(resultat.getString("DATE_FIN"));
+                    r.setDateDebut(resultat.getString("NOM"));
+
+                    r.setCompte(new Compte(
+                            resultat.getString("NUMERO"),
+                            resultat.getString("PRENOM"),
+                            resultat.getString("NOM"),
+                            resultat.getString("MDP"),
+                            resultat.getInt("TYPE")
+                    ));
+
+                    r.setExemplaire(new Exemplaire(
+                            resultat.getInt("ID"),
+                            resultat.getString("EMPLACEMENT"),
+                            new Edition(
+                                    resultat.getInt("ID"),
+                                    resultat.getInt("NOMBRE_PAGE"),
+                                    resultat.getString("ISBN"),
+                                    resultat.getString("DATE_PUBLICATION"),
+                                    resultat.getString("IMAGE"),
+                                    new Editeur(
+                                            resultat.getInt("editeur.ID"),
+                                            resultat.getString("editeur.NOM")),
+                                    new Ouvrage(
+                                            resultat.getInt("ouvrage.ID"),
+                                            resultat.getString("ouvrage.TITRE"),
+                                            resultat.getString("ouvrage.Type"),
+                                            new Auteur(
+                                                    resultat.getString("auteur.ID"),
+                                                    resultat.getString("auteur.NOM"),
+                                                    resultat.getString("auteur.PRENOM"))))));
+                    listeReservation.add(r);
             }
             resultat.close();
             stm.close();
@@ -251,6 +297,6 @@ public class ReservationDAO extends DAO<Reservation> {
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
         }
-        return listeCompte;
+        return listeReservation;
     }
 }

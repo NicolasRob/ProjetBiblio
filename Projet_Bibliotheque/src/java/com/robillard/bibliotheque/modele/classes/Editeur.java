@@ -8,7 +8,8 @@ public class Editeur {
     public Editeur() {
     }
 
-    public Editeur(String nom) {
+    public Editeur(String nom,int id) {
+        this.id = id;
         this.nom = nom;
     }
 
