@@ -5,32 +5,32 @@ public class Reservation {
     private int id;
     private String dateFin,dateDebut;
     private Compte compte;
-    private Exemplaire numeroExemplaireId;
+    private Exemplaire exemplaire;
 
     public Reservation() {
     }
     
-    public Compte getcompte() {
+    public Compte getCompte() {
         return compte;
     }
 
-    public void setcompte(Compte compte) {
+    public void setCompte(Compte compte) {
         this.compte = compte;
     }
 
-    public Exemplaire getNumeroExemplaireId() {
-        return numeroExemplaireId;
+    public Exemplaire getExemplaire() {
+        return exemplaire;
     }
 
-    public void setNumeroExemplaireId(Exemplaire numeroExemplaireId) {
-        this.numeroExemplaireId = numeroExemplaireId;
+    public void setExemplaire(Exemplaire numeroExemplaireId) {
+        this.exemplaire = numeroExemplaireId;
     }
 
     public Reservation(String dateFin, String dateDebut, Compte compte, Exemplaire numeroExemplaireId) {
         this.dateFin = dateFin;
         this.dateDebut = dateDebut;
         this.compte = compte;
-        this.numeroExemplaireId = numeroExemplaireId;
+        this.exemplaire = numeroExemplaireId;
     }
     
     public int getId() {
