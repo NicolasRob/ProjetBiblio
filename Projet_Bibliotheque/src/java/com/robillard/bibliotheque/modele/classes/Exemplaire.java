@@ -5,6 +5,12 @@ public class Exemplaire {
     private int id;
     private String Emplacement;
     private Edition edition;
+
+    public Exemplaire(int id, String Emplacement, Edition edition) {
+        this.id = id;
+        this.Emplacement = Emplacement;
+        this.edition = edition;
+    }
     
     public int getId() {
         return id;
