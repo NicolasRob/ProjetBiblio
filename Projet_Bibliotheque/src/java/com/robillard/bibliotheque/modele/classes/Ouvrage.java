@@ -8,6 +8,12 @@ public class Ouvrage {
 
     public Ouvrage() {}
     
+    public Ouvrage(String titre, String type, Auteur auteur) {
+        this.titre = titre;
+        this.type = type;
+        this.auteur = auteur;
+    }
+    
     public Ouvrage(int id,String titre, String type, Auteur auteur) {
         this.id=id;
         this.titre = titre;

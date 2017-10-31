@@ -106,6 +106,10 @@
         <servlet-name>ModifierAuteur</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.ModifierAuteur</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditionDAO</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.modele.dao.EditionDAO</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -193,6 +197,10 @@
     <servlet-mapping>
         <servlet-name>ModifierAuteur</servlet-name>
         <url-pattern>/ModifierAuteur</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditionDAO</servlet-name>
+        <url-pattern>/EditionDAO</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
