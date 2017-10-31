@@ -1,3 +1,4 @@
+
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -7,6 +8,7 @@ import com.robillard.bibliotheque.modele.dao.AuteurDAO;
 import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AjouterOuvrage extends HttpServlet {
+public class ModifierOuvrage extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -41,61 +43,71 @@ public class AjouterOuvrage extends HttpServlet {
                 request.getParameter("idAuteur") == null ||
                 request.getParameter("idAuteur").trim() == "")
             {
-                request.setAttribute("erreurAjout", "Tous les champs doivent être remplis");
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
+                Auteur auteur = new Auteur(
+                        request.getParameter("idAuteur"),
+                        request.getParameter("prenom"),
+                        request.getParameter("nom")
+                );
+                Ouvrage ouvrage = new Ouvrage (
+                        request.getParameter("titre"),
+                        request.getParameter("type"),
+                        auteur
+                );
+                ouvrage.setId(Integer.parseInt(request.getParameter("id")));
+                request.setAttribute("ouvrage", ouvrage);
+                request.setAttribute("erreurMod", "Tous les champs doivent être remplis");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modOuvrage.jsp");
                 r.forward(request, response);
             }
             else
             {
-                System.out.println("TEST1");
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
                 AuteurDAO auteurDao = new AuteurDAO(cnx);
                 OuvrageDAO ouvrageDao = new OuvrageDAO(cnx);
 
-                System.out.println("TEST2");
                 Auteur auteur = new Auteur(
                     request.getParameter("idAuteur"),
                     request.getParameter("prenom"),
                     request.getParameter("nom")
                 );
 
-                System.out.println("TEST3");
                 Auteur auteurDb = auteurDao.read(auteur.getId());
 
-                System.out.println("TEST4");
-                System.out.println(auteur.getId() + auteur.getPrenom() + auteur.getNom());
                 if (auteurDb == null)
                 {
                     auteurDao.create(auteur);
                     auteurDb = auteurDao.read(auteur.getId());
-                }
-                System.out.println("TEST5");                
+                }              
                 if (auteurDb != null && 
                     auteurDb.getNom().equals(auteur.getNom()) &&
                     auteurDb.getPrenom().equals(auteur.getPrenom()))
                 {
-                    Ouvrage ouvrage = new Ouvrage(
-                        request.getParameter("titre"),
-                        request.getParameter("type"),
-                        auteurDb
+                    Ouvrage ouvrage = new Ouvrage (
+                            request.getParameter("titre"),
+                            request.getParameter("type"),
+                            auteurDb
                     );
-
-                    ouvrageDao.create(ouvrage);
-                    String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8") 
-                            + "t" + URLEncoder.encode("é", "UTF-8") + 
-                            " ajout" + URLEncoder.encode("é", "UTF-8") + 
-                            " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
-                    response.sendRedirect("go?action=afficherAjoutOuvrage&message="+message);
+                    
+                    ouvrage.setId(Integer.parseInt(request.getParameter("id")));
+                    
+                    ouvrageDao.update(ouvrage);
+                    String message = "L'ouvrage a été modifié avec succès";
+                    request.setAttribute("ouvrage", ouvrage);
+                    request.setAttribute("message", message);
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modOuvrage.jsp");
+                    r.forward(request, response);
                 }
                 else
                 {
                     String message = "L'identification " + auteur.getId() +
                          " est déja associé à un auteur du nom de " +
                          auteurDb.getPrenom() + " " + auteurDb.getNom();
+                    Ouvrage ouvrage = ouvrageDao.read(request.getParameter("id"));
+                    request.setAttribute("ouvrage", ouvrage);
                     request.setAttribute("erreurAuteur", message);
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modOuvrage.jsp");
                     r.forward(request, response);
                 }
             }
@@ -107,7 +119,7 @@ public class AjouterOuvrage extends HttpServlet {
             String message = "Une erreur inattendue s'est produite. Veuillez"
                     + " réessayer plus tard.";
             request.setAttribute("erreurException", message);
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modOuvrage.jsp");
             r.forward(request, response);
         }
     }

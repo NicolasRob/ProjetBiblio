@@ -72,6 +72,10 @@ public class ControleurFrontal extends HttpServlet {
                     r = this.getServletContext().getNamedDispatcher("AfficherGestionSuggestion");
                     r.forward(request, response);
                     break;
+                case "supprimerOuvrage":
+                    r = this.getServletContext().getNamedDispatcher("SupprimerOuvrage");
+                    r.forward(request, response);
+                    break;
                 case "login":
                     r = this.getServletContext().getNamedDispatcher("Login");
                     r.forward(request, response);
@@ -82,6 +86,22 @@ public class ControleurFrontal extends HttpServlet {
                     break;
                 case "ajouterOuvrage":
                     r = this.getServletContext().getNamedDispatcher("AjouterOuvrage");
+                    r.forward(request, response);
+                    break;
+                case "afficherModificationOuvrage":
+                    r = this.getServletContext().getNamedDispatcher("AfficherModOuvrage");
+                    r.forward(request, response);
+                    break;
+                case "afficherModificationAuteur":
+                    r = this.getServletContext().getNamedDispatcher("AfficherModAuteur");
+                    r.forward(request, response);
+                    break;
+                case "modifierOuvrage":
+                    r = this.getServletContext().getNamedDispatcher("ModifierOuvrage");
+                    r.forward(request, response);
+                    break;
+                case "modifierAuteur":
+                    r = this.getServletContext().getNamedDispatcher("ModifierAuteur");
                     r.forward(request, response);
                     break;
                 default:
