@@ -1,3 +1,5 @@
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container Site-Content">
 
   <h1 class="mt-4 mb-3">Gestion du catalogue</h1>
@@ -25,15 +27,16 @@
                       </div>
                   </div>
                   <div class="form-group">
-                        <label class="control-label col-sm-2" for="pwd">Crit&egrave;re:</label>
+                        <label class="control-label col-sm-2" for="critere">Crit&egrave;re:</label>
                         <div class="col-sm-10">          
                             <select class="form-control" id="critere" name="critere">
-                                <option>Titre</option>
-                                <option>Auteur</option>
+                                <option value="titre">Titre</option>
+                                <option value="auteur">Auteur</option>
+                                <option value="categorie">Catégorie</option>
                             </select>
                         </div>
                   </div>
-                  <input type="hidden" name="action" value="rechercheCatalogue" />
+                  <input type="hidden" name="action" value="afficherGestionCatalogue" />
                   <div class="form-group">        
                       <div class="col-sm-offset-2 col-sm-10">
                           <button type="submit" class="btn btn-default">Rechercher</button>
@@ -47,21 +50,33 @@
         </div>
         </div>
     </div>
+    <c:if test="${param.recherche != null}">
+        <p class="text-danger">${requestScope.erreurInput}</p>
+        <p class="text-danger">${requestScope.erreurException}</p>
+        <p class="text-success">${param.message}</p>
         <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
-          <div class="card-header" role="tab" id="headingOne">
+            <c:forEach var="ouvrage" items="${requestScope.ouvrages}" varStatus="loop">
+          <div class="card-header" role="tab" id="heading${loop.index}">
             <h5 class="mb-0">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse${loop.index}" 
+                 aria-expanded="true" aria-controls="collapse${loop.index}">
+                  ${ouvrage.getTitre()} - ${ouvrage.getAuteur().getPrenom()} ${ouvrage.getAuteur().getNom()}
+              </a>
             </h5>
           </div>
 
-          <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div id="collapse${loop.index}" class="collapse" role="tabpanel" aria-labelledby="heading${loop.index}">
             <div class="card-body">
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une �dition</a></td>
-                        <td colspan="2"><a href="2">Modifier l'ouvrage</a></td>
-                        <td colspan="2"><a href="2">Supprimer l'ouvrage</a></td>
+                        <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une édition</a></td>
+                        <td colspan="2"><a href="go?action=supprimerOuvrage&id=${ouvrage.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Supprimer l'ouvrage</a></td>
+                        <td><a href="go?action=afficherModificationOuvrage&id=${ouvrage.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Modifier l'ouvrage</a></td>
+                        <td><a href="go?action=afficherModificationAuteur&id=${ouvrage.getAuteur().getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Modifier l'auteur</a></td>
                     </tr>
                     <tr>
                         <td>ISBN</td>
@@ -81,31 +96,10 @@
                 </table>
             </div>
           </div>
-            
-            <div class="card-header" role="tab" id="headingTwo">
-            <h5 class="mb-0">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">Ouvrage - Auteur</a>
-            </h5>
-          </div>
-
-          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div class="card-body">
-                <table class="table table-striped table-bordered">
-                    <tr>
-                        <td>ISBN</td>
-                        <td>Editeur</td>
-                        <td>Date de Publication</td>
-                    </tr>
-                    <tr>
-                        <td>ISBN</td>
-                        <td>Editeur</td>
-                        <td>Date de Publication</td>
-                    </tr>
-                </table>
-            </div>
-          </div>
+          </c:forEach>
         </div>
-</div>
+        </div>
+        </c:if>
 </div>
 <!-- /.container -->
 

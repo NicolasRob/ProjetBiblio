@@ -7,7 +7,7 @@ import com.robillard.bibliotheque.modele.dao.AuteurDAO;
 import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.net.URLEncoder;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -16,12 +16,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AjouterOuvrage extends HttpServlet {
+public class ModifierAuteur extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("utf8");
-        response.setContentType("utf8");
         try 
         {
             if (request.getSession().getAttribute("type") == null ||
@@ -30,74 +28,43 @@ public class AjouterOuvrage extends HttpServlet {
                 RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
                 r.forward(request, response);
             }
-            else if (request.getParameter("titre") == null ||
-                request.getParameter("titre").trim() == "" || 
-                request.getParameter("type") == null ||
-                request.getParameter("type").trim() == "" ||
-                request.getParameter("prenom") == null ||
-                request.getParameter("prenom").trim() == "" ||
+            else if (request.getParameter("prenom") == null ||
+                "".equals(request.getParameter("prenom").trim()) ||
                 request.getParameter("nom") == null ||
-                request.getParameter("nom").trim() == "" ||
-                request.getParameter("idAuteur") == null ||
-                request.getParameter("idAuteur").trim() == "")
+                "".equals(request.getParameter("nom").trim()) )
             {
-                request.setAttribute("erreurAjout", "Tous les champs doivent être remplis");
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
+                Auteur auteur = new Auteur(
+                        request.getParameter("id"),
+                        request.getParameter("prenom"),
+                        request.getParameter("nom")
+                );
+                request.setAttribute("auteur", auteur);
+                request.setAttribute("erreurMod", "Tous les champs doivent être remplis");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modAuteur.jsp");
                 r.forward(request, response);
             }
             else
             {
-                System.out.println("TEST1");
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
                 AuteurDAO auteurDao = new AuteurDAO(cnx);
-                OuvrageDAO ouvrageDao = new OuvrageDAO(cnx);
 
-                System.out.println("TEST2");
                 Auteur auteur = new Auteur(
-                    request.getParameter("idAuteur"),
+                    request.getParameter("id"),
                     request.getParameter("prenom"),
                     request.getParameter("nom")
                 );
-
-                System.out.println("TEST3");
-                Auteur auteurDb = auteurDao.read(auteur.getId());
-
-                System.out.println("TEST4");
-                System.out.println(auteur.getId() + auteur.getPrenom() + auteur.getNom());
-                if (auteurDb == null)
-                {
-                    auteurDao.create(auteur);
-                    auteurDb = auteurDao.read(auteur.getId());
-                }
-                System.out.println("TEST5");                
-                if (auteurDb != null && 
-                    auteurDb.getNom().equals(auteur.getNom()) &&
-                    auteurDb.getPrenom().equals(auteur.getPrenom()))
-                {
-                    Ouvrage ouvrage = new Ouvrage(
-                        request.getParameter("titre"),
-                        request.getParameter("type"),
-                        auteurDb
-                    );
-
-                    ouvrageDao.create(ouvrage);
-                    String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8") 
-                            + "t" + URLEncoder.encode("é", "UTF-8") + 
-                            " ajout" + URLEncoder.encode("é", "UTF-8") + 
-                            " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
-                    response.sendRedirect("go?action=afficherAjoutOuvrage&message="+message);
-                }
-                else
-                {
-                    String message = "L'identification " + auteur.getId() +
-                         " est déja associé à un auteur du nom de " +
-                         auteurDb.getPrenom() + " " + auteurDb.getNom();
-                    request.setAttribute("erreurAuteur", message);
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
-                    r.forward(request, response);
-                }
+                
+                System.out.println(auteur.getId());
+                System.out.println(auteur.getPrenom());
+                System.out.println(auteur.getNom());
+                auteurDao.update(auteur);
+                String message = "L'auteur a été modifié avec succès";
+                request.setAttribute("auteur", auteur);
+                request.setAttribute("message", message);
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modAuteur.jsp");
+                r.forward(request, response);
             }
         }
         catch (Exception e)
@@ -107,7 +74,7 @@ public class AjouterOuvrage extends HttpServlet {
             String message = "Une erreur inattendue s'est produite. Veuillez"
                     + " réessayer plus tard.";
             request.setAttribute("erreurException", message);
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modOuvrage.jsp");
             r.forward(request, response);
         }
     }

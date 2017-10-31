@@ -239,4 +239,70 @@ public class OuvrageDAO extends DAO<Ouvrage>{
         }
         return listeOuvrage;
     }
+    
+    public List<Ouvrage> findAll(String filtre, String recherche) {
+        Statement stm = null;
+        ResultSet resultat = null;
+        List<Ouvrage> listeOuvrage = new LinkedList();
+        String colonne;
+        String requete = "";
+        switch (filtre)
+        {
+            case "titre":
+                colonne = "TITRE";
+                break;
+            case "auteur":
+                colonne = "NOM";
+                break;
+            case "categorie":
+                colonne = "TYPE";
+                break;
+            default:
+                colonne = "";
+        }
+        if (!"".equals(colonne) && !"".equals(recherche.trim()))
+        {
+            try 
+            {
+                stm = cnx.createStatement(); 
+                resultat = stm.executeQuery("SELECT * FROM ouvrage"
+                        + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID"
+                        + " WHERE " + colonne + " LIKE " + "'%" + recherche + "%'");
+                while (resultat.next())
+                {
+                        Ouvrage o = new Ouvrage();
+                        o.setId(resultat.getInt("ID"));
+                        o.setTitre(resultat.getString("TITRE"));
+                        o.setType(resultat.getString("TYPE"));
+                        Auteur a = new Auteur(
+                            resultat.getString("auteur.ID"),
+                            resultat.getString("PRENOM"),
+                            resultat.getString("NOM")
+                        );
+                        o.setAuteur(a);
+                        listeOuvrage.add(o);
+                }
+                resultat.close();
+                stm.close();
+            }
+            catch (SQLException exp)
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }
+            finally
+            {
+                if (stm!=null)
+                try 
+                {
+                    resultat.close();
+                    stm.close();
+                } 
+                catch (SQLException exp) 
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }			
+            }
+        }
+        return listeOuvrage;
+    }
 }
