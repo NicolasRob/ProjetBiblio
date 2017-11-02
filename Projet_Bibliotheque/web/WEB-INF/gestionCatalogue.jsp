@@ -32,7 +32,7 @@
                             <select class="form-control" id="critere" name="critere">
                                 <option value="titre">Titre</option>
                                 <option value="auteur">Auteur</option>
-                                <option value="categorie">Catégorie</option>
+                                <option value="categorie">CatÃ©gorie</option>
                             </select>
                         </div>
                   </div>
@@ -56,12 +56,12 @@
         <p class="text-success">${param.message}</p>
         <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
-            <c:forEach var="ouvrage" items="${requestScope.ouvrages}" varStatus="loop">
+            <c:forEach var="ouvrage" items="${requestScope.ouvragesEditions}" varStatus="loop">
           <div class="card-header" role="tab" id="heading${loop.index}">
             <h5 class="mb-0">
               <a data-toggle="collapse" data-parent="#accordion" href="#collapse${loop.index}" 
                  aria-expanded="true" aria-controls="collapse${loop.index}">
-                  ${ouvrage.getTitre()} - ${ouvrage.getAuteur().getPrenom()} ${ouvrage.getAuteur().getNom()}
+                  ${ouvrage.getKey().getTitre()} - ${ouvrage.getKey().getAuteur().getPrenom()} ${ouvrage.getKey().getAuteur().getNom()}
               </a>
             </h5>
           </div>
@@ -70,29 +70,25 @@
             <div class="card-body">
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <td colspan="2"><a href="go?action=afficherAjoutEdition">Ajouter une édition</a></td>
-                        <td colspan="2"><a href="go?action=supprimerOuvrage&id=${ouvrage.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                        <td colspan="2"><a href="go?action=afficherAjoutEdition&id=${ouvrage.getKey().getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Ajouter une Édition</a></td>
+                        <td colspan="2"><a href="go?action=supprimerOuvrage&id=${ouvrage.getKey().getId()}&recherche=${param.recherche}&critere=${param.critere}">
                                 Supprimer l'ouvrage</a></td>
-                        <td><a href="go?action=afficherModificationOuvrage&id=${ouvrage.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                        <td><a href="go?action=afficherModificationOuvrage&id=${ouvrage.getKey().getId()}&recherche=${param.recherche}&critere=${param.critere}">
                                 Modifier l'ouvrage</a></td>
-                        <td><a href="go?action=afficherModificationAuteur&id=${ouvrage.getAuteur().getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                        <td><a href="go?action=afficherModificationAuteur&id=${ouvrage.getKey().getId()}&recherche=${param.recherche}&critere=${param.critere}">
                                 Modifier l'auteur</a></td>
                     </tr>
+                    <c:forEach var="edition" items="${ouvrage.getValue()}">
                     <tr>
-                        <td>ISBN</td>
-                        <td>Editeur</td>
-                        <td>Date de Publication</td>
-                        <td>Emplacement</td>
-                        <td><a href="">Modifier</a></td>
-                        <td><a href="">Supprimer</a></td>
+                        <td>${edition.getIsbn()}</td>
+                        <td colspan="2">${edition.getEditeur()}</td>
+                        <td>${edition.getDatePublication()}</td>
+                        <td><a href="go?action=afficherModificationEdition&id=${edition.getId()}&recherche=${param.recherche}&critere=${param.critere}">
+                                Modifier</a></td>
+                        <td><a href="go?action=supprimerEdition&id=${edition.getId()}&recherche=${param.recherche}&critere=${param.critere}">Supprimer</a></td>
                     </tr>
-                    <tr>
-                        <td>ISBN</td>
-                        <td>Editeur</td>
-                        <td>Date de Publication</td>
-                        <td>Emplacement</td>
-                        <td><a href="">Modifier</a></td>
-                        <td><a href="">Supprimer</a></td>
+                    </c:forEach>
                 </table>
             </div>
           </div>

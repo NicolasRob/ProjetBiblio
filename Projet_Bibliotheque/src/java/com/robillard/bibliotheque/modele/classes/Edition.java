@@ -9,7 +9,15 @@ public class Edition {
     public Edition() {
     }
 
-
+    public Edition(int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage) {
+        this.nombrePage = nombrePage;
+        this.isbn = isbn;
+        this.datePublication = datePublication;
+        this.image = image;
+        this.editeur = editeur;
+        this.ouvrage = ouvrage;
+    }
+    
     public Edition(int id,int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage) {
         this.nombrePage = nombrePage;
         this.id=id;
