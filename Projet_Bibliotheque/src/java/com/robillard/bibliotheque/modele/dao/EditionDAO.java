@@ -219,7 +219,8 @@ public class EditionDAO extends DAO<Edition>{
         {
             stm = cnx.createStatement(); 
             resultat = stm.executeQuery("SELECT * FROM edition"
-                    + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID");
+                    + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
+                    + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID");
             while (resultat.next())
             {
                     Edition e = new Edition();

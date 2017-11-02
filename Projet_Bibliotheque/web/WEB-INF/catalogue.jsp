@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
 
   <h1 class="mt-4 mb-3">Catalogue
@@ -31,7 +32,7 @@
                             </select>
                         </div>
                   </div>
-                  <input type="hidden" name="action" value="rechercheCatalogue" />
+                  <input type="hidden" name="action" value="catalogue" />
                   <div class="form-group">        
                       <div class="col-sm-offset-2 col-sm-10">
                           <button type="submit" class="btn btn-default">Rechercher</button>
@@ -43,6 +44,7 @@
         </div>
     </div>
 
+    <c:if test="${!empty param.recherche && !empty param.critere}">
   <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
       <div class="card h-100">
@@ -159,6 +161,6 @@
       </a>
     </li>
   </ul>
-
+</c:if>
 </div>
 
