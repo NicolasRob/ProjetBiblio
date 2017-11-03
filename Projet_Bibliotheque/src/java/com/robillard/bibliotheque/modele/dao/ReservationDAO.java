@@ -8,7 +8,6 @@ import com.robillard.bibliotheque.modele.classes.Reservation;
 import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.classes.Edition;
-import com.robillard.bibliotheque.modele.classes.Editeur;
 import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.classes.Auteur;
 import java.sql.Connection;
