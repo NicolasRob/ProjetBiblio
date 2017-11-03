@@ -32,7 +32,7 @@
                             <select class="form-control" id="critere" name="critere">
                                 <option value="titre">Titre</option>
                                 <option value="auteur">Auteur</option>
-                                <option value="categorie">CatÃ©gorie</option>
+                                <option value="categorie">Catégorie</option>
                             </select>
                         </div>
                   </div>

@@ -77,6 +77,18 @@
                       </div>
                   </div>
               </form>
+                <form action="go?action=ajouterExemplaire" method="POST">
+                    <table class="table table-striped table-bordered">
+                      <tr>
+                          <td><input type="text" name="emplacement" id="emplacement" placeholder="Code de localisation"/></td>
+                          <td><button type="submit">Ajouter un exemplaire</button></td>
+                      </tr>
+                      <tr>
+                          <td>Emplacement</td>
+                          <td><a href="go?supprimerExemplaire&id=${requestScope.edition.getId()}">Supprimer</a></td>
+                      </tr>
+                  </table>
+                </form>
           </div>
       </div>
     </div>

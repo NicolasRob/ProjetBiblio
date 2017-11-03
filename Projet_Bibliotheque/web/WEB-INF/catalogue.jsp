@@ -24,11 +24,11 @@
                       </div>
                   </div>
                   <div class="form-group">
-                        <label class="control-label col-sm-2" for="pwd">Crit&egrave;re:</label>
+                        <label class="control-label col-sm-2" for="critere">Crit&egrave;re:</label>
                         <div class="col-sm-10">          
                             <select class="form-control" id="critere" name="critere">
-                                <option>Titre</option>
-                                <option>Auteur</option>
+                                <option value="titre">Titre</option>
+                                <option value="auteur">Auteur</option>
                             </select>
                         </div>
                   </div>
@@ -46,6 +46,20 @@
 
     <c:if test="${!empty param.recherche && !empty param.critere}">
   <div class="row">
+    <c:forEach var="edition" items="${requestScope.editions}">
+    <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+      <div class="card h-100">
+          <a href="go?action=detailsLivre&id=${edition.getId()}"><img class="card-img-top" src="./img/${edition.getImage()}.jpg" alt="" height="300px"></a>
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="go?action=detailsLivre&id=${edition.getId()}">${edition.getOuvrage().getTitre()}</a>
+          </h4>
+          <p class="card-text">${edition.getOuvrage().getAuteur().getPrenom()} ${edition.getOuvrage().getAuteur().getNom()}</p>
+          <p class="card-text">${edition.getEditeur()}, ${edition.getDatePublication()}</p>
+        </div>
+      </div>
+    </div>
+    </c:forEach>
     <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
       <div class="card h-100">
           <a href="go?action=detailsLivre"><img class="card-img-top" src="./img/TheEmptyThrone.jpg" alt="" height="300px"></a>

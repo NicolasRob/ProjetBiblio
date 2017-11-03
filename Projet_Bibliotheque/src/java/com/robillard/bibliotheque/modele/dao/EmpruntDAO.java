@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package com.robillard.bibliotheque.modele.dao;
-import com.robillard.bibliotheque.modele.classes.Reservation;
+import com.robillard.bibliotheque.modele.classes.Emprunt;
 import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.classes.Edition;
@@ -20,28 +20,29 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ReservationDAO extends DAO<Reservation> {
+public class EmpruntDAO extends DAO<Emprunt> {
     
     private static final Logger logger = Logger.getLogger("monLogger");
     
-    public ReservationDAO(Connection c)
+    public EmpruntDAO(Connection c)
     {
         super(c);
     }
         
     @Override
-    public boolean create(Reservation reservation) {
+    public boolean create(Emprunt emprunt) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO reservation "
-                + "(ID , DATE, COMPTE_ID,EXEMPLAIRE_ID ) "
+        String requete = "INSERT INTO emprunt "
+                + "(DATE_DEBUT, DATE_FIN, STATUS, COMPTE_ID, EXEMPLAIRE_ID ) "
                 + "VALUES (?, ?, ?, ?, ?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, reservation.getId());
-            stm.setString(2, reservation.getDate());
-            stm.setString(3, reservation.getCompte().getNumero());
-            stm.setInt(4, reservation.getExemplaire().getId());
+            stm.setString(1, emprunt.getDateDebut());
+            stm.setString(2, emprunt.getDateFin());
+            stm.setString(3, emprunt.getStatus());
+            stm.setString(4, emprunt.getCompte().getNumero());
+            stm.setInt(5, emprunt.getExemplaire().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -69,13 +70,13 @@ public class ReservationDAO extends DAO<Reservation> {
     }
     
     @Override
-    public boolean delete(Reservation reservation) {
+    public boolean delete(Emprunt emprunt) {
         PreparedStatement stm = null;
-        String requete = "DELETE FROM reservation WHERE ID = ?";
+        String requete = "DELETE FROM emprunt WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, reservation.getId());
+            stm.setInt(1, emprunt.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -103,43 +104,44 @@ public class ReservationDAO extends DAO<Reservation> {
     }
     
     @Override
-    public Reservation read(int numero) {
-            return this.read(""+numero);
+    public Emprunt read(int id) {
+            return this.read(""+id);
     }
         
     @Override
-    public Reservation read(String ID) {
+    public Emprunt read(String id) {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM reservation" 
-                +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
-                +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
+        String requete = "SELECT * FROM emprunt" 
+                +"INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID"
+                +"INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID"
                 +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
-                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
                 +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
                 +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
                 +"WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, ID);
+            stm.setString(1, id);
             resultat = stm.executeQuery();
             if (resultat.next())
             {
-                Reservation r = new Reservation();
-                r.setId(resultat.getInt("ID"));
-                r.setDate(resultat.getString("DATE"));
-                r.setCompte(new Compte(
+                Emprunt emp = new Emprunt();
+                emp.setId(resultat.getInt("ID"));
+                emp.setDateDebut(resultat.getString("DATE_DEBUT"));
+                emp.setDateFin(resultat.getString("DATE_FIN"));
+                emp.setStatus(resultat.getString("STATUS"));
+                emp.setCompte(new Compte(
                         resultat.getString("NUMERO"),
                         resultat.getString("PRENOM"),
                         resultat.getString("NOM"),
                         resultat.getString("MDP"),
-                        resultat.getInt("TYPE")));                
-                r.setExemplaire(new Exemplaire(
-                        resultat.getInt("ID"),
+                        resultat.getInt("compte.TYPE")));                
+                emp.setExemplaire(new Exemplaire(
+                        resultat.getInt("exemplaire.ID"),
                         resultat.getString("EMPLACEMENT"),
                         new Edition(
-                                resultat.getInt("ID"),
+                                resultat.getInt("edition.ID"),
                                 resultat.getInt("NOMBRE_PAGE"),
                                 resultat.getString("ISBN"),
                                 resultat.getString("DATE_PUBLICATION"),
@@ -155,11 +157,12 @@ public class ReservationDAO extends DAO<Reservation> {
                                                 resultat.getString("auteur.PRENOM"))))));
                 resultat.close();
                 stm.close();
-                return r;
+                return emp;
             }
         }
         catch (SQLException exp)
         {
+            logger.log(Level.SEVERE, exp.getMessage());
         }
         finally
         {
@@ -178,17 +181,19 @@ public class ReservationDAO extends DAO<Reservation> {
     }
     
     @Override
-    public boolean update(Reservation reservation) {
+    public boolean update(Emprunt emprunt) {
         PreparedStatement stm = null;
-        String requete = "UPDATE reservation SET ID = ?, DATE = ?, "
-                + "COMPTE_ID = ?, EXEMPLAIRE_ID = ? WHERE ID = ?";
+        String requete = "UPDATE emprunt SET DATE_DEBUT = ?, DATE_FIN = ?, "
+                + "STATUS = ?, COMPTE_ID = ?, EXEMPLAIRE_ID = ? WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, reservation.getId());
-            stm.setString(2, reservation.getDate());
-            stm.setString(3, reservation.getCompte().getNumero());
-            stm.setInt(4, reservation.getExemplaire().getId());
+            stm.setString(1, emprunt.getDateDebut());
+            stm.setString(2, emprunt.getDateFin());
+            stm.setString(3, emprunt.getStatus());
+            stm.setString(4, emprunt.getCompte().getNumero());
+            stm.setInt(5, emprunt.getExemplaire().getId());
+            stm.setInt(6, emprunt.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -216,36 +221,35 @@ public class ReservationDAO extends DAO<Reservation> {
     }
         
     @Override
-    public List<Reservation> findAll() {
+    public List<Emprunt> findAll() {
         Statement stm = null;
         ResultSet resultat = null;
-        List<Reservation> listeReservation = new LinkedList();
+        List<Emprunt> listeEmprunt = new LinkedList();
         try 
         {
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery("SELECT * FROM reservation" 
-                +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
-                +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
+            resultat = stm.executeQuery("SELECT * FROM emprunt" 
+                +"INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID"
+                +"INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID"
                 +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
-                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
                 +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
-                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
-                +"WHERE ID = ?");
+                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID");
             while (resultat.next())
             {
-                    Reservation r = new Reservation();
-                    r.setId(resultat.getInt("ID"));
-                    r.setDate(resultat.getString("DATE"));
-
-                    r.setCompte(new Compte(
+                    Emprunt emp = new Emprunt();
+                    emp.setId(resultat.getInt("ID"));
+                    emp.setDateDebut(resultat.getString("DATE_DEBUT"));
+                    emp.setDateFin(resultat.getString("DATE_FIN"));
+                    emp.setStatus(resultat.getString("STATUS"));
+                    emp.setCompte(new Compte(
                             resultat.getString("NUMERO"),
                             resultat.getString("PRENOM"),
                             resultat.getString("NOM"),
                             resultat.getString("MDP"),
-                            resultat.getInt("TYPE")
+                            resultat.getInt("compte.TYPE")
                     ));
 
-                    r.setExemplaire(new Exemplaire(
+                    emp.setExemplaire(new Exemplaire(
                             resultat.getInt("ID"),
                             resultat.getString("EMPLACEMENT"),
                             new Edition(
@@ -263,7 +267,7 @@ public class ReservationDAO extends DAO<Reservation> {
                                                     resultat.getString("auteur.ID"),
                                                     resultat.getString("auteur.NOM"),
                                                     resultat.getString("auteur.PRENOM"))))));
-                    listeReservation.add(r);
+                    listeEmprunt.add(emp);
             }
             resultat.close();
             stm.close();
@@ -285,6 +289,53 @@ public class ReservationDAO extends DAO<Reservation> {
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
         }
-        return listeReservation;
+        return listeEmprunt;
+    }
+    
+    public String findMaxDateByExemplaire(int id) {
+        return this.findMaxDateByExemplaire("" + id);
+    }
+    
+    public String findMaxDateByExemplaire(String id) {
+        PreparedStatement stm = null;
+        ResultSet resultat = null;
+        String date = "";
+        try 
+        {
+            String requete = "SELECT MAX(DATE_FIN) FROM emprunt" 
+                +" INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID"
+                +" INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID"
+                +" INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +" INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +" INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
+                +" WHERE EXEMPLAIRE_ID = ? ";
+            stm = cnx.prepareStatement(requete);
+            stm.setString(1, id);
+            resultat = stm.executeQuery();
+            while (resultat.next())
+            {
+                date = resultat.getString("MAX(DATE_FIN)");
+            }
+            resultat.close();
+            stm.close();
+        }
+        catch (SQLException exp)
+        {
+            logger.log(Level.SEVERE, exp.getMessage());
+        }
+        finally
+        {
+            if (stm!=null)
+            try 
+            {
+                resultat.close();
+                stm.close();
+            } 
+            catch (SQLException exp) 
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }			
+        }
+        return date;
     }
 }

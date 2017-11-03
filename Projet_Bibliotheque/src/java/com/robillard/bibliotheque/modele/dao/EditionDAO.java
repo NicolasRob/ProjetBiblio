@@ -135,8 +135,8 @@ public class EditionDAO extends DAO<Edition>{
                 e.setEditeur(resultat.getString("EDITEUR"));
                 Ouvrage o = new Ouvrage(
                         resultat.getInt("ouvrage.ID"),
-                        resultat.getString("TYPE"),
                         resultat.getString("TITRE"),
+                        resultat.getString("TYPE"),
                         new Auteur(
                             resultat.getString("ID"),
                             resultat.getString("PRENOM"),
@@ -232,8 +232,8 @@ public class EditionDAO extends DAO<Edition>{
                     e.setEditeur(resultat.getString("EDITEUR"));
                     Ouvrage o = new Ouvrage(
                             resultat.getInt("ouvrage.ID"),
-                            resultat.getString("TYPE"),
                             resultat.getString("TITRE"),
+                            resultat.getString("TYPE"),
                             new Auteur(
                                 resultat.getString("ID"),
                                 resultat.getString("PRENOM"),
@@ -262,6 +262,80 @@ public class EditionDAO extends DAO<Edition>{
             {
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
+        }
+        return listeEdition;
+    }
+    
+        public List<Edition> findAll(String filtre, String recherche) {
+        Statement stm = null;
+        ResultSet resultat = null;
+        List<Edition> listeEdition = new LinkedList();
+        String colonne;
+        switch (filtre)
+        {
+            case "titre":
+                colonne = "TITRE";
+                break;
+            case "auteur":
+                colonne = "NOM";
+                break;
+            case "categorie":
+                colonne = "TYPE";
+                break;
+            default:
+                colonne = "";
+        }
+        if (!"".equals(colonne) && !"".equals(recherche.trim()))
+        {
+            try 
+            {
+                stm = cnx.createStatement(); 
+                resultat = stm.executeQuery("SELECT * FROM edition"
+                        + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
+                        + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID"
+                        + " WHERE " + colonne + " LIKE " + "'%" + recherche + "%'");
+                while (resultat.next())
+                {
+                    Ouvrage o = new Ouvrage();
+                    o.setId(resultat.getInt("ouvrage.ID"));
+                    o.setTitre(resultat.getString("TITRE"));
+                    o.setType(resultat.getString("TYPE"));
+                    Auteur a = new Auteur(
+                        resultat.getString("auteur.ID"),
+                        resultat.getString("PRENOM"),
+                        resultat.getString("NOM")
+                    );
+                    o.setAuteur(a);
+                    Edition e = new Edition();
+                    e.setId(resultat.getInt("edition.ID"));
+                    e.setNombrePage(resultat.getInt("NOMBRE_PAGE"));
+                    e.setIsbn(resultat.getString("ISBN"));
+                    e.setDatePublication(resultat.getString("DATE_PUBLICATION"));
+                    e.setImage(resultat.getString("IMAGE"));
+                    e.setEditeur(resultat.getString("EDITEUR"));
+                    e.setOuvrage(o);
+                        listeEdition.add(e);
+                }
+                resultat.close();
+                stm.close();
+            }
+            catch (SQLException exp)
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }
+            finally
+            {
+                if (stm!=null)
+                try 
+                {
+                    resultat.close();
+                    stm.close();
+                } 
+                catch (SQLException exp) 
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }			
+            }
         }
         return listeEdition;
     }

@@ -1,10 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.robillard.bibliotheque.modele.dao;
-import com.robillard.bibliotheque.modele.classes.Reservation;
+import com.robillard.bibliotheque.modele.classes.Emprunt;
 import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.classes.Edition;
@@ -20,28 +15,26 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ReservationDAO extends DAO<Reservation> {
+public class ExemplaireDAO extends DAO<Exemplaire> {
     
     private static final Logger logger = Logger.getLogger("monLogger");
     
-    public ReservationDAO(Connection c)
+    public ExemplaireDAO(Connection c)
     {
         super(c);
     }
         
     @Override
-    public boolean create(Reservation reservation) {
+    public boolean create(Exemplaire exemplaire) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO reservation "
-                + "(ID , DATE, COMPTE_ID,EXEMPLAIRE_ID ) "
-                + "VALUES (?, ?, ?, ?, ?)";
+        String requete = "INSERT INTO exemplaire "
+                + "(EMPLACEMENT, EDITION_ID) "
+                + "VALUES (?, ?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, reservation.getId());
-            stm.setString(2, reservation.getDate());
-            stm.setString(3, reservation.getCompte().getNumero());
-            stm.setInt(4, reservation.getExemplaire().getId());
+            stm.setString(1, exemplaire.getEmplacement());
+            stm.setInt(2, exemplaire.getEdition().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -69,13 +62,13 @@ public class ReservationDAO extends DAO<Reservation> {
     }
     
     @Override
-    public boolean delete(Reservation reservation) {
+    public boolean delete(Exemplaire exemplaire) {
         PreparedStatement stm = null;
-        String requete = "DELETE FROM reservation WHERE ID = ?";
+        String requete = "DELETE FROM exemplaire WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, reservation.getId());
+            stm.setInt(1, exemplaire.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -103,43 +96,31 @@ public class ReservationDAO extends DAO<Reservation> {
     }
     
     @Override
-    public Reservation read(int numero) {
-            return this.read(""+numero);
+    public Exemplaire read(int id) {
+            return this.read(""+id);
     }
         
     @Override
-    public Reservation read(String ID) {
+    public Exemplaire read(String id) {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM reservation" 
-                +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
-                +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
-                +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
-                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
-                +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
-                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
-                +"WHERE ID = ?";
+        String requete = "SELECT * FROM exemplaire"
+                +" INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +" INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +" INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
+                +" WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, ID);
+            stm.setString(1, id);
             resultat = stm.executeQuery();
             if (resultat.next())
             {
-                Reservation r = new Reservation();
-                r.setId(resultat.getInt("ID"));
-                r.setDate(resultat.getString("DATE"));
-                r.setCompte(new Compte(
-                        resultat.getString("NUMERO"),
-                        resultat.getString("PRENOM"),
-                        resultat.getString("NOM"),
-                        resultat.getString("MDP"),
-                        resultat.getInt("TYPE")));                
-                r.setExemplaire(new Exemplaire(
-                        resultat.getInt("ID"),
+                Exemplaire ex = new Exemplaire(
+                        resultat.getInt("exemplaire.ID"),
                         resultat.getString("EMPLACEMENT"),
                         new Edition(
-                                resultat.getInt("ID"),
+                                resultat.getInt("edition.ID"),
                                 resultat.getInt("NOMBRE_PAGE"),
                                 resultat.getString("ISBN"),
                                 resultat.getString("DATE_PUBLICATION"),
@@ -152,14 +133,15 @@ public class ReservationDAO extends DAO<Reservation> {
                                         new Auteur(
                                                 resultat.getString("auteur.ID"),
                                                 resultat.getString("auteur.NOM"),
-                                                resultat.getString("auteur.PRENOM"))))));
+                                                resultat.getString("auteur.PRENOM")))));
                 resultat.close();
                 stm.close();
-                return r;
+                return ex;
             }
         }
         catch (SQLException exp)
         {
+            logger.log(Level.SEVERE, exp.getMessage());
         }
         finally
         {
@@ -178,17 +160,16 @@ public class ReservationDAO extends DAO<Reservation> {
     }
     
     @Override
-    public boolean update(Reservation reservation) {
+    public boolean update(Exemplaire exemplaire) {
         PreparedStatement stm = null;
-        String requete = "UPDATE reservation SET ID = ?, DATE = ?, "
-                + "COMPTE_ID = ?, EXEMPLAIRE_ID = ? WHERE ID = ?";
+        String requete = "UPDATE exemplaire SET EMPLACEMENT = ?, EDITION_ID = ?, "
+                + "WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, reservation.getId());
-            stm.setString(2, reservation.getDate());
-            stm.setString(3, reservation.getCompte().getNumero());
-            stm.setInt(4, reservation.getExemplaire().getId());
+            stm.setString(1, exemplaire.getEmplacement());
+            stm.setInt(2, exemplaire.getEdition().getId());
+            stm.setInt(3, exemplaire.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -216,36 +197,20 @@ public class ReservationDAO extends DAO<Reservation> {
     }
         
     @Override
-    public List<Reservation> findAll() {
+    public List<Exemplaire> findAll() {
         Statement stm = null;
         ResultSet resultat = null;
-        List<Reservation> listeReservation = new LinkedList();
+        List<Exemplaire> listeExemplaire = new LinkedList();
         try 
         {
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery("SELECT * FROM reservation" 
-                +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
-                +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
+            resultat = stm.executeQuery("SELECT * FROM exemplaire" 
                 +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
-                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
                 +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
-                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
-                +"WHERE ID = ?");
+                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID");
             while (resultat.next())
             {
-                    Reservation r = new Reservation();
-                    r.setId(resultat.getInt("ID"));
-                    r.setDate(resultat.getString("DATE"));
-
-                    r.setCompte(new Compte(
-                            resultat.getString("NUMERO"),
-                            resultat.getString("PRENOM"),
-                            resultat.getString("NOM"),
-                            resultat.getString("MDP"),
-                            resultat.getInt("TYPE")
-                    ));
-
-                    r.setExemplaire(new Exemplaire(
+                    Exemplaire ex = new Exemplaire(
                             resultat.getInt("ID"),
                             resultat.getString("EMPLACEMENT"),
                             new Edition(
@@ -262,8 +227,8 @@ public class ReservationDAO extends DAO<Reservation> {
                                             new Auteur(
                                                     resultat.getString("auteur.ID"),
                                                     resultat.getString("auteur.NOM"),
-                                                    resultat.getString("auteur.PRENOM"))))));
-                    listeReservation.add(r);
+                                                    resultat.getString("auteur.PRENOM")))));
+                    listeExemplaire.add(ex);
             }
             resultat.close();
             stm.close();
@@ -285,6 +250,69 @@ public class ReservationDAO extends DAO<Reservation> {
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
         }
-        return listeReservation;
+        return listeExemplaire;
+    }
+    
+    public List<Exemplaire> findByEdition(int id) {
+        return this.findByEdition("" + id);
+    }
+    
+    public List<Exemplaire> findByEdition(String id) {
+        PreparedStatement stm = null;
+        ResultSet resultat = null;
+        List<Exemplaire> listeExemplaire = new LinkedList();
+        try 
+        {
+            String requete = "SELECT * FROM exemplaire" 
+                +" INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +" INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +" INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
+                +" WHERE EDITION_ID = ?";
+            stm = cnx.prepareStatement(requete);
+            stm.setString(1, id);
+            resultat = stm.executeQuery();
+            while (resultat.next())
+            {
+                    Exemplaire ex = new Exemplaire(
+                            resultat.getInt("ID"),
+                            resultat.getString("EMPLACEMENT"),
+                            new Edition(
+                                    resultat.getInt("ID"),
+                                    resultat.getInt("NOMBRE_PAGE"),
+                                    resultat.getString("ISBN"),
+                                    resultat.getString("DATE_PUBLICATION"),
+                                    resultat.getString("IMAGE"),
+                                    resultat.getString("EDITEUR"),
+                                    new Ouvrage(
+                                            resultat.getInt("ouvrage.ID"),
+                                            resultat.getString("ouvrage.TITRE"),
+                                            resultat.getString("ouvrage.Type"),
+                                            new Auteur(
+                                                    resultat.getString("auteur.ID"),
+                                                    resultat.getString("auteur.NOM"),
+                                                    resultat.getString("auteur.PRENOM")))));
+                    listeExemplaire.add(ex);
+            }
+            resultat.close();
+            stm.close();
+        }
+        catch (SQLException exp)
+        {
+            logger.log(Level.SEVERE, exp.getMessage());
+        }
+        finally
+        {
+            if (stm!=null)
+            try 
+            {
+                resultat.close();
+                stm.close();
+            } 
+            catch (SQLException exp) 
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }			
+        }
+        return listeExemplaire;
     }
 }
