@@ -28,11 +28,11 @@ public class Exemplaire {
         this.Emplacement = Emplacement;
     }
 
-    public Edition getEdition() {
+    public Edition getedition() {
         return edition;
     }
 
-    public void setEdition(Edition edition) {
+    public void setedition(Edition edition) {
         this.edition = edition;
     }
 

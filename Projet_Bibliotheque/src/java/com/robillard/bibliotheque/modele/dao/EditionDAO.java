@@ -5,7 +5,6 @@
  */
 package com.robillard.bibliotheque.modele.dao;
 
-
 import com.robillard.bibliotheque.modele.classes.Auteur;
 import com.robillard.bibliotheque.modele.classes.Edition;
 import com.robillard.bibliotheque.modele.classes.Ouvrage;
@@ -21,7 +20,8 @@ import java.util.logging.Logger;
 
 /**
  *
-
+ * @author Vengor
+ */
 public class EditionDAO extends DAO<Edition>{
     
     private Logger logger = Logger.getLogger("monLogger");
