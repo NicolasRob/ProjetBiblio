@@ -126,6 +126,10 @@
         <servlet-name>ModifierEdition</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.ModifierEdition</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Reserver</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.Reserver</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -233,6 +237,10 @@
     <servlet-mapping>
         <servlet-name>ModifierEdition</servlet-name>
         <url-pattern>/ModifierEdition</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Reserver</servlet-name>
+        <url-pattern>/Reserver</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -2,15 +2,10 @@ package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Edition;
-import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
-import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -19,45 +14,43 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherCatalogue extends HttpServlet {
+public class Reserver extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Edition> listeEdition = new LinkedList();
-        if (request.getParameter("recherche") != null &&
-            request.getParameter("recherche").trim() != "" &&
-            request.getParameter("critere") != null)
+        if (request.getSession().getAttribute("type") != null 
+        && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
         {
             try
             {
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
-                EditionDAO editionDao = new EditionDAO(cnx);
-                listeEdition = editionDao.findAll(  request.getParameter("critere"), 
-                                                    request.getParameter("recherche"));
-                //listeEdition = editionDao.findAll();
-                request.setAttribute("editions", listeEdition);
+                EditionDAO dao = new EditionDAO(cnx);
+                Edition edition = dao.read(request.getParameter("id"));
+                if (edition != null)
+                {
+                    request.setAttribute("edition", edition);
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp");
+                    r.forward(request, response);
+                }
+                else
+                {
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
+                    r.forward(request, response);
+                }
             }
             catch (Exception exp)
             {
                 Logger logger = Logger.getLogger("monLogger");
                 logger.log(Level.SEVERE, exp.getMessage());
                 String message = "Une erreur inattendue s'est produite lors"
-                        + " de la recherche. Veuillez réessayer plus tard.";
+                        + " de l'affichage. Veuillez réessayer plus tard.";
                 request.setAttribute("erreurException", message);
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
+                r.forward(request, response);
             }
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
-            r.forward(request, response);
         }
-        else
-        {
-            request.setAttribute("erreurInput", "Le champ de recherche ne peut être vide.");
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
-            r.forward(request, response);
-        }
-        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
-        r.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
