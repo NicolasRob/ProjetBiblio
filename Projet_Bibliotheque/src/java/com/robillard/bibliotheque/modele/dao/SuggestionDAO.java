@@ -208,10 +208,10 @@ public class SuggestionDAO extends DAO<Suggestion> {
             while (resultat.next())
             {
                     Suggestion s = new Suggestion();
-                    s.setId(s.getId());
-                    s.setTitre(s.getTitre());
-                    s.setAuteur(s.getAuteur());
-                    s.setMessage(s.getMessage());
+                    s.setId(resultat.getInt("ID"));
+                    s.setTitre(resultat.getString("TITRE"));
+                    s.setAuteur(resultat.getString("AUTEUR"));
+                    s.setMessage(resultat.getString("MESSAGE"));
                     Compte compte = new Compte(
                         resultat.getString("NUMERO"),
                         resultat.getString("PRENOM"),

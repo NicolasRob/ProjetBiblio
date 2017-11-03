@@ -3,7 +3,7 @@ package com.robillard.bibliotheque.modele.classes;
 
 public class Reservation {
     private int id;
-    private String dateFin,dateDebut;
+    private String date;
     private Compte compte;
     private Exemplaire exemplaire;
 
@@ -26,9 +26,8 @@ public class Reservation {
         this.exemplaire = numeroExemplaireId;
     }
 
-    public Reservation(String dateFin, String dateDebut, Compte compte, Exemplaire numeroExemplaireId) {
-        this.dateFin = dateFin;
-        this.dateDebut = dateDebut;
+    public Reservation(String date, Compte compte, Exemplaire numeroExemplaireId) {
+        this.date = date;
         this.compte = compte;
         this.exemplaire = numeroExemplaireId;
     }
@@ -41,19 +40,11 @@ public class Reservation {
         this.id = id;
     }
 
-    public String getDateFin() {
-        return dateFin;
+    public String getDate() {
+        return date;
     }
 
-    public void setDateFin(String dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public String getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(String dateDebut) {
-        this.dateDebut = dateDebut;
+    public void setDate(String date) {
+        this.date = date;
     }
 }

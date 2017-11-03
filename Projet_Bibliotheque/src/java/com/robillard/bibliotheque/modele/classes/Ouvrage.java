@@ -8,6 +8,12 @@ public class Ouvrage {
 
     public Ouvrage() {}
     
+    public Ouvrage(String titre, String type, Auteur auteur) {
+        this.titre = titre;
+        this.type = type;
+        this.auteur = auteur;
+    }
+    
     public Ouvrage(int id,String titre, String type, Auteur auteur) {
         this.id=id;
         this.titre = titre;
@@ -46,5 +52,32 @@ public class Ouvrage {
     public void setAuteur(Auteur auteur) {
         this.auteur = auteur;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Ouvrage other = (Ouvrage) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

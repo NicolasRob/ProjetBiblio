@@ -86,6 +86,46 @@
         <servlet-name>AjouterOuvrage</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.AjouterOuvrage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SupprimerOuvrage</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.SupprimerOuvrage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherModOuvrage</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherModOuvrage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModifierOuvrage</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.ModifierOuvrage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherModAuteur</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherModAuteur</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModifierAuteur</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.ModifierAuteur</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditionDAO</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.modele.dao.EditionDAO</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SupprimerEdition</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.SupprimerEdition</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AjouterEdition</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AjouterEdition</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfficherModEdition</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherModEdition</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModifierEdition</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.ModifierEdition</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -153,6 +193,46 @@
     <servlet-mapping>
         <servlet-name>AjouterOuvrage</servlet-name>
         <url-pattern>/AjouterOuvrage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SupprimerOuvrage</servlet-name>
+        <url-pattern>/SupprimerOuvrage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherModOuvrage</servlet-name>
+        <url-pattern>/AfficherModOuvrage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifierOuvrage</servlet-name>
+        <url-pattern>/ModifierOuvrage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherModAuteur</servlet-name>
+        <url-pattern>/AfficherModAuteur</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifierAuteur</servlet-name>
+        <url-pattern>/ModifierAuteur</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditionDAO</servlet-name>
+        <url-pattern>/EditionDAO</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SupprimerEdition</servlet-name>
+        <url-pattern>/SupprimerEdition</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AjouterEdition</servlet-name>
+        <url-pattern>/AjouterEdition</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherModEdition</servlet-name>
+        <url-pattern>/AfficherModEdition</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModifierEdition</servlet-name>
+        <url-pattern>/ModifierEdition</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

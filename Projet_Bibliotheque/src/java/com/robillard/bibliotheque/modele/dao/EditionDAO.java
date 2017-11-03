@@ -5,10 +5,10 @@
  */
 package com.robillard.bibliotheque.modele.dao;
 
-import com.robillard.bibliotheque.modele.classes.Edition;
-import com.robillard.bibliotheque.modele.classes.Editeur;
-import com.robillard.bibliotheque.modele.classes.Ouvrage;
+
 import com.robillard.bibliotheque.modele.classes.Auteur;
+import com.robillard.bibliotheque.modele.classes.Edition;
+import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,11 +21,11 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author c.blais
- */
+
 public class EditionDAO extends DAO<Edition>{
-    private Logger logger = Logger.getLogger("monLogger");
     
+    private Logger logger = Logger.getLogger("monLogger");
+        
     public EditionDAO(Connection c)
     {
         super(c);
@@ -34,8 +34,8 @@ public class EditionDAO extends DAO<Edition>{
     @Override
     public boolean create(Edition edition) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO edition"
-                + "(NOMBRE_PAGE , ISBN, DATE_PUBLICATION, IMAGE, EDITEUR_ID, OUVRAGE_ID )"
+        String requete = "INSERT INTO edition "
+                + "(NOMBRE_PAGE, ISBN, DATE_PUBLICATION, IMAGE, EDITEUR, OUVRAGE_ID) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try 
         {
@@ -44,13 +44,13 @@ public class EditionDAO extends DAO<Edition>{
             stm.setString(2, edition.getIsbn());
             stm.setString(3, edition.getDatePublication());
             stm.setString(4, edition.getImage());
-            stm.setInt(5, edition.getEditeur().getId());
+            stm.setString(5, edition.getEditeur());
             stm.setInt(6, edition.getOuvrage().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -83,8 +83,8 @@ public class EditionDAO extends DAO<Edition>{
             int n = stm.executeUpdate();
             if (n>0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -115,11 +115,10 @@ public class EditionDAO extends DAO<Edition>{
     public Edition read(String id) {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM edition" +
-                "INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID" +
-                "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID" +
-                "INNER JOIN auteur On ouvrage.AUTEUR_ID = auteur.ID" +
-                "WHERE ID = ?";
+        String requete = "SELECT * FROM edition"
+                + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
+                + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID"
+                + " WHERE edition.ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
@@ -127,26 +126,23 @@ public class EditionDAO extends DAO<Edition>{
             resultat = stm.executeQuery();
             if (resultat.next())
             {
-                Edition e = new Edition ();
-                Editeur editeur = new Editeur();
-                Ouvrage o = new Ouvrage();
-                Auteur a = new Auteur();
-                
-                e.setId(resultat.getInt("ID"));
+                Edition e = new Edition();
+                e.setId(resultat.getInt("edition.ID"));
                 e.setNombrePage(resultat.getInt("NOMBRE_PAGE"));
                 e.setIsbn(resultat.getString("ISBN"));
                 e.setDatePublication(resultat.getString("DATE_PUBLICATION"));
                 e.setImage(resultat.getString("IMAGE"));
-                    editeur.setId(resultat.getInt("editeur.ID"));
-                    editeur.setNom(resultat.getString("editeur.NOM"));
-                e.setEditeur(editeur);
-                    o.setId(resultat.getInt("ouvrage.ID"));
-                    o.setTitre(resultat.getString("ouvrage.TITRE"));
-                    o.setType(resultat.getString("ouvrage.TYPE"));
-                        a.setId(resultat.getInt("auteur.ID"));
-                        a.setNom(resultat.getString("auteur.NOM"));
-                        a.setPrenom(resultat.getString("auteur.PRENOM"));
-                    o.setAuteur(a);
+                e.setEditeur(resultat.getString("EDITEUR"));
+                Ouvrage o = new Ouvrage(
+                        resultat.getInt("ouvrage.ID"),
+                        resultat.getString("TYPE"),
+                        resultat.getString("TITRE"),
+                        new Auteur(
+                            resultat.getString("ID"),
+                            resultat.getString("PRENOM"),
+                            resultat.getString("NOM")
+                        )
+                );
                 e.setOuvrage(o);
                 resultat.close();
                 stm.close();
@@ -165,10 +161,10 @@ public class EditionDAO extends DAO<Edition>{
                 resultat.close();
                 stm.close();
             } 
-            catch (SQLException exp)
+            catch (SQLException exp) 
             {
                 logger.log(Level.SEVERE, exp.getMessage());
-            }
+            }			
         }
         return null;
     }
@@ -176,23 +172,23 @@ public class EditionDAO extends DAO<Edition>{
     @Override
     public boolean update(Edition edition) {
         PreparedStatement stm = null;
-        String requete = "UPDATE edition NOMBRE_PAGE = ?, ISBN = ?, DATE_PUBLICATION = ?" +
-                "IMAGE = ?, EDITEUR_ID = ?, OUVRAGE_ID = ?"
-                + " WHERE ID = ?";
+        String requete = "UPDATE edition SET NOMBRE_PAGE = ?, ISBN = ?, "
+                + "DATE_PUBLICATION = ?, IMAGE = ?, EDITEUR = ?, OUVRAGE_ID = ? WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(2, edition.getNombrePage());
+            stm.setInt(1, edition.getNombrePage());
+            stm.setString(2, edition.getIsbn());
             stm.setString(3, edition.getDatePublication());
             stm.setString(4, edition.getImage());
-            stm.setInt(5, edition.getEditeur().getId());
+            stm.setString(5, edition.getEditeur());
             stm.setInt(6, edition.getOuvrage().getId());
             stm.setInt(7, edition.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -221,40 +217,31 @@ public class EditionDAO extends DAO<Edition>{
         List<Edition> listeEdition = new LinkedList();
         try 
         {
-             String requete = "SELECT * FROM edition" +
-                "INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID" +
-                "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID" +
-                "INNER JOIN auteur On ouvrage.AUTEUR_ID = auteur.ID" +
-                "WHERE ID = ?" ;
-             
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery(requete);
-            
+            resultat = stm.executeQuery("SELECT * FROM edition"
+                    + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
+                    + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID");
             while (resultat.next())
             {
-                     Edition e = new Edition ();
-                Editeur editeur = new Editeur();
-                Ouvrage o = new Ouvrage();
-                Auteur a = new Auteur();
-                
-                e.setId(resultat.getInt("ID"));
-                e.setNombrePage(resultat.getInt("NOMBRE_PAGE"));
-                e.setIsbn(resultat.getString("ISBN"));
-                e.setDatePublication(resultat.getString("DATE_PUBLICATION"));
-                e.setImage(resultat.getString("IMAGE"));
-                    editeur.setId(resultat.getInt("editeur.ID"));
-                    editeur.setNom(resultat.getString("editeur.NOM"));
-                e.setEditeur(editeur);
-                    o.setId(resultat.getInt("ouvrage.ID"));
-                    o.setTitre(resultat.getString("ouvrage.TITRE"));
-                    o.setType(resultat.getString("ouvrage.TYPE"));
-                        a.setId(resultat.getInt("auteur.ID"));
-                        a.setNom(resultat.getString("auteur.NOM"));
-                        a.setPrenom(resultat.getString("auteur.PRENOM"));
-                    o.setAuteur(a);
-                e.setOuvrage(o);
-                
-                listeEdition.add(e);
+                    Edition e = new Edition();
+                    e.setId(resultat.getInt("edition.ID"));
+                    e.setNombrePage(resultat.getInt("NOMBRE_PAGE"));
+                    e.setIsbn(resultat.getString("ISBN"));
+                    e.setDatePublication(resultat.getString("DATE_PUBLICATION"));
+                    e.setImage(resultat.getString("IMAGE"));
+                    e.setEditeur(resultat.getString("EDITEUR"));
+                    Ouvrage o = new Ouvrage(
+                            resultat.getInt("ouvrage.ID"),
+                            resultat.getString("TYPE"),
+                            resultat.getString("TITRE"),
+                            new Auteur(
+                                resultat.getString("ID"),
+                                resultat.getString("PRENOM"),
+                                resultat.getString("NOM")
+                            )
+                    );
+                    e.setOuvrage(o);
+                    listeEdition.add(e);
             }
             resultat.close();
             stm.close();

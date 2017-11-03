@@ -34,16 +34,15 @@ public class ReservationDAO extends DAO<Reservation> {
     public boolean create(Reservation reservation) {
         PreparedStatement stm = null;
         String requete = "INSERT INTO reservation "
-                + "(ID , DATE_DEBUT, DATE_FIN, COMPTE_ID,EXEMPLAIRE_ID ) "
+                + "(ID , DATE, COMPTE_ID,EXEMPLAIRE_ID ) "
                 + "VALUES (?, ?, ?, ?, ?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, reservation.getId());
-            stm.setString(2, reservation.getDateDebut());
-            stm.setString(3, reservation.getDateFin());
-            stm.setString(4, reservation.getCompte().getNumero());
-            stm.setInt(5, reservation.getExemplaire().getId());
+            stm.setString(2, reservation.getDate());
+            stm.setString(3, reservation.getCompte().getNumero());
+            stm.setInt(4, reservation.getExemplaire().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -130,8 +129,7 @@ public class ReservationDAO extends DAO<Reservation> {
             {
                 Reservation r = new Reservation();
                 r.setId(resultat.getInt("ID"));
-                r.setDateFin(resultat.getString("DATE_FIN"));
-                r.setDateDebut(resultat.getString("NOM"));
+                r.setDate(resultat.getString("DATE"));
                 r.setCompte(new Compte(
                         resultat.getString("NUMERO"),
                         resultat.getString("PRENOM"),
@@ -147,9 +145,7 @@ public class ReservationDAO extends DAO<Reservation> {
                                 resultat.getString("ISBN"),
                                 resultat.getString("DATE_PUBLICATION"),
                                 resultat.getString("IMAGE"),
-                                new Editeur(
-                                        resultat.getInt("editeur.ID"),
-                                        resultat.getString("editeur.NOM")),
+                                resultat.getString("EDITEUR"),
                                 new Ouvrage(
                                         resultat.getInt("ouvrage.ID"),
                                         resultat.getString("ouvrage.TITRE"),
@@ -185,16 +181,15 @@ public class ReservationDAO extends DAO<Reservation> {
     @Override
     public boolean update(Reservation reservation) {
         PreparedStatement stm = null;
-        String requete = "UPDATE reservation SET ID = ?, DATE_DEBUT = ?, "
-                + "DATE_FIN = ?, COMPTE_ID = ?, EXEMPLAIRE_ID = ? WHERE ID = ?";
+        String requete = "UPDATE reservation SET ID = ?, DATE = ?, "
+                + "COMPTE_ID = ?, EXEMPLAIRE_ID = ? WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, reservation.getId());
-            stm.setString(2, reservation.getDateDebut());
-            stm.setString(3, reservation.getDateFin());
-            stm.setString(4, reservation.getCompte().getNumero());
-            stm.setInt(5, reservation.getExemplaire().getId());
+            stm.setString(2, reservation.getDate());
+            stm.setString(3, reservation.getCompte().getNumero());
+            stm.setInt(4, reservation.getExemplaire().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -241,8 +236,7 @@ public class ReservationDAO extends DAO<Reservation> {
             {
                     Reservation r = new Reservation();
                     r.setId(resultat.getInt("ID"));
-                    r.setDateFin(resultat.getString("DATE_FIN"));
-                    r.setDateDebut(resultat.getString("NOM"));
+                    r.setDate(resultat.getString("DATE"));
 
                     r.setCompte(new Compte(
                             resultat.getString("NUMERO"),
@@ -261,9 +255,7 @@ public class ReservationDAO extends DAO<Reservation> {
                                     resultat.getString("ISBN"),
                                     resultat.getString("DATE_PUBLICATION"),
                                     resultat.getString("IMAGE"),
-                                    new Editeur(
-                                            resultat.getInt("editeur.ID"),
-                                            resultat.getString("editeur.NOM")),
+                                    resultat.getString("EDITEUR"),
                                     new Ouvrage(
                                             resultat.getInt("ouvrage.ID"),
                                             resultat.getString("ouvrage.TITRE"),

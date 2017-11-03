@@ -3,15 +3,22 @@ package com.robillard.bibliotheque.modele.classes;
 
 public class Edition {
     private int id,nombrePage;
-    private String isbn,datePublication,image;
-    private Editeur editeur;
+    private String isbn,datePublication,image,editeur;
     private Ouvrage ouvrage;
 
     public Edition() {
     }
 
-
-    public Edition(int id,int nombrePage, String isbn, String datePublication, String image, Editeur editeur, Ouvrage ouvrage) {
+    public Edition(int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage) {
+        this.nombrePage = nombrePage;
+        this.isbn = isbn;
+        this.datePublication = datePublication;
+        this.image = image;
+        this.editeur = editeur;
+        this.ouvrage = ouvrage;
+    }
+    
+    public Edition(int id,int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage) {
         this.nombrePage = nombrePage;
         this.id=id;
         this.isbn = isbn;
@@ -28,6 +35,10 @@ public class Edition {
     public void setImage(String image) {
         this.image = image;
     }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -37,11 +48,11 @@ public class Edition {
         return id;
     }
 
-    public Editeur getEditeur() {
+    public String getEditeur() {
         return editeur;
     }
 
-    public void setEditeur(Editeur editeur) {
+    public void setEditeur(String editeur) {
         this.editeur = editeur;
     }
 

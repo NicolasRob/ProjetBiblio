@@ -1,3 +1,4 @@
+
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -6,6 +7,7 @@ import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -14,48 +16,44 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherAjoutEdition extends HttpServlet {
+public class SupprimerOuvrage extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            try
+        try
+        {
+            Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+            Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+            Connection cnx = (Connection) Connexion.getInstance();
+            OuvrageDAO dao = new OuvrageDAO(cnx);
+            Ouvrage ouvrage = dao.read(request.getParameter("id"));
+            if (ouvrage != null)
             {
-                if (request.getSession().getAttribute("type") != null 
-                    && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
-                {
-                    Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
-                    Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
-                    Connection cnx = (Connection) Connexion.getInstance();
-                    OuvrageDAO dao = new OuvrageDAO(cnx);
-                    Ouvrage ouvrage = dao.read(request.getParameter("id"));
-                    if (ouvrage != null)
-                    {
-                        request.setAttribute("ouvrage", ouvrage);
-                        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
-                        r.forward(request, response);
-                    }
-                    else
-                    {
-                        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
-                        r.forward(request, response);
-                    }
-                }
-                else
-                {
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
-                    r.forward(request, response);
-                }
+                dao.delete(ouvrage);
+                String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8") 
+                                + "t" + URLEncoder.encode("é", "UTF-8") + 
+                                " supprim" + URLEncoder.encode("é", "UTF-8") + 
+                                " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
+                response.sendRedirect("go?action=afficherGestionCatalogue&message="+message
+                                      +"&recherche="+request.getParameter("recherche")
+                                      +"&critere="+request.getParameter("critere"));
             }
-            catch (Exception exp)
+            else
             {
-                Logger logger = Logger.getLogger("monLogger");
-                logger.log(Level.SEVERE, exp.getMessage());
-                String message = "Une erreur inattendue s'est produite lors"
-                        + " de l'affichage. Veuillez réessayer plus tard.";
-                request.setAttribute("erreurException", message);
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
-                r.forward(request, response);
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+                r.forward(request, response);  
             }
+        }
+        catch (Exception exp)
+        {
+            Logger logger = Logger.getLogger("monLogger");
+            logger.log(Level.SEVERE, exp.getMessage());
+            String message = "Une erreur inattendue s'est produite. Veuillez"
+                    + " réessayer plus tard.";
+            request.setAttribute("erreurException", message);
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+            r.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
