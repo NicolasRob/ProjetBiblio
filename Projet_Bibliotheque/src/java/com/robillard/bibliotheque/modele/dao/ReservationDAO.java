@@ -155,7 +155,7 @@ public class ReservationDAO extends DAO<Reservation> {
                                         resultat.getString("ouvrage.TITRE"),
                                         resultat.getString("ouvrage.Type"),
                                         new Auteur(
-                                                resultat.getString("auteur.ID"),
+                                                resultat.getInt("auteur.ID"),
                                                 resultat.getString("auteur.NOM"),
                                                 resultat.getString("auteur.PRENOM"))))));
                 resultat.close();
@@ -269,7 +269,7 @@ public class ReservationDAO extends DAO<Reservation> {
                                             resultat.getString("ouvrage.TITRE"),
                                             resultat.getString("ouvrage.Type"),
                                             new Auteur(
-                                                    resultat.getString("auteur.ID"),
+                                                    resultat.getInt("auteur.ID"),
                                                     resultat.getString("auteur.NOM"),
                                                     resultat.getString("auteur.PRENOM"))))));
                     listeReservation.add(r);

@@ -38,7 +38,7 @@ public class AuteurDAO extends DAO<Auteur> {
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, auteur.getId());
+            stm.setInt(1, auteur.getId());
             stm.setString(2, auteur.getPrenom());
             stm.setString(3, auteur.getNom());
             int n = stm.executeUpdate();
@@ -74,7 +74,7 @@ public class AuteurDAO extends DAO<Auteur> {
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, auteur.getId());
+            stm.setInt(1, auteur.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -119,7 +119,7 @@ public class AuteurDAO extends DAO<Auteur> {
             if (resultat.next())
             {
                 Auteur a = new Auteur();
-                a.setId(resultat.getString("ID"));
+                a.setId(resultat.getInt("ID"));
                 a.setPrenom(resultat.getString("PRENOM"));
                 a.setNom(resultat.getString("NOM"));
                 resultat.close();
@@ -156,7 +156,7 @@ public class AuteurDAO extends DAO<Auteur> {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, auteur.getPrenom());
             stm.setString(2, auteur.getNom());
-            stm.setString(3, auteur.getId());
+            stm.setInt(3, auteur.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -195,7 +195,7 @@ public class AuteurDAO extends DAO<Auteur> {
             while (resultat.next())
             {
                     Auteur a = new Auteur();
-                    a.setId(resultat.getString("ID"));
+                    a.setId(resultat.getInt("ID"));
                     a.setPrenom(resultat.getString("PRENOM"));
                     a.setNom(resultat.getString("NOM"));
                     listeAuteur.add(a);

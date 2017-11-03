@@ -5,6 +5,14 @@ public class Emprunt {
     private int id;
     private Compte compte;
     private Exemplaire Exemplaire;
+
+    public Compte getCompte() {
+        return compte;
+    }
+
+    public void setCompte(Compte compte) {
+        this.compte = compte;
+    }
     private String dateDebut,dateFin;
 
     public Emprunt() {
@@ -16,14 +24,6 @@ public class Emprunt {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Compte getcompte() {
-        return compte;
-    }
-
-    public void setcompte(Compte compte) {
-        this.compte = compte;
     }
 
     public Exemplaire getExemplaire() {

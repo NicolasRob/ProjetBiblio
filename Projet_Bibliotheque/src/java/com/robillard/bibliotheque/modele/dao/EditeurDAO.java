@@ -32,14 +32,13 @@ public class EditeurDAO extends DAO<Editeur> {
     @Override
     public boolean create(Editeur editeur) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO compte"
-                + "(ID , NOM)"
-                + "VALUES (?, ?)";
+        String requete = "INSERT INTO editeur"
+                + "(NOM)"
+                + "VALUES (?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, Editeur.getId());
-            stm.setString(2, Editeur.getNom());
+            stm.setString(1, editeur.getNom());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -127,6 +126,7 @@ public class EditeurDAO extends DAO<Editeur> {
         }
         catch (SQLException exp)
         {
+            logger.log(Level.SEVERE, exp.getMessage());
         }
         finally
         {
@@ -139,7 +139,7 @@ public class EditeurDAO extends DAO<Editeur> {
             catch (SQLException exp)
             {
                 logger.log(Level.SEVERE, exp.getMessage());
-            }			
+            }
         }
         return null;
     }
@@ -147,13 +147,13 @@ public class EditeurDAO extends DAO<Editeur> {
     @Override
     public boolean update(Editeur editeur) {
         PreparedStatement stm = null;
-        String requete = "UPDATE compte NOM = ?, "
+        String requete = "UPDATE editeur NOM = ?, "
                 + " WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, editeur.getId());
-            stm.setString(2, editeur.getNom());
+            stm.setInt(2, editeur.getId());
+            stm.setString(1, editeur.getNom());
             int n = stm.executeUpdate();
             if (n>0)
             {
