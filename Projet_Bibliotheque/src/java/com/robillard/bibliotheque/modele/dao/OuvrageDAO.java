@@ -41,7 +41,7 @@ public class OuvrageDAO extends DAO<Ouvrage>{
             stm = cnx.prepareStatement(requete);
             stm.setString(1, ouvrage.getTitre());
             stm.setString(2, ouvrage.getType());
-            stm.setInt(3, ouvrage.getAuteur().getId());
+            stm.setString(3, ouvrage.getAuteur().getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -126,7 +126,7 @@ public class OuvrageDAO extends DAO<Ouvrage>{
                 o.setTitre(resultat.getString("TITRE"));
                 o.setType(resultat.getString("TYPE"));
                 Auteur a = new Auteur(
-                        resultat.getInt("auteur.ID"),
+                        resultat.getString("auteur.ID"),
                         resultat.getString("PRENOM"),
                         resultat.getString("NOM")
                 );
@@ -165,7 +165,7 @@ public class OuvrageDAO extends DAO<Ouvrage>{
             stm = cnx.prepareStatement(requete);
             stm.setString(1, ouvrage.getTitre());
             stm.setString(2, ouvrage.getType());
-            stm.setInt(3, ouvrage.getAuteur().getId());
+            stm.setString(3, ouvrage.getAuteur().getId());
             stm.setInt(4, ouvrage.getId());
             int n = stm.executeUpdate();
             if (n>0)
@@ -210,7 +210,7 @@ public class OuvrageDAO extends DAO<Ouvrage>{
                     o.setTitre(resultat.getString("TITRE"));
                     o.setType(resultat.getString("TYPE"));
                     Auteur a = new Auteur(
-                        resultat.getInt("auteur.ID"),
+                        resultat.getString("auteur.ID"),
                         resultat.getString("PRENOM"),
                         resultat.getString("NOM")
                     );
