@@ -10,21 +10,22 @@ package com.robillard.bibliotheque.modele.classes;
  * @author Vengor
  */
 public class Auteur {
-    private String id, nom, prenom;
+    int id;
+    private String nom, prenom;
     
     public Auteur() {}
 
-    public Auteur(String id, String prenom, String nom) {
+    public Auteur( int id, String prenom, String nom) {
         this.id = id;
         this.prenom = prenom;
         this.nom = nom;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

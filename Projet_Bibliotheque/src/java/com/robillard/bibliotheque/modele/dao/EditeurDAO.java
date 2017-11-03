@@ -5,7 +5,7 @@
  */
 package com.robillard.bibliotheque.modele.dao;
 
-import com.robillard.bibliotheque.modele.classes.Auteur;
+import com.robillard.bibliotheque.modele.classes.Editeur;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,29 +18,27 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Vengor
+ * @author c.blais
  */
-public class AuteurDAO extends DAO<Auteur> {
+public class EditeurDAO extends DAO<Editeur> {
     
     private Logger logger = Logger.getLogger("monLogger");
     
-    public AuteurDAO(Connection c)
+    public EditeurDAO(Connection c)
     {
         super(c);
     }
         
     @Override
-    public boolean create(Auteur auteur) {
+    public boolean create(Editeur editeur) {
         PreparedStatement stm = null;
-        String requete = "INSERT INTO auteur"
-                + "(ID , PRENOM, NOM) "
-                + "VALUES (?, ?, ?)";
+        String requete = "INSERT INTO editeur"
+                + "(NOM)"
+                + "VALUES (?)";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, auteur.getId());
-            stm.setString(2, auteur.getPrenom());
-            stm.setString(3, auteur.getNom());
+            stm.setString(1, editeur.getNom());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -68,13 +66,13 @@ public class AuteurDAO extends DAO<Auteur> {
     }
     
     @Override
-    public boolean delete(Auteur auteur) {
+    public boolean delete(Editeur editeur) {
         PreparedStatement stm = null;
-        String requete = "DELETE FROM auteur WHERE ID = ?";
+        String requete = "DELETE FROM editeur WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setInt(1, auteur.getId());
+            stm.setInt(1, editeur.getId());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -91,7 +89,7 @@ public class AuteurDAO extends DAO<Auteur> {
             if (stm!=null)
             try 
             {
-                    stm.close();
+                stm.close();
             } 
             catch (SQLException exp) 
             {
@@ -102,15 +100,15 @@ public class AuteurDAO extends DAO<Auteur> {
     }
     
     @Override
-    public Auteur read(int id) {
+    public Editeur read(int id) {
             return this.read(""+id);
     }
         
     @Override
-    public Auteur read(String id) {
+    public Editeur read(String id) {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM auteur WHERE ID = ?";
+        String requete = "SELECT * FROM editeur WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
@@ -118,13 +116,12 @@ public class AuteurDAO extends DAO<Auteur> {
             resultat = stm.executeQuery();
             if (resultat.next())
             {
-                Auteur a = new Auteur();
-                a.setId(resultat.getInt("ID"));
-                a.setPrenom(resultat.getString("PRENOM"));
-                a.setNom(resultat.getString("NOM"));
+                Editeur e = new Editeur ();
+                e.setId(resultat.getInt("ID"));
+                e.setNom(resultat.getString("NOM"));
                 resultat.close();
                 stm.close();
-                return a;
+                return e;
             }
         }
         catch (SQLException exp)
@@ -136,27 +133,27 @@ public class AuteurDAO extends DAO<Auteur> {
             if (stm!=null)
             try 
             {
-                    resultat.close();
-                    stm.close();
+                resultat.close();
+                stm.close();
             } 
-            catch (SQLException exp) 
+            catch (SQLException exp)
             {
                 logger.log(Level.SEVERE, exp.getMessage());
-            }			
+            }
         }
         return null;
     }
     
     @Override
-    public boolean update(Auteur auteur) {
+    public boolean update(Editeur editeur) {
         PreparedStatement stm = null;
-        String requete = "UPDATE auteur SET PRENOM = ?, NOM = ? WHERE ID = ?";
+        String requete = "UPDATE editeur NOM = ?, "
+                + " WHERE ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);
-            stm.setString(1, auteur.getPrenom());
-            stm.setString(2, auteur.getNom());
-            stm.setInt(3, auteur.getId());
+            stm.setInt(2, editeur.getId());
+            stm.setString(1, editeur.getNom());
             int n = stm.executeUpdate();
             if (n>0)
             {
@@ -184,22 +181,23 @@ public class AuteurDAO extends DAO<Auteur> {
     }
         
     @Override
-    public List<Auteur> findAll() {
+    public List<Editeur> findAll() {
         Statement stm = null;
         ResultSet resultat = null;
-        List<Auteur> listeAuteur = new LinkedList();
+        List<Editeur> listeEditeur = new LinkedList();
         try 
         {
             stm = cnx.createStatement(); 
-            resultat = stm.executeQuery("SELECT * FROM auteur");
+            resultat = stm.executeQuery("SELECT * FROM editeur");
             while (resultat.next())
             {
-                    Auteur a = new Auteur();
-                    a.setId(resultat.getInt("ID"));
-                    a.setPrenom(resultat.getString("PRENOM"));
-                    a.setNom(resultat.getString("NOM"));
-                    listeAuteur.add(a);
+                    Editeur e = new Editeur ();
+                    e.setId(resultat.getInt("ID"));
+                    e.setNom(resultat.getString("NOM"));
+                    listeEditeur.add(e);
             }
+            resultat.close();
+            stm.close();
         }
         catch (SQLException exp)
         {
@@ -218,6 +216,6 @@ public class AuteurDAO extends DAO<Auteur> {
                 logger.log(Level.SEVERE, exp.getMessage());
             }			
         }
-        return listeAuteur;
+        return listeEditeur;
     }
 }
