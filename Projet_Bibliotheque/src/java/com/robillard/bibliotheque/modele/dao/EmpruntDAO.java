@@ -15,10 +15,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 
 public class EmpruntDAO extends DAO<Emprunt> {
     
@@ -338,4 +341,138 @@ public class EmpruntDAO extends DAO<Emprunt> {
         }
         return date;
     }
+    
+    public Emprunt findCurrentReservationForEdition(int id, String numero) {
+        return this.findCurrentReservationForEdition("" + id, numero);
+    }
+    
+    public Emprunt findCurrentReservationForEdition(String id, String numero) {
+        PreparedStatement stm = null;
+        ResultSet resultat = null;
+        Emprunt emprunt = null;
+        try 
+        {
+            String requete = "SELECT * FROM emprunt" 
+                +" INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID"
+                +" INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID"
+                +" INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +" INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +" INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
+                +" WHERE edition.ID = ? AND COMPTE_ID = ? AND DATE_FIN >= CURDATE()"
+                +" ORDER BY DATE_FIN"
+                +" LIMIT 1";
+            stm = cnx.prepareStatement(requete);
+            stm.setString(1, id);
+            stm.setString(2, numero);
+            resultat = stm.executeQuery();
+            while (resultat.next())
+            {
+                    emprunt = new Emprunt();
+                    emprunt.setId(resultat.getInt("ID"));
+                    emprunt.setDateDebut(resultat.getString("DATE_DEBUT"));
+                    emprunt.setDateFin(resultat.getString("DATE_FIN"));
+                    emprunt.setStatus(resultat.getString("STATUS"));
+                    emprunt.setCompte(new Compte(
+                            resultat.getString("NUMERO"),
+                            resultat.getString("PRENOM"),
+                            resultat.getString("NOM"),
+                            resultat.getString("MDP"),
+                            resultat.getInt("compte.TYPE")
+                    ));
+
+                    emprunt.setExemplaire(new Exemplaire(
+                            resultat.getInt("ID"),
+                            resultat.getString("EMPLACEMENT"),
+                            new Edition(
+                                    resultat.getInt("ID"),
+                                    resultat.getInt("NOMBRE_PAGE"),
+                                    resultat.getString("ISBN"),
+                                    resultat.getString("DATE_PUBLICATION"),
+                                    resultat.getString("IMAGE"),
+                                    resultat.getString("EDITEUR"),
+                                    new Ouvrage(
+                                            resultat.getInt("ouvrage.ID"),
+                                            resultat.getString("ouvrage.TITRE"),
+                                            resultat.getString("ouvrage.Type"),
+                                            new Auteur(
+                                                    resultat.getString("auteur.ID"),
+                                                    resultat.getString("auteur.NOM"),
+                                                    resultat.getString("auteur.PRENOM"))))));
+            }
+            resultat.close();
+            stm.close();
+        }
+        catch (SQLException exp)
+        {
+            logger.log(Level.SEVERE, exp.getMessage());
+        }
+        finally
+        {
+            if (stm!=null)
+            try 
+            {
+                resultat.close();
+                stm.close();
+            } 
+            catch (SQLException exp) 
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }			
+        }
+        return emprunt;
+    }
+    
+    public Pair<String, String> findEarliestAvailableExemplaireForEdition(int id) {
+        return this.findEarliestAvailableExemplaireForEdition("" + id);
+    }
+    
+    public Pair<String, String> findEarliestAvailableExemplaireForEdition(String id) {
+        PreparedStatement stm = null;
+        ResultSet resultat = null;
+        Pair<String, String> exemplaireDate = null;
+        try 
+        {
+            String requete = "SELECT ID, MIN_DATE FROM "
+                    + "(SELECT exemplaire.ID, IFNULL(MAX(DATE_FIN), CURDATE()) AS MIN_DATE "
+                    + "FROM emprunt "
+                    + "INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID " 
+                    + "RIGHT JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID "
+                    + "INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID "
+                    + "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID " 
+                    + "INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID " 
+                    + "WHERE EDITION_ID = ? "
+                    + "GROUP BY exemplaire.ID "
+                    + "ORDER BY MIN_DATE) AS liste "
+                    + "LIMIT 1";
+            stm = cnx.prepareStatement(requete);
+            stm.setString(1, id);
+            resultat = stm.executeQuery();
+            while (resultat.next())
+            {
+                if (resultat.getString("ID") != null)
+                    exemplaireDate = new Pair(resultat.getString("ID"), resultat.getString("MIN_DATE"));
+            }
+            resultat.close();
+            stm.close();
+        }
+        catch (SQLException exp)
+        {
+            logger.log(Level.SEVERE, exp.getMessage());
+        }
+        finally
+        {
+            if (stm!=null)
+            try 
+            {
+                resultat.close();
+                stm.close();
+            } 
+            catch (SQLException exp) 
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }			
+        }
+        return exemplaireDate;
+    }
+    
 }
