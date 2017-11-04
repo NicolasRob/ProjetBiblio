@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -14,9 +9,11 @@ import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
 import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.LinkedList;
-import java.util.List;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -25,42 +22,58 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Vengor
- */
-public class AfficherModEdition extends HttpServlet {
+public class AjouterExemplaire extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try
+        request.setCharacterEncoding("utf8");
+        response.setContentType("utf8");
+        try 
         {
-            if (request.getSession().getAttribute("type") != null 
-                && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
+            Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+            Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+            Connection cnx = (Connection) Connexion.getInstance();
+            EditionDAO editionDao;
+            Edition edition;
+            ExemplaireDAO exemplaireDao;
+            if (request.getSession().getAttribute("type") == null ||
+                (Integer)request.getSession().getAttribute("type") != 2)
             {
-                Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
-                Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
-                Connection cnx = (Connection) Connexion.getInstance();
-                EditionDAO dao = new EditionDAO(cnx);
-                Edition edition = dao.read(request.getParameter("id"));
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
+                r.forward(request, response);
+            }
+            else if (request.getParameter("id") == null ||
+                "".equals(request.getParameter("id").trim()))
+            {
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
+                r.forward(request, response);
+            }
+            else if (request.getParameter("emplacement") == null ||
+                "".equals(request.getParameter("emplacement").trim()))
+            {
+                String message = "L'exemplaire doit avoir un emplacement";
+                response.sendRedirect("go?action=afficherModificationEdition&messageErreurExemplaire="+message+"&id="+request.getParameter("id"));
+            }
+            else
+            {
+                editionDao = new EditionDAO(cnx);
+                edition = editionDao.read(request.getParameter("id"));
+                
                 if (edition != null)
                 {
-                    ExemplaireDAO exemplaireDao = new ExemplaireDAO(cnx);
-                    List<Exemplaire> listeExemplaire = new LinkedList();
-                    listeExemplaire = exemplaireDao.findByEdition(edition.getId());
-                    request.setAttribute("edition", edition);
-                    request.setAttribute("exemplaires", listeExemplaire);
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modEdition.jsp");
-                    r.forward(request, response);
+                    exemplaireDao = new ExemplaireDAO(cnx);
+                    Exemplaire exemplaire = new Exemplaire(
+                            request.getParameter("emplacement"),
+                            edition
+                    );
+                    String message = "";
+                    if (exemplaireDao.create(exemplaire))
+                        message = "L'exemplaire a " 
+                                + URLEncoder.encode("é", "UTF-8") 
+                                + "t" + URLEncoder.encode("é", "UTF-8") + 
+                                " ajout" + URLEncoder.encode("é", "UTF-8") + 
+                                " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
+                    response.sendRedirect("go?action=afficherModificationEdition&message="+message+"&id="+request.getParameter("id"));
                 }
                 else
                 {
@@ -68,18 +81,14 @@ public class AfficherModEdition extends HttpServlet {
                     r.forward(request, response);
                 }
             }
-            else
-            {
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
-                r.forward(request, response);
-            }
         }
-        catch (Exception exp)
+        catch (Exception e)
         {
             Logger logger = Logger.getLogger("monLogger");
-            logger.log(Level.SEVERE, exp.getMessage());
-            String message = "Une erreur inattendue s'est produite lors"
-                    + " de l'affichage. Veuillez réessayer plus tard.";
+            logger.log(Level.SEVERE, e.getMessage());
+            logger.log(Level.SEVERE, e.toString());
+            String message = "Une erreur inattendue s'est produite. Veuillez"
+                    + " réessayer plus tard.";
             request.setAttribute("erreurException", message);
             RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modEdition.jsp");
             r.forward(request, response);

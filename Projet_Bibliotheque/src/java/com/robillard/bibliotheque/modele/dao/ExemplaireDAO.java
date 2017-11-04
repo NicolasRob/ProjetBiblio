@@ -108,7 +108,7 @@ public class ExemplaireDAO extends DAO<Exemplaire> {
                 +" INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
                 +" INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
                 +" INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
-                +" WHERE ID = ?";
+                +" WHERE exemplaire.ID = ?";
         try 
         {
             stm = cnx.prepareStatement(requete);

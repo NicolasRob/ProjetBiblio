@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container Site-Content">
 
   <h1 class="mt-4 mb-3">Modifier une Édition</h1>
@@ -20,6 +21,7 @@
                   <p class="text-danger" >${requestScope.erreurException}</p>
                   <p class="text-success" >${param.message}</p>
                   <p class="text-danger" >${param.messageErreur}</p>
+                  <p class="text-danger" >${param.messageErreurExemplaire}</p>
                   <div class="form-group">
                       <label class="control-label col-sm-2" for="titre">Titre:</label>
                       <div class="col-sm-10">
@@ -81,12 +83,15 @@
                     <table class="table table-striped table-bordered">
                       <tr>
                           <td><input type="text" name="emplacement" id="emplacement" placeholder="Code de localisation"/></td>
+                          <input type="hidden" name="id" value="${requestScope.edition.getId()}" /> 
                           <td><button type="submit">Ajouter un exemplaire</button></td>
                       </tr>
                       <tr>
-                          <td>Emplacement</td>
-                          <td><a href="go?supprimerExemplaire&id=${requestScope.edition.getId()}">Supprimer</a></td>
-                      </tr>
+                          <c:forEach var="exemplaire" items="${requestScope.exemplaires}">
+                          <td>${exemplaire.getEmplacement()}</td>
+                          <td><a href="go?action=supprimerExemplaire&id=${exemplaire.getId()}">Supprimer</a></td>
+                          </c:forEach>
+                    </tr>
                   </table>
                 </form>
           </div>
