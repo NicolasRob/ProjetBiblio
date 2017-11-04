@@ -1,24 +1,25 @@
+//Tente d'effectuer une réservation sur un exemplaire d'une édition
+//L'utlisateur doit être connecté
+//La réservation sera effectué sur le premier exemplaire disponible
+//Si l'édition n'a pas d'exemplaire, la réservation ne peut pas être faite
+//Si l'utilisateur à déja un emprunt ou une réservation active, il ne peut pas en faire
+//une autre sur la même édition
+//Le id dans la requête doit faire référence à une édition dans la BD
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Compte;
-import com.robillard.bibliotheque.modele.classes.Edition;
 import com.robillard.bibliotheque.modele.classes.Emprunt;
 import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.dao.CompteDAO;
-import com.robillard.bibliotheque.modele.dao.EditionDAO;
 import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
 import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
-import com.robillard.bibliotheque.modele.dao.ReservationDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
@@ -28,10 +29,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Reserver extends HttpServlet {
+public class Reserver extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         request.setCharacterEncoding("utf8");
         response.setContentType("utf8");
         if (request.getSession().getAttribute("login") != null)
@@ -47,13 +50,13 @@ public class Reserver extends HttpServlet {
                 if (request.getParameter("id") != null)
                 {
                     if (empruntDao.findCurrentReservationForEdition(
-                            request.getParameter("id"), 
+                            request.getParameter("id"),
                             request.getSession().getAttribute("login").toString()) != null)
                     {
-                        String message = "Vous avez d" + URLEncoder.encode("é", "UTF-8") 
-                                + "ja une r" + URLEncoder.encode("é", "UTF-8") 
-                                +"servation ou un emprunt actif sur ce titre.";
-                        response.sendRedirect("go?action=detailsLivre&message="+message+"&id="+request.getParameter("id"));
+                        String message = "Vous avez d" + URLEncoder.encode("é", "UTF-8")
+                                + "ja une r" + URLEncoder.encode("é", "UTF-8")
+                                + "servation ou un emprunt actif sur ce titre.";
+                        response.sendRedirect("go?action=detailsLivre&message=" + message + "&id=" + request.getParameter("id"));
 
                     }
                     else
@@ -64,27 +67,27 @@ public class Reserver extends HttpServlet {
                         DateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = formatDate.parse(exemplaireDate.getValue());
                         Emprunt emprunt = new Emprunt(
-                            compte,
-                            exemplaire,
-                            date,
-                            "RESERVATION"
+                                compte,
+                                exemplaire,
+                                date,
+                                "RESERVATION"
                         );
                         boolean resultat = empruntDao.create(emprunt);
 
                         if (resultat)
                         {
                             String message = "La r" + URLEncoder.encode("é", "UTF-8") + "servation"
-                            + " a " + URLEncoder.encode("é", "UTF-8") 
-                            + "t" + URLEncoder.encode("é", "UTF-8") + 
-                            " effectu" + URLEncoder.encode("é", "UTF-8") + 
-                            " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
-                            response.sendRedirect("go?action=detailsLivre&message="+message+"&id="+request.getParameter("id"));
+                                    + " a " + URLEncoder.encode("é", "UTF-8")
+                                    + "t" + URLEncoder.encode("é", "UTF-8")
+                                    + " effectu" + URLEncoder.encode("é", "UTF-8")
+                                    + " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
+                            response.sendRedirect("go?action=detailsLivre&message=" + message + "&id=" + request.getParameter("id"));
                         }
                         else
                         {
-                            String message = "Impossible d'effectuer une r" + URLEncoder.encode("é", "UTF-8") +
-                                    "servation de cet ouvrage pour le moment";
-                            response.sendRedirect("go?action=detailsLivre&message="+message+"&id="+request.getParameter("id"));
+                            String message = "Impossible d'effectuer une r" + URLEncoder.encode("é", "UTF-8")
+                                    + "servation de cet ouvrage pour le moment";
+                            response.sendRedirect("go?action=detailsLivre&message=" + message + "&id=" + request.getParameter("id"));
                         }
                     }
                 }
@@ -113,7 +116,8 @@ public class Reserver extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -127,7 +131,8 @@ public class Reserver extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -137,7 +142,8 @@ public class Reserver extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

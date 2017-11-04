@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.robillard.bibliotheque.modele.dao;
 
 import com.robillard.bibliotheque.modele.classes.Auteur;
@@ -18,26 +13,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Vengor
- */
-public class EditionDAO extends DAO<Edition>{
-    
+public class EditionDAO extends DAO<Edition>
+{
+
     private Logger logger = Logger.getLogger("monLogger");
-        
+
     public EditionDAO(Connection c)
     {
         super(c);
     }
-        
+
     @Override
-    public boolean create(Edition edition) {
+    public boolean create(Edition edition)
+    {
         PreparedStatement stm = null;
         String requete = "INSERT INTO edition "
                 + "(NOMBRE_PAGE, ISBN, DATE_PUBLICATION, IMAGE, EDITEUR, OUVRAGE_ID) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, edition.getNombrePage());
@@ -47,7 +40,7 @@ public class EditionDAO extends DAO<Edition>{
             stm.setString(5, edition.getEditeur());
             stm.setInt(6, edition.getOuvrage().getId());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
                 stm.close();
                 return true;
@@ -59,29 +52,32 @@ public class EditionDAO extends DAO<Edition>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-    
+
     @Override
-    public boolean delete(Edition edition) {
+    public boolean delete(Edition edition)
+    {
         PreparedStatement stm = null;
         String requete = "DELETE FROM edition WHERE ID = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, edition.getId());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
                 stm.close();
                 return true;
@@ -93,33 +89,37 @@ public class EditionDAO extends DAO<Edition>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-    
+
     @Override
-    public Edition read(int id) {
-            return this.read(""+id);
+    public Edition read(int id)
+    {
+        return this.read("" + id);
     }
-        
+
     @Override
-    public Edition read(String id) {
+    public Edition read(String id)
+    {
         PreparedStatement stm = null;
         ResultSet resultat = null;
         String requete = "SELECT * FROM edition"
                 + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
                 + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID"
                 + " WHERE edition.ID = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, id);
@@ -138,9 +138,9 @@ public class EditionDAO extends DAO<Edition>{
                         resultat.getString("TITRE"),
                         resultat.getString("TYPE"),
                         new Auteur(
-                            resultat.getString("ID"),
-                            resultat.getString("PRENOM"),
-                            resultat.getString("NOM")
+                                resultat.getString("ID"),
+                                resultat.getString("PRENOM"),
+                                resultat.getString("NOM")
                         )
                 );
                 e.setOuvrage(o);
@@ -155,26 +155,29 @@ public class EditionDAO extends DAO<Edition>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                resultat.close();
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return null;
     }
-    
+
     @Override
-    public boolean update(Edition edition) {
+    public boolean update(Edition edition)
+    {
         PreparedStatement stm = null;
         String requete = "UPDATE edition SET NOMBRE_PAGE = ?, ISBN = ?, "
                 + "DATE_PUBLICATION = ?, IMAGE = ?, EDITEUR = ?, OUVRAGE_ID = ? WHERE ID = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, edition.getNombrePage());
@@ -185,7 +188,7 @@ public class EditionDAO extends DAO<Edition>{
             stm.setInt(6, edition.getOuvrage().getId());
             stm.setInt(7, edition.getId());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
                 stm.close();
                 return true;
@@ -197,51 +200,54 @@ public class EditionDAO extends DAO<Edition>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-        
+
     @Override
-    public List<Edition> findAll() {
+    public List<Edition> findAll()
+    {
         Statement stm = null;
         ResultSet resultat = null;
         List<Edition> listeEdition = new LinkedList();
-        try 
+        try
         {
-            stm = cnx.createStatement(); 
+            stm = cnx.createStatement();
             resultat = stm.executeQuery("SELECT * FROM edition"
                     + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
                     + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID");
             while (resultat.next())
             {
-                    Edition e = new Edition();
-                    e.setId(resultat.getInt("edition.ID"));
-                    e.setNombrePage(resultat.getInt("NOMBRE_PAGE"));
-                    e.setIsbn(resultat.getString("ISBN"));
-                    e.setDatePublication(resultat.getString("DATE_PUBLICATION"));
-                    e.setImage(resultat.getString("IMAGE"));
-                    e.setEditeur(resultat.getString("EDITEUR"));
-                    Ouvrage o = new Ouvrage(
-                            resultat.getInt("ouvrage.ID"),
-                            resultat.getString("TITRE"),
-                            resultat.getString("TYPE"),
-                            new Auteur(
+                Edition e = new Edition();
+                e.setId(resultat.getInt("edition.ID"));
+                e.setNombrePage(resultat.getInt("NOMBRE_PAGE"));
+                e.setIsbn(resultat.getString("ISBN"));
+                e.setDatePublication(resultat.getString("DATE_PUBLICATION"));
+                e.setImage(resultat.getString("IMAGE"));
+                e.setEditeur(resultat.getString("EDITEUR"));
+                Ouvrage o = new Ouvrage(
+                        resultat.getInt("ouvrage.ID"),
+                        resultat.getString("TITRE"),
+                        resultat.getString("TYPE"),
+                        new Auteur(
                                 resultat.getString("ID"),
                                 resultat.getString("PRENOM"),
                                 resultat.getString("NOM")
-                            )
-                    );
-                    e.setOuvrage(o);
-                    listeEdition.add(e);
+                        )
+                );
+                e.setOuvrage(o);
+                listeEdition.add(e);
             }
             resultat.close();
             stm.close();
@@ -252,21 +258,26 @@ public class EditionDAO extends DAO<Edition>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                resultat.close();
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return listeEdition;
     }
-    
-        public List<Edition> findAll(String filtre, String recherche) {
+
+    //Permet de trouver les éditions qui correspondent à un terme de recherche
+    //appliqué sur une colonne selon le filtre
+    public List<Edition> findAll(String filtre, String recherche)
+    {
         Statement stm = null;
         ResultSet resultat = null;
         List<Edition> listeEdition = new LinkedList();
@@ -287,9 +298,9 @@ public class EditionDAO extends DAO<Edition>{
         }
         if (!"".equals(colonne) && !"".equals(recherche.trim()))
         {
-            try 
+            try
             {
-                stm = cnx.createStatement(); 
+                stm = cnx.createStatement();
                 resultat = stm.executeQuery("SELECT * FROM edition"
                         + " INNER JOIN ouvrage ON edition.OUVRAGE_ID = ouvrage.ID"
                         + " INNER JOIN auteur ON ouvrage.AUTEUR_ID = auteur.ID"
@@ -301,9 +312,9 @@ public class EditionDAO extends DAO<Edition>{
                     o.setTitre(resultat.getString("TITRE"));
                     o.setType(resultat.getString("TYPE"));
                     Auteur a = new Auteur(
-                        resultat.getString("auteur.ID"),
-                        resultat.getString("PRENOM"),
-                        resultat.getString("NOM")
+                            resultat.getString("auteur.ID"),
+                            resultat.getString("PRENOM"),
+                            resultat.getString("NOM")
                     );
                     o.setAuteur(a);
                     Edition e = new Edition();
@@ -314,7 +325,7 @@ public class EditionDAO extends DAO<Edition>{
                     e.setImage(resultat.getString("IMAGE"));
                     e.setEditeur(resultat.getString("EDITEUR"));
                     e.setOuvrage(o);
-                        listeEdition.add(e);
+                    listeEdition.add(e);
                 }
                 resultat.close();
                 stm.close();
@@ -325,16 +336,18 @@ public class EditionDAO extends DAO<Edition>{
             }
             finally
             {
-                if (stm!=null)
-                try 
+                if (stm != null)
                 {
-                    resultat.close();
-                    stm.close();
-                } 
-                catch (SQLException exp) 
-                {
-                    logger.log(Level.SEVERE, exp.getMessage());
-                }			
+                    try
+                    {
+                        resultat.close();
+                        stm.close();
+                    }
+                    catch (SQLException exp)
+                    {
+                        logger.log(Level.SEVERE, exp.getMessage());
+                    }
+                }
             }
         }
         return listeEdition;

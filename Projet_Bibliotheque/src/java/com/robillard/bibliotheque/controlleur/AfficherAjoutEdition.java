@@ -1,3 +1,6 @@
+//Affiche la page d'ajout d'édition pour un ouvrage donné
+//L'utilisateur doit être connecté et être de type 2 (employé) et
+//le id de l'ouvrage doit être soumis dans la requête pour accéder à la page
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -5,7 +8,6 @@ import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -14,48 +16,50 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherAjoutEdition extends HttpServlet {
+public class AfficherAjoutEdition extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            try
-            {
-                if (request.getSession().getAttribute("type") != null 
+            throws ServletException, IOException
+    {
+        try
+        {
+            if (request.getSession().getAttribute("type") != null
                     && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
+            {
+                Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+                Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+                Connection cnx = (Connection) Connexion.getInstance();
+                OuvrageDAO dao = new OuvrageDAO(cnx);
+                Ouvrage ouvrage = dao.read(request.getParameter("id"));
+                if (ouvrage != null)
                 {
-                    Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
-                    Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
-                    Connection cnx = (Connection) Connexion.getInstance();
-                    OuvrageDAO dao = new OuvrageDAO(cnx);
-                    Ouvrage ouvrage = dao.read(request.getParameter("id"));
-                    if (ouvrage != null)
-                    {
-                        request.setAttribute("ouvrage", ouvrage);
-                        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
-                        r.forward(request, response);
-                    }
-                    else
-                    {
-                        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
-                        r.forward(request, response);
-                    }
+                    request.setAttribute("ouvrage", ouvrage);
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
+                    r.forward(request, response);
                 }
                 else
                 {
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
                     r.forward(request, response);
                 }
             }
-            catch (Exception exp)
+            else
             {
-                Logger logger = Logger.getLogger("monLogger");
-                logger.log(Level.SEVERE, exp.getMessage());
-                String message = "Une erreur inattendue s'est produite lors"
-                        + " de l'affichage. Veuillez réessayer plus tard.";
-                request.setAttribute("erreurException", message);
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
                 r.forward(request, response);
             }
+        }
+        catch (Exception exp)
+        {
+            Logger logger = Logger.getLogger("monLogger");
+            logger.log(Level.SEVERE, exp.getMessage());
+            String message = "Une erreur inattendue s'est produite lors"
+                    + " de l'affichage. Veuillez réessayer plus tard.";
+            request.setAttribute("erreurException", message);
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
+            r.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -69,7 +73,8 @@ public class AfficherAjoutEdition extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -83,7 +88,8 @@ public class AfficherAjoutEdition extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -93,7 +99,8 @@ public class AfficherAjoutEdition extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

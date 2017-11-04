@@ -1,15 +1,14 @@
+//Affichage d'un formulaire de recherche du catalogue
+//Si le terme de la recherche et le critère sont soumis dans la requête
+//Une liste des éditions sera placée dans request et ensuite afficher dans la vue
+
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Edition;
-import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
-import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,14 +18,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherCatalogue extends HttpServlet {
+public class AfficherCatalogue extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<Edition> listeEdition = new LinkedList();
-        if (request.getParameter("recherche") != null &&
-            request.getParameter("recherche").trim() != "" &&
-            request.getParameter("critere") != null)
+            throws ServletException, IOException
+    {
+        List<Edition> listeEdition;
+        if (request.getParameter("recherche") != null
+                && !"".equals(request.getParameter("recherche").trim())
+                && request.getParameter("critere") != null)
         {
             try
             {
@@ -34,9 +35,8 @@ public class AfficherCatalogue extends HttpServlet {
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
                 EditionDAO editionDao = new EditionDAO(cnx);
-                listeEdition = editionDao.findAll(  request.getParameter("critere"), 
-                                                    request.getParameter("recherche"));
-                //listeEdition = editionDao.findAll();
+                listeEdition = editionDao.findAll(request.getParameter("critere"),
+                        request.getParameter("recherche"));
                 request.setAttribute("editions", listeEdition);
             }
             catch (Exception exp)
@@ -56,8 +56,6 @@ public class AfficherCatalogue extends HttpServlet {
             RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
             r.forward(request, response);
         }
-        RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp");
-        r.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,7 +69,8 @@ public class AfficherCatalogue extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -85,7 +84,8 @@ public class AfficherCatalogue extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -95,7 +95,8 @@ public class AfficherCatalogue extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

@@ -1,15 +1,19 @@
-
+//Classe entité qui représente une édition d'un ouvrage
 package com.robillard.bibliotheque.modele.classes;
 
-public class Edition {
-    private int id,nombrePage;
-    private String isbn,datePublication,image,editeur;
+public class Edition
+{
+
+    private int id, nombrePage;
+    private String isbn, datePublication, image, editeur;
     private Ouvrage ouvrage;
 
-    public Edition() {
+    public Edition()
+    {
     }
 
-    public Edition(int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage) {
+    public Edition(int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage)
+    {
         this.nombrePage = nombrePage;
         this.isbn = isbn;
         this.datePublication = datePublication;
@@ -17,10 +21,11 @@ public class Edition {
         this.editeur = editeur;
         this.ouvrage = ouvrage;
     }
-    
-    public Edition(int id,int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage) {
+
+    public Edition(int id, int nombrePage, String isbn, String datePublication, String image, String editeur, Ouvrage ouvrage)
+    {
         this.nombrePage = nombrePage;
-        this.id=id;
+        this.id = id;
         this.isbn = isbn;
         this.datePublication = datePublication;
         this.image = image;
@@ -28,59 +33,73 @@ public class Edition {
         this.ouvrage = ouvrage;
     }
 
-    public String getImage() {
+    public String getImage()
+    {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(String image)
+    {
         this.image = image;
     }
-    
-    public void setId(int id) {
+
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public String getEditeur() {
+    public String getEditeur()
+    {
         return editeur;
     }
 
-    public void setEditeur(String editeur) {
+    public void setEditeur(String editeur)
+    {
         this.editeur = editeur;
     }
 
-    public Ouvrage getOuvrage() {
+    public Ouvrage getOuvrage()
+    {
         return ouvrage;
     }
 
-    public void setOuvrage(Ouvrage ouvrage) {
+    public void setOuvrage(Ouvrage ouvrage)
+    {
         this.ouvrage = ouvrage;
     }
 
-      public int getNombrePage() {
+    public int getNombrePage()
+    {
         return nombrePage;
     }
 
-    public void setNombrePage(int nombrePage) {
+    public void setNombrePage(int nombrePage)
+    {
         this.nombrePage = nombrePage;
     }
 
-    public String getIsbn() {
+    public String getIsbn()
+    {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(String isbn)
+    {
         this.isbn = isbn;
     }
 
-    public String getDatePublication() {
+    public String getDatePublication()
+    {
         return datePublication;
     }
 
-    public void setDatePublication(String datePublication) {
+    public void setDatePublication(String datePublication)
+    {
         this.datePublication = datePublication;
     }
 }

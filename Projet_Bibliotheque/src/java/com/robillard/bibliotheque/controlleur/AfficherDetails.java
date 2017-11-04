@@ -1,17 +1,17 @@
+//Affichage des détails d'une édition
+//Une édition avec le id soumis doit exister pour accéder à cette page
+
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Edition;
 import com.robillard.bibliotheque.modele.classes.Exemplaire;
-import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
 import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
 import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,10 +21,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherDetails extends HttpServlet {
+public class AfficherDetails extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         try
         {
             Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
@@ -35,7 +37,7 @@ public class AfficherDetails extends HttpServlet {
             if (edition != null)
             {
                 ExemplaireDAO exemplaireDao = new ExemplaireDAO(cnx);
-                List<Exemplaire> listeExemplaire = new LinkedList();
+                List<Exemplaire> listeExemplaire;
                 listeExemplaire = exemplaireDao.findByEdition(edition.getId());
                 HashMap<Exemplaire, String> mapExemplaireDate = new HashMap<Exemplaire, String>();
                 request.setAttribute("edition", edition);
@@ -75,7 +77,8 @@ public class AfficherDetails extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -89,7 +92,8 @@ public class AfficherDetails extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -99,7 +103,8 @@ public class AfficherDetails extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 
