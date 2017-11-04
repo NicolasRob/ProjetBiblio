@@ -1,18 +1,18 @@
 package com.robillard.bibliotheque.controlleur;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-public class ControleurFrontal extends HttpServlet {
+public class ControleurFrontal extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         RequestDispatcher r = null;
         if (request.getParameter("action") == null)
         {
@@ -60,19 +60,19 @@ public class ControleurFrontal extends HttpServlet {
                     r = this.getServletContext().getNamedDispatcher("AfficherGestionCompte");
                     r.forward(request, response);
                     break;
-                case "afficherAjoutOuvrage" :
+                case "afficherAjoutOuvrage":
                     r = this.getServletContext().getNamedDispatcher("AfficherAjoutOuvrage");
                     r.forward(request, response);
                     break;
-                case "afficherAjoutEdition" :
+                case "afficherAjoutEdition":
                     r = this.getServletContext().getNamedDispatcher("AfficherAjoutEdition");
                     r.forward(request, response);
                     break;
-                case "afficherSuggestion" :
+                case "afficherSuggestion":
                     r = this.getServletContext().getNamedDispatcher("AfficherSuggestion");
                     r.forward(request, response);
                     break;
-                case "afficherGestionSuggestion" :
+                case "afficherGestionSuggestion":
                     r = this.getServletContext().getNamedDispatcher("AfficherGestionSuggestion");
                     r.forward(request, response);
                     break;
@@ -141,8 +141,7 @@ public class ControleurFrontal extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -150,13 +149,13 @@ public class ControleurFrontal extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -164,7 +163,8 @@ public class ControleurFrontal extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -173,8 +173,8 @@ public class ControleurFrontal extends HttpServlet {
      *
      * @return a String containing servlet description
      */
-
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 }

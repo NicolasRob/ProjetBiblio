@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.robillard.bibliotheque.modele.dao;
 
 import com.robillard.bibliotheque.modele.classes.Compte;
@@ -16,26 +11,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Vengor
- */
-public class CompteDAO extends DAO<Compte>{
-    
+public class CompteDAO extends DAO<Compte>
+{
+
     private Logger logger = Logger.getLogger("monLogger");
-    
+
     public CompteDAO(Connection c)
     {
         super(c);
     }
-        
+
     @Override
-    public boolean create(Compte compte) {
+    public boolean create(Compte compte)
+    {
         PreparedStatement stm = null;
         String requete = "INSERT INTO compte "
                 + "(NUMERO , PRENOM, NOM, MDP, TYPE) "
                 + "VALUES (?, ?, ?, ?, ?)";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, compte.getNumero());
@@ -44,10 +37,10 @@ public class CompteDAO extends DAO<Compte>{
             stm.setString(4, compte.getMdp());
             stm.setInt(5, compte.getType());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -56,32 +49,35 @@ public class CompteDAO extends DAO<Compte>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-    
+
     @Override
-    public boolean delete(Compte compte) {
+    public boolean delete(Compte compte)
+    {
         PreparedStatement stm = null;
         String requete = "DELETE FROM compte WHERE NUMERO = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, compte.getNumero());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -90,30 +86,34 @@ public class CompteDAO extends DAO<Compte>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-    
+
     @Override
-    public Compte read(int numero) {
-            return this.read(""+numero);
+    public Compte read(int numero)
+    {
+        return this.read("" + numero);
     }
-        
+
     @Override
-    public Compte read(String numero) {
+    public Compte read(String numero)
+    {
         PreparedStatement stm = null;
         ResultSet resultat = null;
         String requete = "SELECT * FROM compte WHERE NUMERO = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, numero);
@@ -136,26 +136,29 @@ public class CompteDAO extends DAO<Compte>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                resultat.close();
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return null;
     }
-    
+
     @Override
-    public boolean update(Compte compte) {
+    public boolean update(Compte compte)
+    {
         PreparedStatement stm = null;
         String requete = "UPDATE compte SET PRENOM = ?, NOM = ?, "
                 + "MDP = ?, TYPE = ? WHERE NUMERO = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, compte.getPrenom());
@@ -164,10 +167,10 @@ public class CompteDAO extends DAO<Compte>{
             stm.setInt(4, compte.getType());
             stm.setString(5, compte.getNumero());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -176,37 +179,40 @@ public class CompteDAO extends DAO<Compte>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-        
+
     @Override
-    public List<Compte> findAll() {
+    public List<Compte> findAll()
+    {
         Statement stm = null;
         ResultSet resultat = null;
         List<Compte> listeCompte = new LinkedList();
-        try 
+        try
         {
-            stm = cnx.createStatement(); 
+            stm = cnx.createStatement();
             resultat = stm.executeQuery("SELECT * FROM compte");
             while (resultat.next())
             {
-                    Compte c = new Compte();
-                    c.setNumero(resultat.getString("NUMERO"));
-                    c.setPrenom(resultat.getString("PRENOM"));
-                    c.setNom(resultat.getString("NOM"));
-                    c.setMdp(resultat.getString("MDP"));
-                    c.setType(resultat.getInt("TYPE"));
-                    listeCompte.add(c);
+                Compte c = new Compte();
+                c.setNumero(resultat.getString("NUMERO"));
+                c.setPrenom(resultat.getString("PRENOM"));
+                c.setNom(resultat.getString("NOM"));
+                c.setMdp(resultat.getString("MDP"));
+                c.setType(resultat.getInt("TYPE"));
+                listeCompte.add(c);
             }
             resultat.close();
             stm.close();
@@ -217,16 +223,18 @@ public class CompteDAO extends DAO<Compte>{
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                resultat.close();
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return listeCompte;
     }

@@ -1,3 +1,9 @@
+//Affichage de la page de gestion catalogue
+//Contient intialement un formulaire de recherche
+//Si les paramèters nécéssaires sont fournis dans la requête,
+//Un map qui contient les ouvrages correspondants et leurs éditions sera mis dans request
+//La vue parcourera ensuite ce map pour afficher les ouvrages et éditions
+//L'utilisateur doit être connecté et être de type 2 (employé) pour y accéder
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -7,7 +13,6 @@ import com.robillard.bibliotheque.modele.dao.EditionDAO;
 import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,52 +24,63 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherGestionCatalogue extends HttpServlet {
+public class AfficherGestionCatalogue extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<Ouvrage> listeOuvrage = new LinkedList();
-        List<Edition> listeEdition = new LinkedList();
-        HashMap<Ouvrage, List<Edition>> mapOuvrageEdition = new HashMap<Ouvrage, List<Edition>>();
-        if (request.getParameter("recherche") != null &&
-            request.getParameter("recherche").trim() != "" &&
-            request.getParameter("critere") != null)
+            throws ServletException, IOException
+    {
+        if (request.getSession().getAttribute("type") != null
+                && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
         {
-            try
+            List<Ouvrage> listeOuvrage;
+            List<Edition> listeEdition;
+            HashMap<Ouvrage, List<Edition>> mapOuvrageEdition = new HashMap<Ouvrage, List<Edition>>();
+            if (request.getParameter("recherche") != null
+                    && !"".equals(request.getParameter("recherche").trim())
+                    && request.getParameter("critere") != null)
             {
-                Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
-                Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
-                Connection cnx = (Connection) Connexion.getInstance();
-                OuvrageDAO dao = new OuvrageDAO(cnx);
-                EditionDAO editionDao = new EditionDAO(cnx);
-                System.out.println(request.getParameter("critere"));
-                System.out.println(request.getParameter("recherche"));
-                listeOuvrage = dao.findAll( request.getParameter("critere"), 
-                                            request.getParameter("recherche"));
-                request.setAttribute("ouvrages", listeOuvrage);
-                listeEdition = editionDao.findAll();
-                for (Ouvrage o : listeOuvrage)
-                    mapOuvrageEdition.put(o, new LinkedList());
-                for (Edition e : listeEdition)
-                    if (mapOuvrageEdition.containsKey(e.getOuvrage()))
-                        mapOuvrageEdition.get(e.getOuvrage()).add(e);
-                request.setAttribute("ouvragesEditions", mapOuvrageEdition);
+                try
+                {
+                    Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+                    Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+                    Connection cnx = (Connection) Connexion.getInstance();
+                    OuvrageDAO dao = new OuvrageDAO(cnx);
+                    EditionDAO editionDao = new EditionDAO(cnx);
+                    System.out.println(request.getParameter("critere"));
+                    System.out.println(request.getParameter("recherche"));
+                    listeOuvrage = dao.findAll(request.getParameter("critere"),
+                            request.getParameter("recherche"));
+                    request.setAttribute("ouvrages", listeOuvrage);
+                    listeEdition = editionDao.findAll();
+                    for (Ouvrage o : listeOuvrage)
+                        mapOuvrageEdition.put(o, new LinkedList());
+                    for (Edition e : listeEdition)
+                        if (mapOuvrageEdition.containsKey(e.getOuvrage()))
+                            mapOuvrageEdition.get(e.getOuvrage()).add(e);
+                    request.setAttribute("ouvragesEditions", mapOuvrageEdition);
+                }
+                catch (Exception exp)
+                {
+                    Logger logger = Logger.getLogger("monLogger");
+                    logger.log(Level.SEVERE, exp.getMessage());
+                    String message = "Une erreur inattendue s'est produite lors"
+                            + " de la recherche. Veuillez réessayer plus tard.";
+                    request.setAttribute("erreurException", message);
+                }
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+                r.forward(request, response);
             }
-            catch (Exception exp)
+            else
             {
-                Logger logger = Logger.getLogger("monLogger");
-                logger.log(Level.SEVERE, exp.getMessage());
-                String message = "Une erreur inattendue s'est produite lors"
-                        + " de la recherche. Veuillez réessayer plus tard.";
-                request.setAttribute("erreurException", message);
+                request.setAttribute("erreurInput", "Les champs ne peuvent être vides");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+                r.forward(request, response);
             }
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
-            r.forward(request, response);
         }
         else
         {
-            request.setAttribute("erreurInput", "Les champs ne peuvent être vides");
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
             r.forward(request, response);
         }
     }
@@ -80,7 +96,8 @@ public class AfficherGestionCatalogue extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -94,7 +111,8 @@ public class AfficherGestionCatalogue extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -104,7 +122,8 @@ public class AfficherGestionCatalogue extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

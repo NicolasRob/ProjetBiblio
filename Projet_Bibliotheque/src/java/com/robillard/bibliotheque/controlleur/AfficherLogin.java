@@ -1,19 +1,30 @@
+//Affichage de la page de login
+//L'utilisateur ne doit pas être connecté pour avoir accès à la page de login
 package com.robillard.bibliotheque.controlleur;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AfficherLogin extends HttpServlet {
+public class AfficherLogin extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
+        if (request.getSession().getAttribute("login") == null)
+        {
             RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp");
             r.forward(request, response);
+        }
+        else
+        {
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
+            r.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -27,7 +38,8 @@ public class AfficherLogin extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -41,7 +53,8 @@ public class AfficherLogin extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -51,7 +64,8 @@ public class AfficherLogin extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 
