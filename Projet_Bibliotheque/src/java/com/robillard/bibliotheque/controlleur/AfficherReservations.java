@@ -28,7 +28,7 @@ public class AfficherReservations extends HttpServlet {
                 Connection cnx = (Connection) Connexion.getInstance();
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 //a faire : ajouter la methode a EmpruntDAO
-                listeEmprunt = dao.findAll(request.getParameter("login"));
+                listeEmprunt = dao.findAll(request.getSession().getAttribute("login"));
                 request .setAttribute("reservations", listeEmprunt);
             }
             
