@@ -136,9 +136,10 @@ public class Emprunt
         {
             LocalDate d1 = LocalDate.now(ZoneId.of("America/Montreal"));
             LocalDate d2 = LocalDate.parse(dateFin);
-            return Period.between(d1, d2).getDays();
+            int jours = Period.between(d1, d2).getDays();
+            return (jours > duree) ? duree : jours;
         }
-        catch (DateTimeParseException exp)
+        catch (Exception exp)
         {
             System.out.println("Dates invalides: " + exp.getMessage());
             return 0;

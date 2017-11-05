@@ -9,6 +9,9 @@ import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,9 +44,15 @@ public class SupprimerReservation extends HttpServlet
                     List<Emprunt> listeEmprunt = dao.findAllActiveByExemplaire(emprunt.getExemplaire().getId());
                     for (Emprunt e : listeEmprunt)
                     {
-                        e.devancerEmprunt(emprunt.getJoursRestants());
-                        System.out.println(e.getId() + " " + e.getDateDebut() + " " + e.getDateFin());
-                        dao.update(e);
+                        DateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                        Date dt1 = formatDate.parse(e.getDateDebut());
+                        Date dt2 = formatDate.parse(emprunt.getDateFin());
+                        if (dt1.after(dt2))
+                        {
+                            e.devancerEmprunt(emprunt.getJoursRestants());
+                            System.out.println(e.getId() + " " + e.getDateDebut() + " " + e.getDateFin());
+                            dao.update(e);
+                        }
                     }
                     String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8")
                             + "t" + URLEncoder.encode("é", "UTF-8")
