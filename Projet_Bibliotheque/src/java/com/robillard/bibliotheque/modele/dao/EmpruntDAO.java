@@ -319,7 +319,7 @@ public class EmpruntDAO extends DAO<Emprunt>
                     + "INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID "
                     + "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID "
                     + "INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID "
-                    + "WHERE emprunt.ID = ? ";
+                    + "WHERE emprunt.COMPTE_ID = ? ";
             stm = cnx.prepareStatement(requete);
             stm.setString(1,id);
             resultat = stm.executeQuery();

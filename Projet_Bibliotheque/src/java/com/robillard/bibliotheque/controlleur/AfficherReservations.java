@@ -32,20 +32,8 @@ public class AfficherReservations extends HttpServlet
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 listeEmprunt = dao.findByCompte((String) request.getSession().getAttribute("login"));
                 List<Emprunt> listeReservation = new LinkedList();
-                //crée un iterateur et parcoure la liste pour ne sauvegarder que les reservation 
-                System.out.println(listeEmprunt.size());
-                for(Emprunt item : listeEmprunt){
-                    System.out.println(item.getCompte());
-                }
-                System.out.println("salut");
-                for (Iterator<Emprunt> it = listeEmprunt.iterator(); it.hasNext();) {
-                    System.out.println(it.next());
-                    System.out.println(it.hasNext());
-                    if(it.next().getStatus().equalsIgnoreCase("RESERVATION")){
-                        listeReservation.add(it.next());
-                    }
-                    else{}
-                }
+                //ajoute les emprunt a la liste qui va dans la requete
+                for (Emprunt e : listeEmprunt) {listeReservation.add(e);}
                 request.setAttribute("listeReservation", listeReservation);
             }
             

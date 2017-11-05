@@ -20,21 +20,18 @@
       <tr>
         <th>Titre</th>
         <th>Auteur</th>
-        <th>Date de r&eacute;servation</th>
+        <th>Date de d&eacute;but de r&eacute;servation</th>
+        <th>Date de fin de r&eacute;servation</th>
       </tr>
     </thead>
     <tbody>
-        ${requestScope}
             <c:forEach var="reservation" items="${requestScope.listeReservation}">
                 <tr>
                     <td>${reservation.getExemplaire().getEdition().getOuvrage().getTitre()}</td>
-                    <td>${reservation.getExmplaire().getEdtion().getOuvrage.getAuteur().getNom()}</td>
+                    <td>${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getNom().concat(" ").concat(reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom())}</td>
+                    <td>${reservation.getDateDebut()}</td>
                     <td>${reservation.getDateFin()}</td>
-                </tr>
-                <tr>
-                    <td>salut</td>
-                    <td>beau</td>
-                    <td>toi</td>
+                    
                 </tr>
             </c:forEach>
     </tbody>
