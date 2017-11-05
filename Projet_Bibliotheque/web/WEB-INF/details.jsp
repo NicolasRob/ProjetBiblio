@@ -12,7 +12,9 @@
         <li class="breadcrumb-item">
             <a href="go?action=afficherAccueil">Accueil</a>
         </li>
-        <li class="breadcrumb-item">Recherche</li>
+        <li class="breadcrumb-item">
+            <a href="go?action=catalogue&recherche=${param.recherche}&critere=${param.critere}">Recherche</a>
+        </li>
         <li class="breadcrumb-item active">Détails</li>
     </ol>
 

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -136,8 +137,9 @@ public class Emprunt
         {
             LocalDate d1 = LocalDate.now(ZoneId.of("America/Montreal"));
             LocalDate d2 = LocalDate.parse(dateFin);
-            int jours = Period.between(d1, d2).getDays();
-            return (jours > duree) ? duree : jours;
+            //int jours = Period.between(d1, d2).getDays();
+            int jours = (int)ChronoUnit.DAYS.between(d1, d2);
+            return (jours > duree) ? duree+1 : jours;
         }
         catch (Exception exp)
         {

@@ -51,7 +51,7 @@
             <c:forEach var="edition" items="${requestScope.editions}">
                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
                     <div class="card h-100">
-                        <a href="go?action=detailsLivre&id=${edition.getId()}"><img class="card-img-top" src="/Projet_Bibliotheque/img/${edition.getImage()}" alt="" height="300px"></a>
+                        <a href="go?action=detailsLivre&id=${edition.getId()}&recherche=${param.recherche}&critere=${param.critere}"><img class="card-img-top" src="/Projet_Bibliotheque/img/${edition.getImage()}" alt="" height="300px"></a>
                         <div class="card-body">
                             <h4 class="card-title">
                                 <a href="go?action=detailsLivre&id=${edition.getId()}">${edition.getOuvrage().getTitre()}</a>
@@ -63,31 +63,6 @@
                 </div>
             </c:forEach>
         </div>
-
-        <!-- Pagination -->
-        <ul class="pagination justify-content-center">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-        </ul>
     </c:if>
 </div>
 
