@@ -1,7 +1,15 @@
 package com.robillard.bibliotheque.controlleur;
 
+import com.mysql.jdbc.Connection;
+import com.robillard.bibliotheque.modele.classes.Emprunt;
+import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
+import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +20,35 @@ public class AfficherReservations extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<Emprunt> listeEmprunt = new LinkedList();
+        if(request.getSession().getAttribute("login") != null){
+            try{
+                Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+                Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+                Connection cnx = (Connection) Connexion.getInstance();
+                EmpruntDAO dao = new EmpruntDAO(cnx);
+                //a faire : ajouter la methode a EmpruntDAO
+                listeEmprunt = dao.findAll(request.getParameter("login"));
+                request .setAttribute("reservations", listeEmprunt);
+            }
+            
+            catch (Exception exp)
+            {
+                Logger logger = Logger.getLogger("monLogger");
+                logger.log(Level.SEVERE, exp.getMessage());
+                String message = "Une erreur inattendue s'est produite lors"
+                        + " de la recherche. Veuillez réessayer plus tard.";
+                request.setAttribute("erreurException", message);
+            }
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/reservations.jsp");
+            r.forward(request, response);
+        }
+        else
+        {
+            request.setAttribute("erreurInput", "erreur 404, tu est un tata.");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/reservations.jsp");
+            r.forward(request, response);
+        }
             RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/reservations.jsp");
             r.forward(request, response);
     }

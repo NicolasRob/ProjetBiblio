@@ -229,8 +229,80 @@ public class ReservationDAO extends DAO<Reservation> {
                 +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
                 +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
                 +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
+                +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID");
+            while (resultat.next())
+            {
+                    Reservation r = new Reservation();
+                    r.setId(resultat.getInt("ID"));
+                    r.setDate(resultat.getString("DATE"));
+
+                    r.setCompte(new Compte(
+                            resultat.getString("NUMERO"),
+                            resultat.getString("PRENOM"),
+                            resultat.getString("NOM"),
+                            resultat.getString("MDP"),
+                            resultat.getInt("TYPE")));
+
+                    r.setExemplaire(new Exemplaire(
+                            resultat.getInt("ID"),
+                            resultat.getString("EMPLACEMENT"),
+                            new Edition(
+                                    resultat.getInt("ID"),
+                                    resultat.getInt("NOMBRE_PAGE"),
+                                    resultat.getString("ISBN"),
+                                    resultat.getString("DATE_PUBLICATION"),
+                                    resultat.getString("IMAGE"),
+                                    resultat.getString("EDITEUR"),
+                                    new Ouvrage(
+                                            resultat.getInt("ouvrage.ID"),
+                                            resultat.getString("ouvrage.TITRE"),
+                                            resultat.getString("ouvrage.Type"),
+                                            new Auteur(
+                                                    resultat.getString("auteur.ID"),
+                                                    resultat.getString("auteur.NOM"),
+                                                    resultat.getString("auteur.PRENOM"))))));
+                    listeReservation.add(r);
+            }
+            resultat.close();
+            stm.close();
+        }
+        catch (SQLException exp)
+        {
+            logger.log(Level.SEVERE, exp.getMessage());
+        }
+        finally
+        {
+            if (stm!=null)
+            try 
+            {
+                resultat.close();
+                stm.close();
+            } 
+            catch (SQLException exp) 
+            {
+                logger.log(Level.SEVERE, exp.getMessage());
+            }			
+        }
+        return listeReservation;
+    }
+    
+     public List<Reservation> findAll(String id) {
+        PreparedStatement stm = null;
+        ResultSet resultat = null;
+        List<Reservation> listeReservation = new LinkedList();
+        try 
+        {
+            String requete = "SELECT * FROM reservation" 
+                +"INNER JOIN Compte on Compte.NUMERO = reservation.COMPTE_ID"
+                +"INNER JOIN exemplaire ON exemplaire.ID = reservation.EXEMPLAIRE_ID"
+                +"INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
+                +"INNER JOIN editeur ON editeur.ID = edition.EDITEUR_ID"
+                +"INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
                 +"INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
-                +"WHERE ID = ?");
+                +"WHERE ID = ?";
+            stm = cnx.prepareStatement(requete); 
+            stm.setString(1, id);
+            resultat = stm.executeQuery();
             while (resultat.next())
             {
                     Reservation r = new Reservation();
