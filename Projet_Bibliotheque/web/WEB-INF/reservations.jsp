@@ -1,4 +1,5 @@
-<%-- Page d'affichage des réservations du compte connecté --%>
+<%-- Page d'affichage des rÃ©servations du compte connectÃ© --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="container Site-Content">
 
@@ -14,6 +15,35 @@
         <li class="breadcrumb-item active">Mes r&eacute;servations</li>
     </ol>
 
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="index.html">Accueil</a>
+    </li>
+    <li class="breadcrumb-item">
+      Compte
+    </li>
+    <li class="breadcrumb-item active">Mes r&eacute;servations</li>
+  </ol>
+     
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Auteur</th>
+        <th>Date de r&eacute;servation</th>
+      </tr>
+    </thead>
+    <tbody> 
+            <c:forEach var="reservation" items="${requestScope.reservations}">
+                <tr>
+                    <td>${reservation.getExemplaire().getEdition().getOuvrage().getTitre()}</td>
+                    <td>${reservation.getExmplaire().getEdtion().getOuvrage.getAuteur().getNom()}</td>
+                    <td>${reservation.getDate()}</td>
+                </tr>
+            </c:forEach>
+    </tbody>
+  </table>
+=======
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
