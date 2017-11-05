@@ -1,15 +1,18 @@
 //Affichage des détails d'une édition
 //Une édition avec le id soumis doit exister pour accéder à cette page
-
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
+import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.classes.Edition;
 import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
 import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
 import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
 import com.robillard.bibliotheque.util.Connexion;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +23,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 public class AfficherDetails extends HttpServlet
 {
@@ -43,7 +48,17 @@ public class AfficherDetails extends HttpServlet
                 request.setAttribute("edition", edition);
                 EmpruntDAO empruntDao = new EmpruntDAO(cnx);
                 for (Exemplaire ex : listeExemplaire)
-                    mapExemplaireDate.put(ex, empruntDao.findMaxDateByExemplaire(ex.getId()));
+                {
+                    DateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = empruntDao.findMaxDateByExemplaire(ex.getId());
+                    Date dt = null;
+                    if (date != null)
+                        dt = formatDate.parse(date);
+                    if (dt != null && dt.before(new Date()))
+                        mapExemplaireDate.put(ex, null);
+                    else
+                        mapExemplaireDate.put(ex, empruntDao.findMaxDateByExemplaire(ex.getId()));
+                }
                 request.setAttribute("exemplaires", mapExemplaireDate);
                 RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp");
                 r.forward(request, response);

@@ -48,10 +48,10 @@
 
     <c:if test="${!empty param.recherche && !empty param.critere}">
         <div class="row">
-            <c:forEach var="edition" items="${requestScope.editions}" begin="0" end="7">
+            <c:forEach var="edition" items="${requestScope.editions}">
                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
                     <div class="card h-100">
-                        <a href="go?action=detailsLivre&id=${edition.getId()}"><img class="card-img-top" src="./img/${edition.getImage()}.jpg" alt="" height="300px"></a>
+                        <a href="go?action=detailsLivre&id=${edition.getId()}"><img class="card-img-top" src="/Projet_Bibliotheque/img/${edition.getImage()}" alt="" height="300px"></a>
                         <div class="card-body">
                             <h4 class="card-title">
                                 <a href="go?action=detailsLivre&id=${edition.getId()}">${edition.getOuvrage().getTitre()}</a>

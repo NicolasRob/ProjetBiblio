@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-lg-2 my-auto">
                     <a href="#">
-                        <img class="img-fluid rounded mx-auto d-block" src="./img/${requestScope.edition.getImage()}.jpg" alt="" >
+                        <img class="img-fluid rounded mx-auto d-block" src="/Projet_Bibliotheque/img/${edition.getImage()}" alt="" >
                     </a>
                 </div>
                 <div class="col-lg-10">
