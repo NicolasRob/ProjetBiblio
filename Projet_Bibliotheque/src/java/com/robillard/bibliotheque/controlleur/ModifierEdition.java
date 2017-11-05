@@ -9,7 +9,6 @@ package com.robillard.bibliotheque.controlleur;
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Edition;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
-import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.File;
 import java.io.FileOutputStream;

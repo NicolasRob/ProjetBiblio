@@ -1,13 +1,16 @@
+//Permet de supprimer une réservation
+//Si des réservations étaient en attente dans le futurs pour l'exemplaire en
+//question, elles seront devancées par le nombre de jours restants à la
+//réservation supprimé.
+//Si la réservation est supprimé avant d'atteindre la date de début, toutes les
+//réservations suivantes pour cette exemplaire seront devancées de 2 semaines.
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Emprunt;
-import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
-import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,8 +30,7 @@ public class SupprimerReservation extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        if (request.getSession().getAttribute("type") != null
-                && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
+        if (request.getSession().getAttribute("login") != null)
         {
             try
             {
@@ -37,10 +39,9 @@ public class SupprimerReservation extends HttpServlet
                 Connection cnx = (Connection) Connexion.getInstance();
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 Emprunt emprunt = dao.read(request.getParameter("id"));
-                if (emprunt != null)
+                if (emprunt != null && emprunt.getCompte().getNumero() == request.getSession().getAttribute("login"))
                 {
                     dao.delete(emprunt);
-                    System.out.println(emprunt.getJoursRestants());
                     List<Emprunt> listeEmprunt = dao.findAllActiveByExemplaire(emprunt.getExemplaire().getId());
                     for (Emprunt e : listeEmprunt)
                     {
@@ -50,7 +51,6 @@ public class SupprimerReservation extends HttpServlet
                         if (dt1.after(dt2))
                         {
                             e.devancerEmprunt(emprunt.getJoursRestants());
-                            System.out.println(e.getId() + " " + e.getDateDebut() + " " + e.getDateFin());
                             dao.update(e);
                         }
                     }
@@ -64,7 +64,7 @@ public class SupprimerReservation extends HttpServlet
                 }
                 else
                 {
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
                     r.forward(request, response);
                 }
             }
@@ -75,7 +75,7 @@ public class SupprimerReservation extends HttpServlet
                 String message = "Une erreur inattendue s'est produite. Veuillez"
                         + " réessayer plus tard.";
                 request.setAttribute("erreurException", message);
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/gestionCatalogue.jsp");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
                 r.forward(request, response);
             }
         }

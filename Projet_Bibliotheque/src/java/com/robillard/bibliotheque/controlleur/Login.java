@@ -7,6 +7,8 @@ import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.dao.CompteDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,9 +45,15 @@ public class Login extends HttpServlet
                     r.forward(request, response);
                 }
             }
-            catch (Exception e)
+            catch (Exception exp)
             {
-                System.out.println("Exception : " + e);
+                Logger logger = Logger.getLogger("monLogger");
+                logger.log(Level.SEVERE, exp.getMessage());
+                String message = "Une erreur inattendue s'est produite. Veuillez"
+                        + " réessayer plus tard.";
+                request.setAttribute("erreurException", message);
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+                r.forward(request, response);
             }
         }
         else
