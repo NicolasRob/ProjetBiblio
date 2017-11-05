@@ -1,18 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//Affichage du formulaire de modification d'édition
+//L'utilisateur doit être connecté et être de type 2 (employé) et
+//le id de l'édition doit être soumis dans la requête et correspondre
+//à une édition dans la bd pour accéder à la page
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Edition;
-import com.robillard.bibliotheque.modele.classes.Ouvrage;
+import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
-import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
+import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -21,27 +21,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Vengor
- */
-public class AfficherModEdition extends HttpServlet {
+public class AfficherModEdition extends HttpServlet
+{
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         try
         {
-            if (request.getSession().getAttribute("type") != null 
-                && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
+            if (request.getSession().getAttribute("type") != null
+                    && Integer.parseInt(request.getSession().getAttribute("type").toString()) >= 2)
             {
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
@@ -50,7 +39,11 @@ public class AfficherModEdition extends HttpServlet {
                 Edition edition = dao.read(request.getParameter("id"));
                 if (edition != null)
                 {
+                    ExemplaireDAO exemplaireDao = new ExemplaireDAO(cnx);
+                    List<Exemplaire> listeExemplaire = new LinkedList();
+                    listeExemplaire = exemplaireDao.findByEdition(edition.getId());
                     request.setAttribute("edition", edition);
+                    request.setAttribute("exemplaires", listeExemplaire);
                     RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/modEdition.jsp");
                     r.forward(request, response);
                 }
@@ -89,7 +82,8 @@ public class AfficherModEdition extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -103,7 +97,8 @@ public class AfficherModEdition extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -113,7 +108,8 @@ public class AfficherModEdition extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

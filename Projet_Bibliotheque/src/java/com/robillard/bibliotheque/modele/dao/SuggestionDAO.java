@@ -1,5 +1,5 @@
-
 package com.robillard.bibliotheque.modele.dao;
+
 import com.robillard.bibliotheque.modele.classes.Compte;
 import com.robillard.bibliotheque.modele.classes.Suggestion;
 import java.sql.Connection;
@@ -12,21 +12,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SuggestionDAO extends DAO<Suggestion> {
+public class SuggestionDAO extends DAO<Suggestion>
+{
+
     private Logger logger = Logger.getLogger("monLogger");
-    
+
     public SuggestionDAO(Connection c)
     {
         super(c);
     }
-        
+
     @Override
-    public boolean create(Suggestion Suggestion) {
+    public boolean create(Suggestion Suggestion)
+    {
         PreparedStatement stm = null;
         String requete = "INSERT INTO Suggestion "
                 + "(ID, TITRE, AUTEUR, MESSAGE, COMPTE) "
                 + "VALUES (?, ?, ?, ?, ?)";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, Suggestion.getId());
@@ -40,12 +43,12 @@ public class SuggestionDAO extends DAO<Suggestion> {
             stm.setString(3, Suggestion.getNom());
             stm.setString(4, Suggestion.getMdp());
             stm.setInt(5, Suggestion.getType());
-            */
+             */
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -54,32 +57,35 @@ public class SuggestionDAO extends DAO<Suggestion> {
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-    
+
     @Override
-    public boolean delete(Suggestion Suggestion) {
+    public boolean delete(Suggestion Suggestion)
+    {
         PreparedStatement stm = null;
         String requete = "DELETE FROM Suggestion WHERE NUMERO = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, Suggestion.getId());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -88,32 +94,36 @@ public class SuggestionDAO extends DAO<Suggestion> {
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-    
+
     @Override
-    public Suggestion read(int id) {
-            return this.read(""+id);
+    public Suggestion read(int id)
+    {
+        return this.read("" + id);
     }
-        
+
     @Override
-    public Suggestion read(String id) {
+    public Suggestion read(String id)
+    {
         PreparedStatement stm = null;
         ResultSet resultat = null;
         String requete = "SELECT * FROM suggestion"
                 + " INNER JOIN compte ON compte.NUMERO = suggestion.COMPTE_ID"
                 + " WHERE suggestion.ID = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setString(1, id);
@@ -130,7 +140,7 @@ public class SuggestionDAO extends DAO<Suggestion> {
                         resultat.getString("PRENOM"),
                         resultat.getString("NOM"),
                         resultat.getString("MDP"),
-                        resultat.getInt("TYPE"));                        
+                        resultat.getInt("TYPE"));
                 suggestion.setCompte(compte);
                 resultat.close();
                 stm.close();
@@ -142,26 +152,29 @@ public class SuggestionDAO extends DAO<Suggestion> {
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                resultat.close();
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return null;
     }
-    
+
     @Override
-    public boolean update(Suggestion Suggestion) {
+    public boolean update(Suggestion Suggestion)
+    {
         PreparedStatement stm = null;
         String requete = "UPDATE Suggestion SET ID = ?, TITRE = ?, "
                 + "AUTEUR = ?, MESSAGE = ? WHERE  = ?";
-        try 
+        try
         {
             stm = cnx.prepareStatement(requete);
             stm.setInt(1, Suggestion.getId());
@@ -170,10 +183,10 @@ public class SuggestionDAO extends DAO<Suggestion> {
             stm.setString(4, Suggestion.getMessage());
             stm.setString(5, Suggestion.getCompte().getNumero());
             int n = stm.executeUpdate();
-            if (n>0)
+            if (n > 0)
             {
-                    stm.close();
-                    return true;
+                stm.close();
+                return true;
             }
         }
         catch (SQLException exp)
@@ -182,46 +195,48 @@ public class SuggestionDAO extends DAO<Suggestion> {
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return false;
     }
-        
+
     @Override
-    public List<Suggestion> findAll() {
+    public List<Suggestion> findAll()
+    {
         Statement stm = null;
         ResultSet resultat = null;
         List<Suggestion> listeSuggestion = new LinkedList();
-        try 
+        try
         {
-            stm = cnx.createStatement(); 
+            stm = cnx.createStatement();
             resultat = stm.executeQuery("SELECT * FROM suggestion"
-                + " INNER JOIN compte ON compte.NUMERO = suggestion.COMPTE_ID");
+                    + " INNER JOIN compte ON compte.NUMERO = suggestion.COMPTE_ID");
             while (resultat.next())
             {
-                    Suggestion s = new Suggestion();
-                    s.setId(resultat.getInt("ID"));
-                    s.setTitre(resultat.getString("TITRE"));
-                    s.setAuteur(resultat.getString("AUTEUR"));
-                    s.setMessage(resultat.getString("MESSAGE"));
-                    Compte compte = new Compte(
+                Suggestion s = new Suggestion();
+                s.setId(resultat.getInt("ID"));
+                s.setTitre(resultat.getString("TITRE"));
+                s.setAuteur(resultat.getString("AUTEUR"));
+                s.setMessage(resultat.getString("MESSAGE"));
+                Compte compte = new Compte(
                         resultat.getString("NUMERO"),
                         resultat.getString("PRENOM"),
                         resultat.getString("NOM"),
                         resultat.getString("MDP"),
-                        resultat.getInt("TYPE"));                       
+                        resultat.getInt("TYPE"));
                 s.setCompte(compte);
-                    
-                    
-                    listeSuggestion.add(s);
+
+                listeSuggestion.add(s);
             }
             resultat.close();
             stm.close();
@@ -232,16 +247,18 @@ public class SuggestionDAO extends DAO<Suggestion> {
         }
         finally
         {
-            if (stm!=null)
-            try 
+            if (stm != null)
             {
-                resultat.close();
-                stm.close();
-            } 
-            catch (SQLException exp) 
-            {
-                logger.log(Level.SEVERE, exp.getMessage());
-            }			
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
         }
         return listeSuggestion;
     }

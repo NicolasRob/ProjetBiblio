@@ -1,11 +1,11 @@
-//Supprime une édition de la bd
+//Supprime un exemplaire de la bd
 //L'utilisateur doit être connecté et être de type 2 (employé)
-//Le id soumis doit correspondre à une édition dans la base de données
+//Le id soumis doit correspondre à un exemplaire dans la base de données
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
-import com.robillard.bibliotheque.modele.classes.Edition;
-import com.robillard.bibliotheque.modele.dao.EditionDAO;
+import com.robillard.bibliotheque.modele.classes.Exemplaire;
+import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SupprimerEdition extends HttpServlet
+public class SupprimerExemplaire extends HttpServlet
 {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -31,19 +31,17 @@ public class SupprimerEdition extends HttpServlet
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
-                EditionDAO dao = new EditionDAO(cnx);
-                Edition edition = dao.read(request.getParameter("id"));
-                if (edition != null)
+                ExemplaireDAO dao = new ExemplaireDAO(cnx);
+                Exemplaire exemplaire = dao.read(request.getParameter("id"));
+                if (exemplaire != null)
                 {
-                    dao.delete(edition);
-                    String message = "L'" + URLEncoder.encode("é", "UTF-8") + "dition a "
+                    dao.delete(exemplaire);
+                    String message = "L'exemplaire a "
                             + URLEncoder.encode("é", "UTF-8")
                             + "t" + URLEncoder.encode("é", "UTF-8")
                             + " supprim" + URLEncoder.encode("é", "UTF-8")
                             + " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
-                    response.sendRedirect("go?action=afficherGestionCatalogue&message=" + message
-                            + "&recherche=" + request.getParameter("recherche")
-                            + "&critere=" + request.getParameter("critere"));
+                    response.sendRedirect("go?action=afficherModificationEdition&message=" + message + "&id=" + exemplaire.getEdition().getId());
                 }
                 else
                 {

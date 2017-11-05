@@ -1,22 +1,18 @@
-//Modifie un édition de la base de données
+//Ajoute un nouvel exemplaire d'une édition dans la base de données
+//Tous les champs nécéssaires doivent être soumis dans la requête
 //L'utilisateur doit être connecté et être de type 2 (employé)
-//Tous les champs doivent être remplis
-//La date doit avoir le format yyyy-MM-dd
-//Le nombre de page doit être entier
-//Le id soumis doit correspondre à un ouvrage dans la base de données
+//Le id soumis doit correspondre à une édition dans la base de données
+
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
 import com.robillard.bibliotheque.modele.classes.Edition;
+import com.robillard.bibliotheque.modele.classes.Exemplaire;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
-import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
+import com.robillard.bibliotheque.modele.dao.ExemplaireDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -25,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ModifierEdition extends HttpServlet
+public class AjouterExemplaire extends HttpServlet
 {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -35,64 +31,49 @@ public class ModifierEdition extends HttpServlet
         response.setContentType("utf8");
         try
         {
+            Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
+            Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
+            Connection cnx = (Connection) Connexion.getInstance();
+            EditionDAO editionDao;
+            Edition edition;
+            ExemplaireDAO exemplaireDao;
             if (request.getSession().getAttribute("type") == null
                     || (Integer) request.getSession().getAttribute("type") != 2)
             {
                 RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
                 r.forward(request, response);
             }
-            else if (request.getParameter("titre") == null
-                    || "".equals(request.getParameter("titre").trim())
-                    || request.getParameter("auteur") == null
-                    || "".equals(request.getParameter("auteur").trim())
-                    || request.getParameter("isbn") == null
-                    || "".equals(request.getParameter("isbn").trim())
-                    || request.getParameter("editeur") == null
-                    || "".equals(request.getParameter("editeur").trim())
-                    || request.getParameter("date") == null
-                    || "".equals(request.getParameter("date").trim())
-                    || request.getParameter("image") == null
-                    || "".equals(request.getParameter("image").trim())
-                    || request.getParameter("id") == null
+            else if (request.getParameter("id") == null
                     || "".equals(request.getParameter("id").trim()))
             {
-                String message = "Tous les champs doivent etre remplis";
-                response.sendRedirect("go?action=afficherModificationEdition&message=" + message + "&id=" + request.getParameter("id"));
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
+                r.forward(request, response);
+            }
+            else if (request.getParameter("emplacement") == null
+                    || "".equals(request.getParameter("emplacement").trim()))
+            {
+                String message = "L'exemplaire doit avoir un emplacement";
+                response.sendRedirect("go?action=afficherModificationEdition&messageErreurExemplaire=" + message + "&id=" + request.getParameter("id"));
             }
             else
             {
-                //La date sera conservé sous forme de String, mais il faut
-                //tout de même tester si elle a le bon format. Si la date entré
-                //n'a pas le bon format, le parse déclenchera une ParseException
-                DateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = formatDate.parse(request.getParameter("date"));
-                System.out.println("TEST1");
-                Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
-                Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
-                Connection cnx = (Connection) Connexion.getInstance();
-                EditionDAO editionDao = new EditionDAO(cnx);
+                editionDao = new EditionDAO(cnx);
+                edition = editionDao.read(request.getParameter("id"));
 
-                System.out.println("TEST2");
-
-                Edition edition = editionDao.read(request.getParameter("id"));
                 if (edition != null)
                 {
-                    Edition e = new Edition(
-                            Integer.parseInt(request.getParameter("id")),
-                            Integer.parseInt(request.getParameter("pages")),
-                            request.getParameter("isbn"),
-                            request.getParameter("date"),
-                            request.getParameter("image"),
-                            request.getParameter("editeur"),
-                            edition.getOuvrage()
+                    exemplaireDao = new ExemplaireDAO(cnx);
+                    Exemplaire exemplaire = new Exemplaire(
+                            request.getParameter("emplacement"),
+                            edition
                     );
                     String message = "";
-                    if (editionDao.update(e))
+                    if (exemplaireDao.create(exemplaire))
                     {
-                        message = "L'" + URLEncoder.encode("é", "UTF-8") + "dition a "
+                        message = "L'exemplaire a "
                                 + URLEncoder.encode("é", "UTF-8")
                                 + "t" + URLEncoder.encode("é", "UTF-8")
-                                + " modifi" + URLEncoder.encode("é", "UTF-8")
+                                + " ajout" + URLEncoder.encode("é", "UTF-8")
                                 + " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
                     }
                     response.sendRedirect("go?action=afficherModificationEdition&message=" + message + "&id=" + request.getParameter("id"));
@@ -103,21 +84,6 @@ public class ModifierEdition extends HttpServlet
                     r.forward(request, response);
                 }
             }
-        }
-        catch (ParseException e)
-        {
-            Logger logger = Logger.getLogger("monLogger");
-            logger.log(Level.SEVERE, e.getMessage());
-            String message = "La date de publication doit utiliser le format"
-                    + " YYYY-MM-DD";
-            response.sendRedirect("go?action=afficherModificationEdition&messageErreur=" + message + "&id=" + request.getParameter("id"));
-        }
-        catch (NumberFormatException e)
-        {
-            Logger logger = Logger.getLogger("monLogger");
-            logger.log(Level.SEVERE, e.getMessage());
-            String message = "Le nombre de page doit etre un nombre entier.";
-            response.sendRedirect("go?action=afficherModificationEdition&messageErreur=" + message + "&id=" + request.getParameter("id"));
         }
         catch (Exception e)
         {

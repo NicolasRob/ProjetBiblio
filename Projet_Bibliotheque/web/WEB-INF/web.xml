@@ -130,6 +130,14 @@
         <servlet-name>Reserver</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.Reserver</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AjouterExemplaire</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AjouterExemplaire</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SupprimerExemplaire</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.SupprimerExemplaire</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -241,6 +249,14 @@
     <servlet-mapping>
         <servlet-name>Reserver</servlet-name>
         <url-pattern>/Reserver</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AjouterExemplaire</servlet-name>
+        <url-pattern>/AjouterExemplaire</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SupprimerExemplaire</servlet-name>
+        <url-pattern>/SupprimerExemplaire</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,3 +1,9 @@
+//Ajoute un nouvel ouvrage dans la base de données
+//Tous les champs nécéssaires doivent être soumis dans la requête
+//L'utilisateur doit être connecté et être de type 2 (employé)
+//Si l'auteur n'existe pas dans la base de données, il sera créé
+//Le formulaire utilise un identifiant unique pour les auteurs, pour différencier
+//les auteurs du même nom
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -16,30 +22,32 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AjouterOuvrage extends HttpServlet {
+public class AjouterOuvrage extends HttpServlet
+{
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         request.setCharacterEncoding("utf8");
         response.setContentType("utf8");
-        try 
+        try
         {
-            if (request.getSession().getAttribute("type") == null ||
-                (Integer)request.getSession().getAttribute("type") != 2)
+            if (request.getSession().getAttribute("type") == null
+                    || (Integer) request.getSession().getAttribute("type") != 2)
             {
                 RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
                 r.forward(request, response);
             }
-            else if (request.getParameter("titre") == null ||
-                request.getParameter("titre").trim() == "" || 
-                request.getParameter("type") == null ||
-                request.getParameter("type").trim() == "" ||
-                request.getParameter("prenom") == null ||
-                request.getParameter("prenom").trim() == "" ||
-                request.getParameter("nom") == null ||
-                request.getParameter("nom").trim() == "" ||
-                request.getParameter("idAuteur") == null ||
-                request.getParameter("idAuteur").trim() == "")
+            else if (request.getParameter("titre") == null
+                    || "".equals(request.getParameter("titre").trim())
+                    || request.getParameter("type") == null
+                    || "".equals(request.getParameter("type").trim())
+                    || request.getParameter("prenom") == null
+                    || "".equals(request.getParameter("prenom").trim())
+                    || request.getParameter("nom") == null
+                    || "".equals(request.getParameter("nom").trim())
+                    || request.getParameter("idAuteur") == null
+                    || "".equals(request.getParameter("idAuteur").trim()))
             {
                 request.setAttribute("erreurAjout", "Tous les champs doivent être remplis");
                 RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
@@ -47,53 +55,47 @@ public class AjouterOuvrage extends HttpServlet {
             }
             else
             {
-                System.out.println("TEST1");
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
                 AuteurDAO auteurDao = new AuteurDAO(cnx);
                 OuvrageDAO ouvrageDao = new OuvrageDAO(cnx);
-
-                System.out.println("TEST2");
                 Auteur auteur = new Auteur(
-                    request.getParameter("idAuteur"),
-                    request.getParameter("prenom"),
-                    request.getParameter("nom")
+                        request.getParameter("idAuteur"),
+                        request.getParameter("prenom"),
+                        request.getParameter("nom")
                 );
-
-                System.out.println("TEST3");
                 Auteur auteurDb = auteurDao.read(auteur.getId());
-
-                System.out.println("TEST4");
-                System.out.println(auteur.getId() + auteur.getPrenom() + auteur.getNom());
+                //Création de l'auteur si nécéssaire
                 if (auteurDb == null)
                 {
                     auteurDao.create(auteur);
                     auteurDb = auteurDao.read(auteur.getId());
                 }
-                System.out.println("TEST5");                
-                if (auteurDb != null && 
-                    auteurDb.getNom().equals(auteur.getNom()) &&
-                    auteurDb.getPrenom().equals(auteur.getPrenom()))
+                //Test si l'identifiant unique fait bel et bien référence à 
+                //l'auteur entré.
+                if (auteurDb != null
+                        && auteurDb.getNom().equals(auteur.getNom())
+                        && auteurDb.getPrenom().equals(auteur.getPrenom()))
                 {
                     Ouvrage ouvrage = new Ouvrage(
-                        request.getParameter("titre"),
-                        request.getParameter("type"),
-                        auteurDb
+                            request.getParameter("titre"),
+                            request.getParameter("type"),
+                            auteurDb
                     );
 
                     ouvrageDao.create(ouvrage);
-                    String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8") 
-                            + "t" + URLEncoder.encode("é", "UTF-8") + 
-                            " ajout" + URLEncoder.encode("é", "UTF-8") + 
-                            " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
-                    response.sendRedirect("go?action=afficherAjoutOuvrage&message="+message);
+                    String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8")
+                            + "t" + URLEncoder.encode("é", "UTF-8")
+                            + " ajout" + URLEncoder.encode("é", "UTF-8")
+                            + " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
+                    response.sendRedirect("go?action=afficherAjoutOuvrage&message=" + message);
                 }
                 else
                 {
-                    String message = "L'identification " + auteur.getId() +
-                         " est déja associé à un auteur du nom de " +
-                         auteurDb.getPrenom() + " " + auteurDb.getNom();
+                    String message = "L'identification " + auteur.getId()
+                            + " est déja associé à un auteur du nom de "
+                            + auteurDb.getPrenom() + " " + auteurDb.getNom();
                     request.setAttribute("erreurAuteur", message);
                     RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutOuvrage.jsp");
                     r.forward(request, response);
@@ -123,7 +125,8 @@ public class AjouterOuvrage extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -137,7 +140,8 @@ public class AjouterOuvrage extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -147,7 +151,8 @@ public class AjouterOuvrage extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 
