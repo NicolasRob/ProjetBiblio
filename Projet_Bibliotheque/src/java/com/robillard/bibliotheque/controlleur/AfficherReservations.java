@@ -7,6 +7,7 @@ import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,16 +23,30 @@ public class AfficherReservations extends HttpServlet
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Emprunt> listeEmprunt = new LinkedList();
         if(request.getSession().getAttribute("login") != null){
             try{
+                List<Emprunt> listeEmprunt = new LinkedList();
                 Class.forName(this.getServletContext().getInitParameter("piloteJDBC"));
                 Connexion.setUrl(this.getServletContext().getInitParameter("urlBd"));
                 Connection cnx = (Connection) Connexion.getInstance();
                 EmpruntDAO dao = new EmpruntDAO(cnx);
-                //a faire : ajouter la methode a EmpruntDAO
-                listeEmprunt = dao.findAll(request.getSession().getAttribute("login"));
-                request .setAttribute("reservations", listeEmprunt);
+                listeEmprunt = dao.findByCompte((String) request.getSession().getAttribute("login"));
+                List<Emprunt> listeReservation = new LinkedList();
+                //crée un iterateur et parcoure la liste pour ne sauvegarder que les reservation 
+                System.out.println(listeEmprunt.size());
+                for(Emprunt item : listeEmprunt){
+                    System.out.println(item.getCompte());
+                }
+                System.out.println("salut");
+                for (Iterator<Emprunt> it = listeEmprunt.iterator(); it.hasNext();) {
+                    System.out.println(it.next());
+                    System.out.println(it.hasNext());
+                    if(it.next().getStatus().equalsIgnoreCase("RESERVATION")){
+                        listeReservation.add(it.next());
+                    }
+                    else{}
+                }
+                request.setAttribute("listeReservation", listeReservation);
             }
             
             catch (Exception exp)
