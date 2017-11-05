@@ -5,16 +5,6 @@
 
     <h1 class="mt-4 mb-3">R&eacute;servations</h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="go?action=afficherAccueil">Accueil</a>
-        </li>
-        <li class="breadcrumb-item">
-            Compte
-        </li>
-        <li class="breadcrumb-item active">Mes r&eacute;servations</li>
-    </ol>
-
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a href="index.html">Accueil</a>
@@ -30,45 +20,20 @@
       <tr>
         <th>Titre</th>
         <th>Auteur</th>
-        <th>Date de r&eacute;servation</th>
+        <th>Date de d&eacute;but de r&eacute;servation</th>
+        <th>Date de fin de r&eacute;servation</th>
       </tr>
     </thead>
-    <tbody> 
-            <c:forEach var="reservation" items="${requestScope.reservations}">
+    <tbody>
+            <c:forEach var="reservation" items="${requestScope.listeReservation}">
                 <tr>
                     <td>${reservation.getExemplaire().getEdition().getOuvrage().getTitre()}</td>
-                    <td>${reservation.getExmplaire().getEdtion().getOuvrage.getAuteur().getNom()}</td>
-                    <td>${reservation.getDate()}</td>
+                    <td>${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getNom().concat(" ").concat(reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom())}</td>
+                    <td>${reservation.getDateDebut()}</td>
+                    <td>${reservation.getDateFin()}</td>
+                    
                 </tr>
             </c:forEach>
     </tbody>
-  </table>
-=======
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Date de r&eacute;servation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>The Pillars of the Earth</td>
-                <td>Ken Follet</td>
-                <td>22 octobre 2017</td>
-            </tr>
-            <tr>
-                <td>Great Expectations</td>
-                <td>Charles Dickens</td>
-                <td>10 novembre 2017</td>
-            </tr>
-            <tr>
-                <td>The Road</td>
-                <td>Cormac McCarthy</td>
-                <td>15 octobre 2017</td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
+  </table>  
+</div>  
