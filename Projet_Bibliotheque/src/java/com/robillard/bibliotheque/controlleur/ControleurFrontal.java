@@ -108,6 +108,10 @@ public class ControleurFrontal extends HttpServlet
                     r = this.getServletContext().getNamedDispatcher("SupprimerExemplaire");
                     r.forward(request, response);
                     break;
+                case "supprimerReservation":
+                    r = this.getServletContext().getNamedDispatcher("SupprimerReservation");
+                    r.forward(request, response);
+                    break;
                 case "afficherModificationOuvrage":
                     r = this.getServletContext().getNamedDispatcher("AfficherModOuvrage");
                     r.forward(request, response);

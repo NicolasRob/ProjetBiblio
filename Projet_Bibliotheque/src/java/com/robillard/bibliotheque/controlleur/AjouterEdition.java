@@ -4,7 +4,6 @@
 //La date doit avoir le format yyyy-MM-dd
 //Le nombre de page doit être entier
 //Le id soumis doit correspondre à un ouvrage dans la base de données
-
 package com.robillard.bibliotheque.controlleur;
 
 import com.mysql.jdbc.Connection;
@@ -13,7 +12,11 @@ import com.robillard.bibliotheque.modele.classes.Ouvrage;
 import com.robillard.bibliotheque.modele.dao.EditionDAO;
 import com.robillard.bibliotheque.modele.dao.OuvrageDAO;
 import com.robillard.bibliotheque.util.Connexion;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,10 +26,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
+@MultipartConfig
 public class AjouterEdition extends HttpServlet
 {
 
@@ -35,6 +41,8 @@ public class AjouterEdition extends HttpServlet
     {
         request.setCharacterEncoding("utf8");
         response.setContentType("utf8");
+        OutputStream out = null;
+        InputStream in = null;
         try
         {
             if (request.getSession().getAttribute("type") == null
@@ -53,14 +61,13 @@ public class AjouterEdition extends HttpServlet
                     || "".equals(request.getParameter("editeur").trim())
                     || request.getParameter("date") == null
                     || "".equals(request.getParameter("date").trim())
-                    || request.getParameter("image") == null
-                    || "".equals(request.getParameter("image").trim())
+                    || request.getPart("image") == null
+                    || "".equals(request.getPart("image").toString().trim())
                     || request.getParameter("id") == null
                     || "".equals(request.getParameter("id").trim()))
             {
-                request.setAttribute("erreurAjout", "Tous les champs doivent être remplis");
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
-                r.forward(request, response);
+                String message = "Tous les champs doivent " + URLEncoder.encode("ê", "UTF-8") + "tre remplis";
+                response.sendRedirect("go?action=afficherAjoutEdition&erreurAjout=" + message + "&id=" + request.getParameter("id"));
             }
             else
             {
@@ -77,11 +84,22 @@ public class AjouterEdition extends HttpServlet
                 Ouvrage ouvrage = ouvrageDao.read(request.getParameter("id"));
                 if (ouvrage != null)
                 {
+                    String path = this.getServletContext().getRealPath("/") + "/img";
+                    final Part filePart = request.getPart("image");
+                    String nomImage = getFileName(filePart);
+                    out = new FileOutputStream(new File(path + File.separator + nomImage));
+                    in = filePart.getInputStream();
+                    int read = 0;
+                    final byte[] bytes = new byte[1024];
+                    while ((read = in.read(bytes)) != -1)
+                    {
+                        out.write(bytes, 0, read);
+                    }
                     Edition e = new Edition(
                             Integer.parseInt(request.getParameter("pages")),
                             request.getParameter("isbn"),
                             request.getParameter("date"),
-                            request.getParameter("image"),
+                            nomImage,
                             request.getParameter("editeur"),
                             ouvrage
                     );
@@ -129,6 +147,32 @@ public class AjouterEdition extends HttpServlet
             RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/ajoutEdition.jsp");
             r.forward(request, response);
         }
+        finally
+        {
+            if (out != null)
+            {
+                out.close();
+            }
+            if (in != null)
+            {
+                in.close();
+            }
+        }
+    }
+
+    private String getFileName(final Part part)
+    {
+        System.out.println(part.getHeader("content-disposition"));
+        String[] t = part.getHeader("content-disposition").split(";");
+        for (String content : t)
+        {
+            if (content.trim().startsWith("filename"))
+            {
+                String s = content.substring(content.indexOf('=') + 1).trim();
+                return s.substring(s.lastIndexOf(File.separator) + 1).replace("\"", "");
+            }
+        }
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

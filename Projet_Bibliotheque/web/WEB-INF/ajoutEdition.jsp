@@ -18,8 +18,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h2 class="card-title"></h2>
-                    <form class="form-horizontal" action="go">
+                    <form class="form-horizontal" action="go" enctype="multipart/form-data" method="POST">
                         <p class="text-danger" >${requestScope.erreurException}</p>
+                        <p class="text-danger" >${param.erreurAjout}</p>
                         <p class="text-success" >${param.message}</p>
                         <p class="text-danger" >${param.messageErreur}</p>
                         <div class="form-group">
@@ -63,7 +64,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="image">Image:</label>
                             <div class="col-sm-10">          
-                                <input type="text" class="form-control" id="image" name="image">
+                                <input type="file" class="form-control" id="image" name="image">
                             </div>
                         </div>
                         <input type="hidden" name="id" value="${requestScope.ouvrage.getId()}" />

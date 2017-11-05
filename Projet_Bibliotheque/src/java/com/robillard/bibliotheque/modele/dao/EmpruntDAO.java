@@ -118,13 +118,13 @@ public class EmpruntDAO extends DAO<Emprunt>
     {
         PreparedStatement stm = null;
         ResultSet resultat = null;
-        String requete = "SELECT * FROM emprunt"
-                + "INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID"
-                + "INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID"
-                + "INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID"
-                + "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID"
-                + "INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID"
-                + "WHERE ID = ?";
+        String requete = "SELECT * FROM emprunt "
+                + "INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID "
+                + "INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID "
+                + "INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID "
+                + "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID "
+                + "INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID "
+                + "WHERE emprunt.ID = ?";
         try
         {
             stm = cnx.prepareStatement(requete);
@@ -249,7 +249,7 @@ public class EmpruntDAO extends DAO<Emprunt>
             while (resultat.next())
             {
                 Emprunt emp = new Emprunt();
-                emp.setId(resultat.getInt("ID"));
+                emp.setId(resultat.getInt("emprunt.ID"));
                 emp.setDateDebut(resultat.getString("DATE_DEBUT"));
                 emp.setDateFin(resultat.getString("DATE_FIN"));
                 emp.setStatus(resultat.getString("STATUS"));
@@ -262,10 +262,92 @@ public class EmpruntDAO extends DAO<Emprunt>
                 ));
 
                 emp.setExemplaire(new Exemplaire(
-                        resultat.getInt("ID"),
+                        resultat.getInt("exemplaire.ID"),
                         resultat.getString("EMPLACEMENT"),
                         new Edition(
-                                resultat.getInt("ID"),
+                                resultat.getInt("edition.ID"),
+                                resultat.getInt("NOMBRE_PAGE"),
+                                resultat.getString("ISBN"),
+                                resultat.getString("DATE_PUBLICATION"),
+                                resultat.getString("IMAGE"),
+                                resultat.getString("EDITEUR"),
+                                new Ouvrage(
+                                        resultat.getInt("ouvrage.ID"),
+                                        resultat.getString("ouvrage.TITRE"),
+                                        resultat.getString("ouvrage.Type"),
+                                        new Auteur(
+                                                resultat.getString("auteur.ID"),
+                                                resultat.getString("auteur.NOM"),
+                                                resultat.getString("auteur.PRENOM"))))));
+                listeEmprunt.add(emp);
+            }
+            resultat.close();
+            stm.close();
+        }
+        catch (SQLException exp)
+        {
+            logger.log(Level.SEVERE, exp.getMessage());
+        }
+        finally
+        {
+            if (stm != null)
+            {
+                try
+                {
+                    resultat.close();
+                    stm.close();
+                }
+                catch (SQLException exp)
+                {
+                    logger.log(Level.SEVERE, exp.getMessage());
+                }
+            }
+        }
+        return listeEmprunt;
+    }
+    
+    public List<Emprunt> findAllActiveByExemplaire(int id)
+    {
+        return this.findAllActiveByExemplaire("" + id);
+    }
+    
+    public List<Emprunt> findAllActiveByExemplaire(String id)
+    {
+        PreparedStatement stm = null;
+        ResultSet resultat = null;
+        List<Emprunt> listeEmprunt = new LinkedList();
+        try
+        {
+            String requete = "SELECT * FROM emprunt "
+                    + "INNER JOIN Compte on Compte.NUMERO = emprunt.COMPTE_ID "
+                    + "INNER JOIN exemplaire ON exemplaire.ID = emprunt.EXEMPLAIRE_ID "
+                    + "INNER JOIN edition ON exemplaire.EDITION_ID = edition.ID "
+                    + "INNER JOIN ouvrage ON ouvrage.ID = edition.OUVRAGE_ID "
+                    + "INNER JOIN auteur ON auteur.ID = ouvrage.AUTEUR_ID "
+                    + "WHERE EXEMPLAIRE_ID = ? AND DATE_FIN >= CURDATE()";
+            stm = cnx.prepareStatement(requete);
+            stm.setString(1, id);
+            resultat = stm.executeQuery();
+            while (resultat.next())
+            {
+                Emprunt emp = new Emprunt();
+                emp.setId(resultat.getInt("emprunt.ID"));
+                emp.setDateDebut(resultat.getString("DATE_DEBUT"));
+                emp.setDateFin(resultat.getString("DATE_FIN"));
+                emp.setStatus(resultat.getString("STATUS"));
+                emp.setCompte(new Compte(
+                        resultat.getString("NUMERO"),
+                        resultat.getString("PRENOM"),
+                        resultat.getString("NOM"),
+                        resultat.getString("MDP"),
+                        resultat.getInt("compte.TYPE")
+                ));
+
+                emp.setExemplaire(new Exemplaire(
+                        resultat.getInt("exemplaire.ID"),
+                        resultat.getString("EMPLACEMENT"),
+                        new Edition(
+                                resultat.getInt("edition.ID"),
                                 resultat.getInt("NOMBRE_PAGE"),
                                 resultat.getString("ISBN"),
                                 resultat.getString("DATE_PUBLICATION"),
@@ -390,7 +472,7 @@ public class EmpruntDAO extends DAO<Emprunt>
             while (resultat.next())
             {
                 emprunt = new Emprunt();
-                emprunt.setId(resultat.getInt("ID"));
+                emprunt.setId(resultat.getInt("emprunt.ID"));
                 emprunt.setDateDebut(resultat.getString("DATE_DEBUT"));
                 emprunt.setDateFin(resultat.getString("DATE_FIN"));
                 emprunt.setStatus(resultat.getString("STATUS"));
@@ -403,10 +485,10 @@ public class EmpruntDAO extends DAO<Emprunt>
                 ));
 
                 emprunt.setExemplaire(new Exemplaire(
-                        resultat.getInt("ID"),
+                        resultat.getInt("exemplaire.ID"),
                         resultat.getString("EMPLACEMENT"),
                         new Edition(
-                                resultat.getInt("ID"),
+                                resultat.getInt("edition.ID"),
                                 resultat.getInt("NOMBRE_PAGE"),
                                 resultat.getString("ISBN"),
                                 resultat.getString("DATE_PUBLICATION"),

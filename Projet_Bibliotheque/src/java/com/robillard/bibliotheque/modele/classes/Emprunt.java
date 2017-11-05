@@ -8,7 +8,14 @@
 
 package com.robillard.bibliotheque.modele.classes;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -50,7 +57,8 @@ public class Emprunt
         Date dt1;
         Date dt2;
         Calendar c = Calendar.getInstance();
-        c.setTime(dateDebut);
+        if (dateDebut.after(new Date()))
+            c.setTime(dateDebut);
         c.add(Calendar.DATE, 1);
         dt1 = c.getTime();
         c.add(Calendar.DATE, duree);
@@ -120,6 +128,38 @@ public class Emprunt
     public void setDateFin(String dateFin)
     {
         this.dateFin = dateFin;
+    }
+    
+    public int getJoursRestants()
+    {
+        try
+        {
+            LocalDate d1 = LocalDate.now(ZoneId.of("America/Montreal"));
+            LocalDate d2 = LocalDate.parse(dateFin);
+            return Period.between(d1, d2).getDays();
+        }
+        catch (DateTimeParseException exp)
+        {
+            System.out.println("Dates invalides: " + exp.getMessage());
+            return 0;
+        }
+    }
+    
+    public void devancerEmprunt(int jours)
+    {
+        try
+        {
+            LocalDate d1 = LocalDate.parse(dateDebut);
+            LocalDate d2 = LocalDate.parse(dateFin);
+            d1 = d1.minusDays(jours);
+            d2 = d2.minusDays(jours);
+            this.dateDebut = d1.toString();
+            this.dateFin = d2.toString();
+        }
+        catch (DateTimeParseException exp)
+        {
+            System.out.println("Dates invalides: " + exp.getMessage());
+        }
     }
 
 }

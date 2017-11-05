@@ -138,6 +138,10 @@
         <servlet-name>SupprimerExemplaire</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.SupprimerExemplaire</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SupprimerReservation</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.SupprimerReservation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -257,6 +261,10 @@
     <servlet-mapping>
         <servlet-name>SupprimerExemplaire</servlet-name>
         <url-pattern>/SupprimerExemplaire</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SupprimerReservation</servlet-name>
+        <url-pattern>/SupprimerReservation</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
