@@ -1,3 +1,4 @@
+<%-- Template appliqué à toutes les pages .jsp --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
@@ -46,9 +47,6 @@
               </div>
             </li>
             </c:if>
-            <li class="nav-item">
-              <a class="nav-link" href="go?action=afficherSuggestion">Suggestion</a>
-            </li>
             <c:if test="${sessionScope.type == 2}">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,7 +55,6 @@
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownAdmin">
                 <a class="dropdown-item" href="go?action=afficherGestionCatalogue">Gestion du catalogue</a>
                 <a class="dropdown-item" href="go?action=afficherGestionCompte">Gestion des comptes</a>
-                <a class="dropdown-item" href="go?action=afficherGestionSuggestion">Consulter les suggestions</a>
               </div>
             </li>
             </c:if>
