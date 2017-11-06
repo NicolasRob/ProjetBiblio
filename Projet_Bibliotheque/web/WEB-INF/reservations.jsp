@@ -1,4 +1,4 @@
-<%-- Page d'affichage des réservations du compte connecté --%>
+<%-- Page d'affichage des r�servations du compte connecté --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="container Site-Content">
@@ -31,7 +31,7 @@
                     <td>${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getNom().concat(" ").concat(reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom())}</td>
                     <td>${reservation.getDateDebut()}</td>
                     <td>${reservation.getDateFin()}</td>
-                    
+                    <td><a href="go?action=supprimerReservation&id=${reservation.getId()}">Annuler</a></td>
                 </tr>
             </c:forEach>
     </tbody>
