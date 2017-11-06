@@ -33,7 +33,7 @@
                         <div class="form-group">        
                             <div class="col-sm-offset-2 col-sm-10">
                                     <p class="text-danger"><%= (request.getAttribute("erreurLogin") != null)
-                                    ? request.getAttribute("erreurLogin") : ""%></p>
+                                        ? request.getAttribute("erreurLogin") : ""%></p>
                                 <button type="submit" class="btn btn-default">Connection</button>
                             </div>
                         </div>

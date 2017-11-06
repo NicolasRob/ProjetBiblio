@@ -1,6 +1,6 @@
 <%-- Affichage d'un formulaire de recherche d'un compte --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%-- Affichage des informations du compte recherché --%>
+<%-- Affichage des informations du compte recherchÃ© --%>
 
 <div class="container Site-Content">
 
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <a class='col-sm-2' href="go?action=afficherAjoutOuvrage">Cr&eacute;er un nouveau compte</a>
+                            <a class='col-sm-2' href="go?action=afficherCreationCompte">Cr&eacute;er un nouveau compte</a>
                         </div>
                     </form>
                 </div>
@@ -65,7 +65,7 @@
                                     </c:if>
                                 </tr>
                                 <tr>
-                                    <td><p class="card-text">Numéro de membre: </p></td>
+                                    <td><p class="card-text">NumÃ©ro de membre: </p></td>
                                     <td><p class="card-text">${requestScope.compte.getNumero()}</p></td>
                                 </tr>
                             </tbody>
@@ -92,7 +92,6 @@
                         <td> ${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom()} ${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getNom()}</td>
                         <td>${reservation.getDateDebut()}</td>
                         <td>${reservation.getDateFin()}</td>
-
                     </tr>
                 </c:forEach>
             </tbody>

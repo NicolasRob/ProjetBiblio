@@ -1,10 +1,9 @@
-<%-- Page d'affichage des réservations du compte connecté --%>
+<%-- Page d'affichage des r�servations du compte connecté --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="container Site-Content">
 
     <h1 class="mt-4 mb-3">R&eacute;servations</h1>
-
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a href="go?action=afficherAcceuil">Accueil</a>
@@ -31,9 +30,9 @@
                     <td>${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getNom().concat(" ").concat(reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom())}</td>
                     <td>${reservation.getDateDebut()}</td>
                     <td>${reservation.getDateFin()}</td>
-                    
+                    <td><a href="go?action=supprimerReservation&id=${reservation.getId()}">Annuler</a></td>
                 </tr>
             </c:forEach>
-    </tbody>
-  </table>  
+        </tbody>
+    </table>  
 </div>  

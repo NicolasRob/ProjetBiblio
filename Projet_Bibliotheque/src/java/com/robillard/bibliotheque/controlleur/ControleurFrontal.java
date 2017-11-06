@@ -124,6 +124,14 @@ public class ControleurFrontal extends HttpServlet
                     r = this.getServletContext().getNamedDispatcher("AfficherModEdition");
                     r.forward(request, response);
                     break;
+                case "afficherCreationCompte":
+                    r = this.getServletContext().getNamedDispatcher("AfficherCreationCompte");
+                    r.forward(request, response);
+                    break;
+                case "creerCompte":
+                    r = this.getServletContext().getNamedDispatcher("CreerCompte");
+                    r.forward(request, response);
+                    break;
                 case "modifierOuvrage":
                     r = this.getServletContext().getNamedDispatcher("ModifierOuvrage");
                     r.forward(request, response);
