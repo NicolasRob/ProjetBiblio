@@ -7,7 +7,6 @@ import com.robillard.bibliotheque.modele.dao.EmpruntDAO;
 import com.robillard.bibliotheque.util.Connexion;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,7 +31,7 @@ public class AfficherReservations extends HttpServlet
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 listeEmprunt = dao.findByCompte((String) request.getSession().getAttribute("login"));
                 List<Emprunt> listeReservation = new LinkedList();
-                //ajoute les emprunt a la liste qui va dans la requete
+                //ajoute les reservation a la liste qui va dans la requete
                 for (Emprunt e : listeEmprunt) {listeReservation.add(e);}
                 request.setAttribute("listeReservation", listeReservation);
             }

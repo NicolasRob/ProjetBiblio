@@ -1,4 +1,5 @@
 <%-- Affichage d'un formulaire de recherche d'un compte --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- Affichage des informations du compte recherché --%>
 
 <div class="container Site-Content">
@@ -14,7 +15,6 @@
         </li>
         <li class="breadcrumb-item active">Gestion des comptes</li>
     </ol>
-
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
@@ -27,7 +27,7 @@
                                 <input type="text" class="form-control" id="recherche" name="numero">
                             </div>
                         </div>
-                        <input type="hidden" name="action" value="rechercheCompte" />
+                        <input type="hidden" name="action" value="afficherGestionCompte" />
                         <div class="form-group">        
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-default">Rechercher</button>
@@ -41,92 +41,84 @@
             </div>
         </div>
     </div>
-    <div class="card mb-4">
-        <div class="card-header">
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 class="card-title">Nicolas Robillard</h2>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td><p class="card-text">Nom: </p></td>
-                                <td><p class="card-text">Nicolas Robillard</p></td>
-                            </tr>
-                            <tr>
-                                <td><p class="card-text">Type: </p></td>
-                                <td><p class="card-text">Membre</p></td>
-                            </tr>
-                            <tr>
-                                <td><p class="card-text">Numéro de membre: </p></td>
-                                <td><p class="card-text">00000001</p></td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <c:if test="${requestScope.compte !=null}">
+        <div class="card mb-4">
+            <div class="card-header">
+            </div>            
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="card-title">${requestScope.compte.getNom()} ${requestScope.compte.getPrenom()}</h2>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td><p class="card-text">Nom: </p></td>
+                                    <td><p class="card-text">${requestScope.compte.getPrenom()} ${requestScope.compte.getNom()}</p></td>
+                                </tr>
+                                <tr>
+                                    <td><p class="card-text">Type: </p></td>
+                                    <c:if test= "${requestScope.compte.getType() eq 1}">
+                                        <td><p class="card-text">Membre</p></td>
+                                    </c:if>
+                                    <c:if test="${requestScope.compte.getType() eq 2}">
+                                        <td><p class="card-text">Administrateur</p></td>
+                                    </c:if>
+                                </tr>
+                                <tr>
+                                    <td><p class="card-text">Numéro de membre: </p></td>
+                                    <td><p class="card-text">${requestScope.compte.getNumero()}</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+</c:if>
+<c:if test="${requestScope.compte !=null}">
+        <h2>R&eacute;servations</h2>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Date de r&eacute;servation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="reservation" items="${requestScope.listeReservation}">
+                    <tr>
+                        <td>${reservation.getExemplaire().getEdition().getOuvrage().getTitre()}</td>
+                        <td> ${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom()} ${reservation.getExemplaire().getEdition().getOuvrage().getAuteur().getNom()}</td>
+                        <td>${reservation.getDateDebut()}</td>
+                        <td>${reservation.getDateFin()}</td>
+
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        </c:if>
+<c:if test="${requestScope.compte !=null}">
+        <h2>Emprunts</h2>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Date d'emprunt</th>
+                    <th>Date de retour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="emprunt" items="${requestScope.listeEmprunt}">
+                            <tr>
+                                <td>${emprunt.getExemplaire().getEdition().getOuvrage().getTitre()}</td>
+                                <td>${emprunt.getExemplaire().getEdition().getOuvrage().getAuteur().getPrenom()} ${emprunt.getExemplaire().getEdition().getOuvrage().getAuteur().getNom()}</td>
+                                <td>${emprunt.getDateDebut()}</td>
+                                <td>${emprunt.getDateFin()}</td>
+                            </tr>
+                        </c:forEach>
+            </tbody>
+        </table>
     </div>
-
-    <h2>R&eacute;servations</h2>
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Date de r&eacute;servation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>The Pillars of the Earth</td>
-                <td>Ken Follet</td>
-                <td>22 octobre 2017</td>
-            </tr>
-            <tr>
-                <td>Great Expectations</td>
-                <td>Charles Dickens</td>
-                <td>10 novembre 2017</td>
-            </tr>
-            <tr>
-                <td>The Road</td>
-                <td>Cormac McCarthy</td>
-                <td>15 octobre 2017</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2>Emprunts</h2>
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Date d'emprunt</th>
-                <th>Date de retour</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>The Pillars of the Earth</td>
-                <td>Ken Follet</td>
-                <td>23 octobre 2017</td>
-                <td>7 novembre 2017</td>
-            </tr>
-            <tr>
-                <td>Great Expectations</td>
-                <td>Charles Dickens</td>
-                <td>12 novembre 2017</td>
-                <td>26 novembre 2017</td>
-            </tr>
-            <tr>
-                <td>The Road</td>
-                <td>Cormac McCarthy</td>
-                <td>17 octobre 2017</td>
-                <td>31 octobre 2017</td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
+</c:if>

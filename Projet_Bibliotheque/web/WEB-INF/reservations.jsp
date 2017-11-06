@@ -7,7 +7,7 @@
 
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="index.html">Accueil</a>
+      <a href="go?action=afficherAcceuil">Accueil</a>
     </li>
     <li class="breadcrumb-item">
       Compte
