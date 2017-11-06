@@ -55,7 +55,7 @@ public class AfficherGestionCompte extends HttpServlet
                 listeEmprunt = dao.findByCompte((String) request.getParameter("numero"));
                 List<Emprunt> listeReservation = new LinkedList();
                 //ajoute les reservation a la liste qui va dans la requete
-                for (Emprunt e : listeEmprunt) {listeReservation.add(e);}
+                for (Emprunt e : listeEmprunt) {if(e.getStatus().equals("RESERVATION")){listeReservation.add(e);}}
                 request.setAttribute("listeReservation", listeReservation);
             }
             
