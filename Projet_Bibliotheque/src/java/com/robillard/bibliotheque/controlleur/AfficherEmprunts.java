@@ -33,7 +33,6 @@ public class AfficherEmprunts extends HttpServlet
                 Connection cnx = (Connection) Connexion.getInstance();
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 listeEmprunt = dao.findByCompte((String) request.getSession().getAttribute("login"));
-                System.out.println(listeEmprunt.size());
                 request.setAttribute("listeEmprunt", listeEmprunt);
             }
             
