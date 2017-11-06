@@ -27,7 +27,7 @@
                                 <input type="text" class="form-control" id="recherche" name="numero">
                             </div>
                         </div>
-                        <input type="hidden" name="action" value="rechercheCompte" />
+                        <input type="hidden" name="action" value="afficherGestionCompte" />
                         <div class="form-group">        
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-default">Rechercher</button>
