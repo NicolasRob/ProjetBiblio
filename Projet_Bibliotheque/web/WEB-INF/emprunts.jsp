@@ -13,11 +13,8 @@
             </li>
             <li class="breadcrumb-item active">Mes emprunts</li>
         </ol>
-    lol
         <table class="table table-striped table-bordered">
-            lol
             <thead>
-                lol
                 <tr>
                     <th>Titre</th>
                     <th>Auteur</th>
@@ -26,7 +23,6 @@
                 </tr>
             </thead>
             <tbody>
-                    ${requestScope}
                     <c:forEach var="emprunt" items="${requestScope.listeEmprunt}">
                         <tr>
                             <td>${emprunt.getExemplaire().getEdition().getOuvrage().getTitre()}</td>
@@ -35,8 +31,6 @@
                             <td>${emprunt.getDateFin()}</td>
                         </tr>
                     </c:forEach>
-                        lol
             </tbody>
         </table>
-                        lol
     </div>

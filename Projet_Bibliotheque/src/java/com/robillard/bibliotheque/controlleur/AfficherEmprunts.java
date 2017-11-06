@@ -45,7 +45,7 @@ public class AfficherEmprunts extends HttpServlet
                         + " de la recherche. Veuillez réessayer plus tard.";
                 request.setAttribute("erreurException", message);
             }
-            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/reservations.jsp");
+            RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/emprunts.jsp");
             r.forward(request, response);
         }
         else
