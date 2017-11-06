@@ -57,24 +57,24 @@
                             <tr>
                                 <td><p class="card-text">Exemplaires: </p></td>
                                 <td>
-                                    <c:if test="${!empty requestScope.exemplaires}">
-                                        <ol>
-                                            <c:forEach var="exemplaire" items="${requestScope.exemplaires}">
-                                                <li><p class="card-text">${exemplaire.getKey().getEmplacement()} : <c:if test="${!empty exemplaire.getValue()}" >
-                                                            Reservé jusqu'au ${exemplaire.getValue()}
-                                                        </c:if>
-                                                        <c:if test="${empty exemplaire.getValue()}" >
-                                                            Disponible
-                                                        </c:if>
-                                                    </p></li>           
-                                                </c:forEach>
-                                        </ol>
+                        <c:if test="${!empty requestScope.exemplaires}">
+                            <ol>
+                                <c:forEach var="exemplaire" items="${requestScope.exemplaires}">
+                                    <li><p class="card-text">${exemplaire.getKey().getEmplacement()} : <c:if test="${!empty exemplaire.getValue()}" >
+                                        Reservé jusqu'au ${exemplaire.getValue()}
                                     </c:if>
-                                    <c:if test="${empty requestScope.exemplaires}">
-                                        <p class="card-text">Non disponible</p>
+                                    <c:if test="${empty exemplaire.getValue()}" >
+                                        Disponible
                                     </c:if>
-                                </td>
-                            </tr>
+                                    </p></li>           
+                                </c:forEach>
+                            </ol>
+                        </c:if>
+                        <c:if test="${empty requestScope.exemplaires}">
+                            <p class="card-text">Non disponible</p>
+                        </c:if>
+                        </td>
+                        </tr>
                         </tbody>
                     </table>
                     <c:if test="${sessionScope.login != null && !empty requestScope.exemplaires}">

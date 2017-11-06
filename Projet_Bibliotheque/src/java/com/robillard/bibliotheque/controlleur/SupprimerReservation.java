@@ -48,6 +48,8 @@ public class SupprimerReservation extends HttpServlet
                         DateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
                         Date dt1 = formatDate.parse(e.getDateDebut());
                         Date dt2 = formatDate.parse(emprunt.getDateFin());
+                        //On a besoin de devancer une réservation que si elle commence
+                        //après la réservation qu'on annule
                         if (dt1.after(dt2))
                         {
                             e.devancerEmprunt(emprunt.getJoursRestants());
