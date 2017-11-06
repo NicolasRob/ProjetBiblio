@@ -159,8 +159,8 @@ public class EmpruntDAO extends DAO<Emprunt>
                                         resultat.getString("ouvrage.Type"),
                                         new Auteur(
                                                 resultat.getString("auteur.ID"),
-                                                resultat.getString("auteur.NOM"),
-                                                resultat.getString("auteur.PRENOM"))))));
+                                                resultat.getString("auteur.PRENOM"),
+                                                resultat.getString("auteur.NOM"))))));
                 resultat.close();
                 stm.close();
                 return emp;
@@ -277,8 +277,8 @@ public class EmpruntDAO extends DAO<Emprunt>
                                         resultat.getString("ouvrage.Type"),
                                         new Auteur(
                                                 resultat.getString("auteur.ID"),
-                                                resultat.getString("auteur.NOM"),
-                                                resultat.getString("auteur.PRENOM"))))));
+                                                resultat.getString("auteur.PRENOM"),
+                                                resultat.getString("auteur.NOM"))))));
                 listeEmprunt.add(emp);
             }
             resultat.close();
@@ -359,8 +359,8 @@ public class EmpruntDAO extends DAO<Emprunt>
                                         resultat.getString("ouvrage.Type"),
                                         new Auteur(
                                                 resultat.getString("auteur.ID"),
-                                                resultat.getString("auteur.NOM"),
-                                                resultat.getString("auteur.PRENOM"))))));
+                                                resultat.getString("auteur.PRENOM"),
+                                                resultat.getString("auteur.NOM"))))));
                 listeEmprunt.add(emp);
             }
             resultat.close();
@@ -436,8 +436,8 @@ public class EmpruntDAO extends DAO<Emprunt>
                                         resultat.getString("ouvrage.Type"),
                                         new Auteur(
                                                 resultat.getString("auteur.ID"),
-                                                resultat.getString("auteur.NOM"),
-                                                resultat.getString("auteur.PRENOM"))))));
+                                                resultat.getString("auteur.PRENOM"),
+                                                resultat.getString("auteur.NOM"))))));
                 listeEmprunt.add(emp);
             }
             resultat.close();
@@ -577,8 +577,8 @@ public class EmpruntDAO extends DAO<Emprunt>
                                         resultat.getString("ouvrage.Type"),
                                         new Auteur(
                                                 resultat.getString("auteur.ID"),
-                                                resultat.getString("auteur.NOM"),
-                                                resultat.getString("auteur.PRENOM"))))));
+                                                resultat.getString("auteur.PRENOM"),
+                                                resultat.getString("auteur.NOM"))))));
             }
             resultat.close();
             stm.close();
