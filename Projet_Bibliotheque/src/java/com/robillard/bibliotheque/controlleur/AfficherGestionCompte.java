@@ -34,6 +34,7 @@ public class AfficherGestionCompte extends HttpServlet
                 Connection cnx = (Connection) Connexion.getInstance();
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 listeEmprunt = dao.findByCompte((String) request.getParameter("numero"));
+                for (Emprunt e : listeEmprunt) {if(e.getStatus().equals("RESERVATION")){listeEmprunt.remove(e);}}
                 request.setAttribute("listeEmprunt", listeEmprunt);
             }
             
