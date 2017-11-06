@@ -30,7 +30,7 @@
                             <div class="col-sm-10">          
                                 <select class="form-control" id="critere" name="critere">
                                     <option value="titre">Titre</option>
-                                    <option value="auteur">Auteur</option>
+                                    <option value="auteur">Nom de famille de l'auteur</option>
                                 </select>
                             </div>
                         </div>
