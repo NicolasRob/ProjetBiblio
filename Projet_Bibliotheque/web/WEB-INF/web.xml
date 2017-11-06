@@ -142,6 +142,14 @@
         <servlet-name>SupprimerReservation</servlet-name>
         <servlet-class>com.robillard.bibliotheque.controlleur.SupprimerReservation</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AfficherCreationCompte</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.AfficherCreationCompte</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreerCompte</servlet-name>
+        <servlet-class>com.robillard.bibliotheque.controlleur.CreerCompte</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControleurFrontal</servlet-name>
         <url-pattern>/go</url-pattern>
@@ -265,6 +273,14 @@
     <servlet-mapping>
         <servlet-name>SupprimerReservation</servlet-name>
         <url-pattern>/SupprimerReservation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfficherCreationCompte</servlet-name>
+        <url-pattern>/AfficherCreationCompte</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreerCompte</servlet-name>
+        <url-pattern>/CreerCompte</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

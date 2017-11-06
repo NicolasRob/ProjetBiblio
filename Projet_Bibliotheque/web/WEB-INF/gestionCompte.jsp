@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <a class='col-sm-2' href="go?action=afficherAjoutOuvrage">Cr&eacute;er un nouveau compte</a>
+                            <a class='col-sm-2' href="go?action=afficherCreationCompte">Cr&eacute;er un nouveau compte</a>
                         </div>
                     </form>
                 </div>

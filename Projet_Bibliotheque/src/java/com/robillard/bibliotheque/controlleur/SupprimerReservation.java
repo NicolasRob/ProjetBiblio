@@ -39,7 +39,7 @@ public class SupprimerReservation extends HttpServlet
                 Connection cnx = (Connection) Connexion.getInstance();
                 EmpruntDAO dao = new EmpruntDAO(cnx);
                 Emprunt emprunt = dao.read(request.getParameter("id"));
-                if (emprunt != null && emprunt.getCompte().getNumero() == request.getSession().getAttribute("login"))
+                if (emprunt != null && emprunt.getCompte().getNumero().equals(request.getSession().getAttribute("login")))
                 {
                     dao.delete(emprunt);
                     List<Emprunt> listeEmprunt = dao.findAllActiveByExemplaire(emprunt.getExemplaire().getId());
@@ -54,17 +54,16 @@ public class SupprimerReservation extends HttpServlet
                             dao.update(e);
                         }
                     }
-                    String message = "L'ouvrage a " + URLEncoder.encode("é", "UTF-8")
+                    String message = "La r" +URLEncoder.encode("é", "UTF-8") 
+                            + "servation a " + URLEncoder.encode("é", "UTF-8")
                             + "t" + URLEncoder.encode("é", "UTF-8")
-                            + " supprim" + URLEncoder.encode("é", "UTF-8")
+                            + " annul" + URLEncoder.encode("é", "UTF-8")
                             + " avec succ" + URLEncoder.encode("è", "UTF-8") + "s";
-                    response.sendRedirect("go?action=afficherGestionCatalogue&message=" + message
-                            + "&recherche=" + request.getParameter("recherche")
-                            + "&critere=" + request.getParameter("critere"));
+                    response.sendRedirect("go?action=afficherReservations&message=" + message);
                 }
                 else
                 {
-                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+                    RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
                     r.forward(request, response);
                 }
             }
@@ -75,7 +74,7 @@ public class SupprimerReservation extends HttpServlet
                 String message = "Une erreur inattendue s'est produite. Veuillez"
                         + " réessayer plus tard.";
                 request.setAttribute("erreurException", message);
-                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+                RequestDispatcher r = this.getServletContext().getRequestDispatcher("/index.jsp");
                 r.forward(request, response);
             }
         }
